@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebenkosten-Anwalt — Nebenkostenabrechnung kostenlos prüfen lassen</title>
+<meta name="description" content="Nebenkostenabrechnung erhalten? Lassen Sie sie in unserer privaten Testphase kostenlos prüfen. Unterlagen hochladen, wir melden uns zeitnah mit einer Ersteinschätzung.">
+<!--
+  TODO vor Livegang:
+  [1] Tally-Formular-Link einsetzen (alle href="#tally-formular" ersetzen)
+  [2] Datenschutzerklärung verlinken (href="#datenschutz")
+  [3] Impressum verlinken (href="#impressum")
+-->
+<style>
+  /* ============ Grundgerüst ============ */
+  :root {
+    --ink:        #24312B;   /* dunkles Grünschwarz — Text */
+    --ink-soft:   #55655D;   /* gedämpftes Grüngrau — Nebentext */
+    --paper:      #F7F4EE;   /* warmes Papierweiß — Grundfläche */
+    --paper-deep: #EFEAE0;   /* Karten / abgesetzte Flächen */
+    --moss:       #2F5D4C;   /* Moosgrün — Primärfarbe, Buttons */
+    --moss-deep:  #24493C;   /* Hover */
+    --amber:      #B97C3B;   /* warmes Ocker — Akzente, Nummern */
+    --line:       #D9D2C4;   /* Trennlinien */
+    --serif: "Charter", "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+    --sans: "Avenir Next", "Segoe UI", "Trebuchet MS", system-ui, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 700; line-height: 1.2; }
+  a { color: var(--moss); }
+  .wrap { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem; }
+
+  .btn {
+    display: inline-block;
+    background: var(--moss);
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.9rem 1.9rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 0 var(--moss-deep);
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .btn:hover, .btn:focus-visible { background: var(--moss-deep); }
+  .btn:active { transform: translateY(1px); box-shadow: none; }
+  .btn--ghost {
+    background: transparent;
+    color: var(--moss);
+    box-shadow: inset 0 0 0 1.5px var(--moss);
+  }
+  .btn--ghost:hover { background: rgba(47, 93, 76, 0.08); color: var(--moss-deep); }
+
+  /* ============ Kopfzeile ============ */
+  .topbar { border-bottom: 1px solid var(--line); background: var(--paper); }
+  .topbar__inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 1rem; padding-bottom: 1rem;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-family: var(--serif); font-size: 1.2rem; font-weight: 700;
+    color: var(--ink); text-decoration: none;
+  }
+  .brand svg { flex: none; }
+  .topbar__cta { font-size: 0.95rem; padding: 0.55rem 1.1rem; }
+
+  /* ============ Hero-Karussell ============ */
+  .hero { position: relative; overflow: hidden; }
+  .hero__slides { display: grid; }
+  .slide {
+    grid-area: 1 / 1;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.45s ease, visibility 0.45s ease;
+  }
+  .slide.is-active { opacity: 1; visibility: visible; }
+  .slide__inner {
+    display: grid; gap: 2rem; align-items: center;
+    padding: 3rem 0 4.75rem;
+  }
+  .slide__badge {
+    display: inline-block;
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em;
+    border: 1px solid currentColor; border-radius: 999px;
+    padding: 0.25rem 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+  .slide__title {
+    font-size: clamp(1.9rem, 5vw, 2.9rem);
+    letter-spacing: -0.01em;
+    margin-bottom: 1.1rem;
+  }
+  .slide__sub { max-width: 34rem; margin-bottom: 1.75rem; }
+  .slide__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
+  .slide__note { font-size: 0.9rem; margin-top: 1rem; }
+  .slide__art { max-width: 26rem; margin: 0 auto; }
+  .slide__art svg { display: block; width: 100%; height: auto; }
+
+  /* Farbwelten der Folien */
+  .slide--moss { background: var(--moss); color: #fff; }
+  .slide--moss .slide__badge { color: #F3E3CE; }
+  .slide--moss .slide__sub, .slide--moss .slide__note { color: rgba(255,255,255,0.84); }
+  .slide--moss .btn { background: var(--paper); color: var(--moss-deep); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
+  .slide--moss .btn:hover { background: #fff; }
+  .slide--moss .btn--ghost { background: transparent; color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.7); }
+  .slide--moss .btn--ghost:hover { background: rgba(255,255,255,0.1); }
+
+  .slide--sand { background: #EFE6D6; color: var(--ink); }
+  .slide--sand .slide__badge { color: var(--amber); }
+  .slide--sand .slide__sub, .slide--sand .slide__note { color: var(--ink-soft); }
+
+  .slide--ink { background: #24312B; color: #fff; }
+  .slide--ink .slide__badge { color: #F3E3CE; }
+  .slide--ink .slide__sub, .slide--ink .slide__note { color: rgba(255,255,255,0.8); }
+  .slide--ink .btn { background: var(--paper); color: var(--moss-deep); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
+  .slide--ink .btn:hover { background: #fff; }
+
+  /* Pfeile + Punkte */
+  .hero__arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 2.75rem; height: 2.75rem;
+    border: none; border-radius: 50%;
+    background: rgba(247,244,238,0.9); color: var(--ink);
+    display: grid; place-items: center;
+    cursor: pointer; z-index: 2;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+  }
+  .hero__arrow:hover { background: #fff; }
+  .hero__arrow--prev { left: 0.75rem; }
+  .hero__arrow--next { right: 0.75rem; }
+  .hero__dots {
+    position: absolute; bottom: 1.25rem; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 0.55rem; z-index: 2;
+  }
+  .hero__dot {
+    width: 0.7rem; height: 0.7rem; padding: 0;
+    border-radius: 50%; cursor: pointer;
+    border: 1.5px solid rgba(247,244,238,0.9);
+    background: rgba(36,49,43,0.25);
+  }
+  .slide--sand ~ .hero__dots .hero__dot { border-color: rgba(36,49,43,0.4); }
+  .hero__dot.is-active { background: var(--amber); border-color: var(--amber); }
+
+  /* ============ Leistungsumfang ============ */
+  .features { list-style: none; display: grid; gap: 1.75rem 2rem; }
+  .feature { display: grid; grid-template-columns: auto 1fr; gap: 0.9rem; align-items: start; }
+  .feature__icon {
+    width: 2.7rem; height: 2.7rem;
+    display: grid; place-items: center;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+  }
+  .feature h3 { font-family: var(--sans); font-size: 1.02rem; font-weight: 700; color: var(--moss-deep); margin-bottom: 0.25rem; }
+  .feature p { font-size: 0.95rem; color: var(--ink-soft); }
+
+  /* ============ FAQ ============ */
+  .faq { max-width: 46rem; }
+  .faq details { border-bottom: 1px solid var(--line); }
+  .faq summary {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding: 1.1rem 0; cursor: pointer;
+    font-weight: 600; font-size: 1.05rem;
+    list-style: none;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary:hover { color: var(--moss-deep); }
+  .faq__chev { flex: none; transition: transform 0.2s ease; }
+  .faq details[open] .faq__chev { transform: rotate(180deg); }
+  .faq details > div { padding: 0 0 1.25rem; color: var(--ink-soft); font-size: 0.98rem; max-width: 42rem; }
+  .faq details > div p + p { margin-top: 0.6rem; }
+
+  /* ============ Sektionen ============ */
+  section { padding: 3.25rem 0; }
+  .section--alt { background: var(--paper-deep); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .kicker {
+    font-family: var(--sans); font-size: 0.85rem; font-weight: 700;
+    letter-spacing: 0.09em; text-transform: uppercase; color: var(--amber);
+    margin-bottom: 0.6rem;
+  }
+  .section-title { font-size: clamp(1.5rem, 3.5vw, 2.1rem); margin-bottom: 0.75rem; }
+  .section-lead { color: var(--ink-soft); max-width: 38rem; margin-bottom: 2.25rem; }
+
+  /* ============ Schritte ============ */
+  .steps { list-style: none; display: grid; gap: 1.25rem; counter-reset: schritt; }
+  .step {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.5rem 1.4rem 1.4rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+  .step__icon {
+    width: 3.25rem; height: 3.25rem;
+    display: grid; place-items: center;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+  }
+  .step h3 { font-size: 1.15rem; margin-bottom: 0.35rem; }
+  .step h3::before {
+    counter-increment: schritt;
+    content: counter(schritt) ". ";
+    color: var(--amber);
+  }
+  .step p { font-size: 0.98rem; color: var(--ink-soft); }
+
+  /* ============ Vertrauen & Transparenz ============ */
+  .trust { display: grid; gap: 1.25rem; }
+  .trust__card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--moss);
+    border-radius: 8px;
+    padding: 1.4rem 1.4rem 1.3rem;
+  }
+  .trust__card h3 {
+    font-size: 1.1rem; margin-bottom: 0.4rem;
+    display: flex; align-items: center; gap: 0.55rem;
+  }
+  .trust__card p { font-size: 0.98rem; color: var(--ink-soft); }
+  .trust__card p + p { margin-top: 0.6rem; }
+
+  /* ============ Abschluss-CTA ============ */
+  .closing { text-align: left; }
+  .closing__box {
+    background: var(--moss);
+    color: #fff;
+    border-radius: 12px;
+    padding: 2.5rem 1.75rem;
+  }
+  .closing__box h2 { font-size: clamp(1.5rem, 3.5vw, 2rem); margin-bottom: 0.6rem; }
+  .closing__box p { color: rgba(255,255,255,0.85); max-width: 36rem; margin-bottom: 1.5rem; }
+  .closing__box .btn {
+    background: var(--paper); color: var(--moss-deep);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.25);
+  }
+  .closing__box .btn:hover { background: #fff; }
+
+  /* ============ Footer ============ */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 2rem 0 2.5rem;
+    font-size: 0.92rem; color: var(--ink-soft);
+  }
+  .footer__grid { display: grid; gap: 1.25rem; }
+  .footer__links { list-style: none; display: flex; flex-wrap: wrap; gap: 1.25rem; }
+  .footer__links a { color: var(--ink-soft); }
+  .footer__legal { max-width: 44rem; }
+
+  /* ============ Größere Bildschirme ============ */
+  @media (min-width: 46rem) {
+    .slide__inner { grid-template-columns: 1.1fr 0.9fr; padding: 4.25rem 0 5.25rem; }
+    .slide__art { max-width: none; margin: 0; }
+    .hero__arrow--prev { left: 1.5rem; }
+    .hero__arrow--next { right: 1.5rem; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .features { grid-template-columns: 1fr 1fr; }
+    .trust { grid-template-columns: 1fr 1fr 1fr; }
+    .closing__box { padding: 3rem 3rem; }
+    .footer__grid { grid-template-columns: 1fr auto; align-items: start; }
+  }
+  @media (min-width: 62rem) {
+    .features { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .btn { transition: none; }
+    .slide { transition: none; }
+    .faq__chev { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" href="#">
+      <!-- Logo: stilisiertes Abrechnungsblatt mit Prüfhaken -->
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+        <rect x="5" y="3" width="18" height="24" rx="2" fill="#F7F4EE" stroke="#2F5D4C" stroke-width="1.8"/>
+        <line x1="9" y1="9"  x2="19" y2="9"  stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round"/>
+        <line x1="9" y1="13" x2="17" y2="13" stroke="#D9D2C4" stroke-width="1.6" stroke-linecap="round"/>
+        <line x1="9" y1="17" x2="18" y2="17" stroke="#D9D2C4" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M11 22.5l2.5 2.5 5-5.5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      Nebenkosten-Anwalt
+    </a>
+    <!-- TODO [1]: href durch Tally-Formular-Link ersetzen -->
+    <a class="btn topbar__cta" href="#tally-formular">Jetzt prüfen lassen</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ Hero-Karussell ============ -->
+  <section class="hero" aria-roledescription="Karussell" aria-label="Einstiegs-Motive">
+    <div class="hero__slides">
+
+      <!-- Folie 1: Standard-Einstieg -->
+      <div class="slide slide--moss is-active" role="group" aria-roledescription="Folie" aria-label="1 von 3">
+        <div class="wrap slide__inner">
+          <div>
+            <span class="slide__badge">Private, unentgeltliche Testphase</span>
+            <h1 class="slide__title">Nebenkostenabrechnung erhalten? Kostenlos prüfen lassen.</h1>
+            <p class="slide__sub">
+              Laden Sie Ihre Betriebskostenabrechnung und Ihren Mietvertrag hoch — ein
+              Handyfoto genügt. Sie erhalten eine erste Einschätzung, ob Positionen Ihrer
+              Abrechnung näher geprüft werden sollten. Ohne Kosten, ohne Verpflichtung.
+            </p>
+            <div class="slide__actions">
+              <!-- TODO [1]: href durch Tally-Formular-Link ersetzen -->
+              <a class="btn" href="#tally-formular">Jetzt prüfen lassen</a>
+              <a class="btn btn--ghost" href="#ablauf">So funktioniert’s</a>
+            </div>
+            <p class="slide__note">Kein Papierkram, keine Zahlungsdaten — nur Ihre Unterlagen.</p>
+          </div>
+          <!-- Motiv: Mieterin + Muster-Prüfergebnis -->
+          <div class="slide__art" aria-hidden="true">
+            <svg viewBox="0 0 360 300">
+              <defs><clipPath id="s1clip"><circle cx="60" cy="62" r="56"/></clipPath></defs>
+              <ellipse cx="180" cy="284" rx="140" ry="12" fill="rgba(0,0,0,0.12)"/>
+              <!-- Person -->
+              <g transform="translate(168 8) scale(1.55)">
+                <circle cx="60" cy="62" r="56" fill="rgba(247,244,238,0.16)"/>
+                <g clip-path="url(#s1clip)">
+                  <path d="M14 122 C26 88 94 88 106 122 Z" fill="#B97C3B"/>
+                  <rect x="52" y="74" width="16" height="18" rx="5" fill="#C68863"/>
+                  <ellipse cx="60" cy="54" rx="20" ry="23" fill="#E8B48C"/>
+                  <path d="M37 58 C34 26 86 26 83 58 C83 38 76 32 60 32 C44 32 37 38 37 58 Z" fill="#3E3229"/>
+                  <circle cx="60" cy="24" r="9" fill="#3E3229"/>
+                  <circle cx="52" cy="54" r="2.2" fill="#2A241E"/>
+                  <circle cx="68" cy="54" r="2.2" fill="#2A241E"/>
+                  <path d="M48 47 q4 -3 8 0" stroke="#3E3229" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                  <path d="M64 47 q4 -3 8 0" stroke="#3E3229" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                  <path d="M53 63 q7 6 14 0" stroke="#8A5A44" stroke-width="2" fill="none" stroke-linecap="round"/>
+                </g>
+              </g>
+              <!-- Muster-Dokument -->
+              <g transform="rotate(-4 105 195)">
+                <rect x="30" y="112" width="152" height="172" rx="8" fill="#FFFFFF" stroke="#24312B" stroke-width="2.5"/>
+                <line x1="46" y1="140" x2="130" y2="140" stroke="#24312B" stroke-width="3" stroke-linecap="round"/>
+                <line x1="46" y1="160" x2="164" y2="160" stroke="#D9D2C4" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="46" y1="177" x2="156" y2="177" stroke="#D9D2C4" stroke-width="2.5" stroke-linecap="round"/>
+                <rect x="40" y="188" width="130" height="19" rx="4" fill="#F3E3CE"/>
+                <line x1="46" y1="197" x2="158" y2="197" stroke="#B97C3B" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="46" y1="220" x2="150" y2="220" stroke="#D9D2C4" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="46" y1="244" x2="168" y2="244" stroke="#24312B" stroke-width="1.5"/>
+                <line x1="46" y1="257" x2="120" y2="257" stroke="#24312B" stroke-width="3" stroke-linecap="round"/>
+                <text x="106" y="238" transform="rotate(-16 106 238)" text-anchor="middle" fill="rgba(36,49,43,0.14)" font-family="sans-serif" font-size="26" font-weight="700" letter-spacing="6">MUSTER</text>
+                <circle cx="176" cy="272" r="16" fill="#2F5D4C"/>
+                <path d="M169 272l5 5 9 -10" stroke="#F7F4EE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </g>
+              <!-- Beschriftung -->
+              <g>
+                <rect x="26" y="84" width="150" height="26" rx="13" fill="#24312B"/>
+                <text x="101" y="101" text-anchor="middle" fill="#F7F4EE" font-family="sans-serif" font-size="12.5">Musterdarstellung</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Folie 2: Nachzahlung -->
+      <div class="slide slide--sand" role="group" aria-roledescription="Folie" aria-label="2 von 3">
+        <div class="wrap slide__inner">
+          <div>
+            <span class="slide__badge">Kostenlos in der Testphase</span>
+            <h2 class="slide__title">Nachzahlung höher als erwartet?</h2>
+            <p class="slide__sub">
+              Ob Umlageschlüssel, Fristen oder einzelne Kostenpositionen — viele
+              Abrechnungen lohnen einen zweiten Blick. Wir schauen kostenlos für
+              Sie nach, bevor Sie zahlen oder widersprechen.
+            </p>
+            <div class="slide__actions">
+              <!-- TODO [1]: href durch Tally-Formular-Link ersetzen -->
+              <a class="btn" href="#tally-formular">Jetzt prüfen lassen</a>
+            </div>
+            <p class="slide__note">Auch möglich, wenn Sie die Nachzahlung schon überwiesen haben.</p>
+          </div>
+          <!-- Motiv: Mieter + markierte Nachzahlungszeile -->
+          <div class="slide__art" aria-hidden="true">
+            <svg viewBox="0 0 360 300">
+              <defs><clipPath id="s2clip"><circle cx="60" cy="62" r="56"/></clipPath></defs>
+              <ellipse cx="180" cy="284" rx="140" ry="12" fill="rgba(36,49,43,0.08)"/>
+              <g transform="translate(168 8) scale(1.55)">
+                <circle cx="60" cy="62" r="56" fill="#E3D9C4"/>
+                <g clip-path="url(#s2clip)">
+                  <path d="M14 122 C26 88 94 88 106 122 Z" fill="#2F5D4C"/>
+                  <rect x="52" y="74" width="16" height="18" rx="5" fill="#A66E4A"/>
+                  <ellipse cx="60" cy="54" rx="20" ry="23" fill="#C68863"/>
+                  <path d="M39 48 C39 28 81 28 81 48 C81 40 72 34 60 34 C48 34 39 40 39 48 Z" fill="#2A241E"/>
+                  <circle cx="52" cy="54" r="2.2" fill="#2A241E"/>
+                  <circle cx="68" cy="54" r="2.2" fill="#2A241E"/>
+                  <path d="M48 47 q4 -3 8 0" stroke="#2A241E" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                  <path d="M64 47 q4 -3 8 0" stroke="#2A241E" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                  <path d="M53 63 q7 6 14 0" stroke="#7A4A34" stroke-width="2" fill="none" stroke-linecap="round"/>
+                </g>
+              </g>
+              <g transform="rotate(-4 105 195)">
+                <rect x="30" y="112" width="152" height="172" rx="8" fill="#FFFFFF" stroke="#24312B" stroke-width="2.5"/>
+                <line x1="46" y1="140" x2="130" y2="140" stroke="#24312B" stroke-width="3" stroke-linecap="round"/>
+                <line x1="46" y1="160" x2="164" y2="160" stroke="#D9D2C4" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="46" y1="177" x2="156" y2="177" stroke="#D9D2C4" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="46" y1="194" x2="160" y2="194" stroke="#D9D2C4" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- rot markierte Nachzahlungszeile -->
+                <rect x="40" y="206" width="130" height="19" rx="4" fill="none" stroke="#A9502F" stroke-width="2"/>
+                <line x1="48" y1="215" x2="130" y2="215" stroke="#A9502F" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="46" y1="244" x2="168" y2="244" stroke="#24312B" stroke-width="1.5"/>
+                <line x1="46" y1="257" x2="120" y2="257" stroke="#24312B" stroke-width="3" stroke-linecap="round"/>
+                <text x="106" y="170" transform="rotate(-16 106 170)" text-anchor="middle" fill="rgba(36,49,43,0.12)" font-family="sans-serif" font-size="26" font-weight="700" letter-spacing="6">MUSTER</text>
+              </g>
+              <!-- Lupe -->
+              <g transform="translate(120 176)">
+                <circle cx="34" cy="34" r="30" fill="rgba(255,255,255,0.5)" stroke="#2F5D4C" stroke-width="5"/>
+                <line x1="57" y1="59" x2="84" y2="88" stroke="#2F5D4C" stroke-width="8" stroke-linecap="round"/>
+              </g>
+              <g>
+                <rect x="26" y="84" width="150" height="26" rx="13" fill="#24312B"/>
+                <text x="101" y="101" text-anchor="middle" fill="#F7F4EE" font-family="sans-serif" font-size="12.5">Musterdarstellung</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Folie 3: Fristen / Umzug -->
+      <div class="slide slide--ink" role="group" aria-roledescription="Folie" aria-label="3 von 3">
+        <div class="wrap slide__inner">
+          <div>
+            <span class="slide__badge">Fristen-Check inklusive</span>
+            <h2 class="slide__title">Abrechnung spät erhalten oder mitten im Jahr umgezogen?</h2>
+            <p class="slide__sub">
+              Dann kommt es besonders auf Zeiträume und Fristen an — etwa, ob die
+              Abrechnung rechtzeitig bei Ihnen war. Genau das sehen wir uns mit an.
+            </p>
+            <div class="slide__actions">
+              <!-- TODO [1]: href durch Tally-Formular-Link ersetzen -->
+              <a class="btn" href="#tally-formular">Jetzt prüfen lassen</a>
+            </div>
+            <p class="slide__note">Abrechnungszeitraum und Zugangsdatum genügen für den ersten Check.</p>
+          </div>
+          <!-- Motiv: Mieter (älter) + Kalender-Dokument -->
+          <div class="slide__art" aria-hidden="true">
+            <svg viewBox="0 0 360 300">
+              <defs><clipPath id="s3clip"><circle cx="60" cy="62" r="56"/></clipPath></defs>
+              <ellipse cx="180" cy="284" rx="140" ry="12" fill="rgba(0,0,0,0.2)"/>
+              <g transform="translate(168 8) scale(1.55)">
+                <circle cx="60" cy="62" r="56" fill="rgba(247,244,238,0.12)"/>
+                <g clip-path="url(#s3clip)">
+                  <path d="M14 122 C26 88 94 88 106 122 Z" fill="#55655D"/>
+                  <rect x="52" y="74" width="16" height="18" rx="5" fill="#D9A876"/>
+                  <ellipse cx="60" cy="54" rx="20" ry="23" fill="#F0C9A0"/>
+                  <path d="M39 46 C39 28 81 28 81 46 C81 38 72 33 60 33 C48 33 39 38 39 46 Z" fill="#8C8578"/>
+                  <circle cx="52" cy="54" r="2" fill="#2A241E"/>
+                  <circle cx="68" cy="54" r="2" fill="#2A241E"/>
+                  <circle cx="52" cy="54" r="6.5" fill="none" stroke="#24312B" stroke-width="1.7"/>
+                  <circle cx="68" cy="54" r="6.5" fill="none" stroke="#24312B" stroke-width="1.7"/>
+                  <line x1="58.5" y1="54" x2="61.5" y2="54" stroke="#24312B" stroke-width="1.7"/>
+                  <path d="M53 64 q7 5 14 0" stroke="#8A5A44" stroke-width="2" fill="none" stroke-linecap="round"/>
+                </g>
+              </g>
+              <!-- Kalenderblatt -->
+              <g transform="rotate(-4 105 195)">
+                <rect x="30" y="112" width="152" height="172" rx="8" fill="#FFFFFF" stroke="#24312B" stroke-width="2.5"/>
+                <line x1="30" y1="146" x2="182" y2="146" stroke="#24312B" stroke-width="2.5"/>
+                <line x1="60" y1="102" x2="60" y2="124" stroke="#24312B" stroke-width="3" stroke-linecap="round"/>
+                <line x1="152" y1="102" x2="152" y2="124" stroke="#24312B" stroke-width="3" stroke-linecap="round"/>
+                <g fill="#D9D2C4">
+                  <circle cx="56" cy="170" r="5"/><circle cx="86" cy="170" r="5"/><circle cx="116" cy="170" r="5"/><circle cx="146" cy="170" r="5"/>
+                  <circle cx="56" cy="198" r="5"/><circle cx="116" cy="198" r="5"/><circle cx="146" cy="198" r="5"/>
+                  <circle cx="56" cy="226" r="5"/><circle cx="86" cy="226" r="5"/><circle cx="146" cy="226" r="5"/>
+                  <circle cx="86" cy="254" r="5"/><circle cx="116" cy="254" r="5"/>
+                </g>
+                <circle cx="86" cy="198" r="11" fill="#F3E3CE" stroke="#B97C3B" stroke-width="2.5"/>
+                <circle cx="116" cy="226" r="11" fill="none" stroke="#2F5D4C" stroke-width="2.5"/>
+                <path d="M111 226l4 4 7 -8" stroke="#2F5D4C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </g>
+              <g>
+                <rect x="26" y="84" width="150" height="26" rx="13" fill="#F7F4EE"/>
+                <text x="101" y="101" text-anchor="middle" fill="#24312B" font-family="sans-serif" font-size="12.5">Musterdarstellung</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Steuerung -->
+    <button class="hero__arrow hero__arrow--prev" type="button" aria-label="Vorheriges Motiv">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11.5 3.5L6 9l5.5 5.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="hero__arrow hero__arrow--next" type="button" aria-label="Nächstes Motiv">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M6.5 3.5L12 9l-5.5 5.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="hero__dots" role="tablist" aria-label="Motiv wählen">
+      <button class="hero__dot is-active" type="button" role="tab" aria-selected="true" aria-label="Motiv 1"></button>
+      <button class="hero__dot" type="button" role="tab" aria-selected="false" aria-label="Motiv 2"></button>
+      <button class="hero__dot" type="button" role="tab" aria-selected="false" aria-label="Motiv 3"></button>
+    </div>
+  </section>
+
+  <!-- ============ Ablauf ============ -->
+  <section id="ablauf" class="section--alt" aria-labelledby="ablauf-title">
+    <div class="wrap">
+      <p class="kicker">So funktioniert’s</p>
+      <h2 id="ablauf-title" class="section-title">In vier Schritten zur Ersteinschätzung</h2>
+      <p class="section-lead">
+        Sie brauchen weder Scanner noch Aktenordner — Fotos Ihrer Unterlagen mit dem
+        Handy reichen aus.
+      </p>
+      <ol class="steps">
+        <li class="step">
+          <span class="step__icon" aria-hidden="true">
+            <!-- Icon: Blatt mit Foto-Ecke -->
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <rect x="4" y="2" width="15" height="20" rx="2" stroke="#2F5D4C" stroke-width="1.8" fill="none"/>
+              <line x1="8" y1="8" x2="15" y2="8" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round"/>
+              <line x1="8" y1="12" x2="14" y2="12" stroke="#D9D2C4" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M15 17l3-3 4 4v4a2 2 0 0 1-2 2h-5v-7z" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.4" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Unterlagen hochladen</h3>
+            <p>Nebenkostenabrechnung und Mietvertrag hochladen oder abfotografieren —
+            ein Handyfoto reicht. Weitere Belege können Sie freiwillig ergänzen.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step__icon" aria-hidden="true">
+            <!-- Icon: Kalenderblatt mit Markierung -->
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <rect x="3" y="5" width="20" height="18" rx="2" stroke="#2F5D4C" stroke-width="1.8" fill="none"/>
+              <line x1="3" y1="10" x2="23" y2="10" stroke="#2F5D4C" stroke-width="1.8"/>
+              <line x1="8" y1="2.5" x2="8" y2="7" stroke="#2F5D4C" stroke-width="1.8" stroke-linecap="round"/>
+              <line x1="18" y1="2.5" x2="18" y2="7" stroke="#2F5D4C" stroke-width="1.8" stroke-linecap="round"/>
+              <circle cx="13" cy="16.5" r="3.2" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.4"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Fristangaben eintragen</h3>
+            <p>Abrechnungszeitraum und Zugangsdatum angeben — daraus ergibt sich, welche
+            Fristen für Abrechnung und Widerspruch relevant sind.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step__icon" aria-hidden="true">
+            <!-- Icon: Umschlag mit Häkchen -->
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <rect x="2.5" y="6" width="21" height="15" rx="2" stroke="#2F5D4C" stroke-width="1.8" fill="none"/>
+              <path d="M3.5 7.5L13 14.5 22.5 7.5" stroke="#2F5D4C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <circle cx="20" cy="19" r="5" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.4"/>
+              <path d="M17.8 19l1.5 1.5 2.6-3" stroke="#B97C3B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Kontaktdaten &amp; Einwilligung</h3>
+            <p>Name und E-Mail-Adresse hinterlassen und der Datenverarbeitung zustimmen —
+            transparent erklärt, jederzeit widerrufbar.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step__icon" aria-hidden="true">
+            <!-- Icon: Sprechblase mit Prüfhaken -->
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <path d="M4 4h18v13H12l-5 5v-5H4V4z" stroke="#2F5D4C" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
+              <path d="M9 10.5l2.5 2.5 5-5.5" stroke="#B97C3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Ersteinschätzung erhalten</h3>
+            <p>Wir sehen uns Ihre Unterlagen an und melden uns zeitnah per E-Mail mit
+            einer ersten Einschätzung und den nächsten möglichen Schritten.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ Leistungsumfang ============ -->
+  <section id="leistungsumfang" aria-labelledby="leistung-title">
+    <div class="wrap">
+      <p class="kicker">Leistungsumfang</p>
+      <h2 id="leistung-title" class="section-title">Was die kostenlose Ersteinschätzung umfasst</h2>
+      <p class="section-lead">
+        Eine sorgfältige, KI-gestützte Durchsicht der Punkte, an denen
+        Nebenkostenabrechnungen typischerweise angreifbar sind.
+      </p>
+      <ul class="features">
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8.5" stroke="#2F5D4C" stroke-width="1.7"/><path d="M11 6.5V11l3.5 2" stroke="#B97C3B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <div>
+            <h3>Prüfung der gesetzlichen Fristen</h3>
+            <p>Hat Ihr Vermieter die Abrechnungsfrist von zwölf Monaten eingehalten —
+            und wie lange können Sie noch Einwendungen erheben?</p>
+          </div>
+        </li>
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="2.5" width="14" height="17" rx="2" stroke="#2F5D4C" stroke-width="1.7"/><path d="M8 7h6M8 10.5h5" stroke="#D9D2C4" stroke-width="1.6" stroke-linecap="round"/><path d="M8 14.5l2 2 4-4.5" stroke="#B97C3B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <div>
+            <h3>Formelle Richtigkeit</h3>
+            <p>Enthält die Abrechnung alle Mindestangaben — Gesamtkosten,
+            Umlageschlüssel, Ihren Anteil, Ihre Vorauszahlungen — nachvollziehbar
+            dargestellt?</p>
+          </div>
+        </li>
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 5h14M4 11h14M4 17h9" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round"/><circle cx="18" cy="17" r="2.6" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.5"/></svg>
+          </span>
+          <div>
+            <h3>Umlegbarkeit der Positionen</h3>
+            <p>Dürfen die abgerechneten Kostenarten nach der Betriebskostenverordnung
+            überhaupt auf Mieter umgelegt werden — oder verstecken sich
+            Verwaltungs- und Instandhaltungskosten darin?</p>
+          </div>
+        </li>
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M5 3.5h9l3.5 3.5v11.5h-12.5z" stroke="#2F5D4C" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3.5V7h3.5" stroke="#2F5D4C" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 12l2.5 2.5L15 9.5" stroke="#B97C3B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <div>
+            <h3>Abgleich mit dem Mietvertrag</h3>
+            <p>Wurden nur Kosten umgelegt, die in Ihrem Mietvertrag vereinbart sind —
+            und stimmt der vereinbarte Verteilerschlüssel mit dem verwendeten überein?</p>
+          </div>
+        </li>
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="7" cy="7" r="3" stroke="#2F5D4C" stroke-width="1.7"/><circle cx="15" cy="15" r="3" stroke="#B97C3B" stroke-width="1.7"/><path d="M16.5 5.5l-11 11" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </span>
+          <div>
+            <h3>Prüfung des Verteilerschlüssels</h3>
+            <p>Ist der Schlüssel — etwa Wohnfläche, Personenzahl oder Verbrauch —
+            korrekt angewandt und rechnerisch richtig auf Ihre Wohnung umgelegt?</p>
+          </div>
+        </li>
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="2.5" width="14" height="17" rx="2" stroke="#2F5D4C" stroke-width="1.7"/><rect x="7" y="5.5" width="8" height="3.5" rx="1" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.3"/><circle cx="8" cy="13" r="1"  fill="#2F5D4C"/><circle cx="11" cy="13" r="1" fill="#2F5D4C"/><circle cx="14" cy="13" r="1" fill="#2F5D4C"/><circle cx="8" cy="16.5" r="1" fill="#2F5D4C"/><circle cx="11" cy="16.5" r="1" fill="#2F5D4C"/><circle cx="14" cy="16.5" r="1" fill="#2F5D4C"/></svg>
+          </span>
+          <div>
+            <h3>Rechnerische Prüfung</h3>
+            <p>Stimmen Summen, Anteile und der Abzug Ihrer geleisteten
+            Vorauszahlungen — oder ergibt die Nachforderung rechnerisch keinen Sinn?</p>
+          </div>
+        </li>
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3c2.5 3 5 5.2 5 8.5a5 5 0 0 1-10 0C6 8.2 8.5 6 11 3z" stroke="#2F5D4C" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12.5a2.2 2.2 0 0 0 2.2 2.2" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <div>
+            <h3>Heiz- und Warmwasserkosten</h3>
+            <p>Wurden die Grundregeln der Heizkostenverordnung beachtet — etwa die
+            vorgeschriebene verbrauchsabhängige Abrechnung?</p>
+          </div>
+        </li>
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="9.5" cy="9.5" r="6" stroke="#2F5D4C" stroke-width="1.7"/><line x1="14" y1="14" x2="19" y2="19" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round"/><path d="M7 9.5h5" stroke="#B97C3B" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </span>
+          <div>
+            <h3>Plausibilitäts-Check</h3>
+            <p>Fallen einzelne Positionen aus dem Rahmen — etwa ungewöhnlich hohe
+            Beträge oder starke Sprünge gegenüber der Vorjahresabrechnung, falls
+            Sie diese mit hochladen?</p>
+          </div>
+        </li>
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3.5 4h15v10H10l-4 4v-4H3.5V4z" stroke="#2F5D4C" stroke-width="1.7" stroke-linejoin="round"/><path d="M7.5 9h7" stroke="#B97C3B" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </span>
+          <div>
+            <h3>Verständliche Rückmeldung</h3>
+            <p>Sie erhalten die Ersteinschätzung in klarer Sprache — mit Hinweisen,
+            welche Punkte sich für eine Nachfrage oder Einwendung beim Vermieter
+            eignen könnten.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ Vertrauen & Transparenz ============ -->
+  <section id="transparenz" aria-labelledby="transparenz-title">
+    <div class="wrap">
+      <p class="kicker">Offen gesagt</p>
+      <h2 id="transparenz-title" class="section-title">Was Sie über diese Prüfung wissen sollten</h2>
+      <p class="section-lead">
+        Ihre Abrechnung und Ihr Mietvertrag sind Vertrauenssache. Deshalb sagen wir klar,
+        was wir tun — und was nicht.
+      </p>
+      <div class="trust">
+        <div class="trust__card">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="3" y="3" width="14" height="14" rx="3" stroke="#2F5D4C" stroke-width="1.6" fill="none"/>
+              <circle cx="7.5" cy="8" r="1.2" fill="#2F5D4C"/>
+              <circle cx="12.5" cy="8" r="1.2" fill="#2F5D4C"/>
+              <path d="M7 12.5h6" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            KI-gestützte Ersteinschätzung
+          </h3>
+          <p>Die erste Auswertung Ihrer Unterlagen erfolgt automatisiert mit Unterstützung
+          künstlicher Intelligenz. Sie interagieren also mit einem KI-System — das sagen
+          wir Ihnen offen, wie es die EU-KI-Verordnung (Art. 50) vorsieht.</p>
+        </div>
+        <div class="trust__card">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M10 2l7 3v5c0 4-3 7-7 8-4-1-7-4-7-8V5l7-3z" stroke="#2F5D4C" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
+              <path d="M7 9.5l2 2 4-4.5" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+            Keine Rechtsberatung, kein Mandat
+          </h3>
+          <p>Während der Testphase entsteht kein Mandatsverhältnis und keine Rechtsberatung
+          im rechtlichen Sinne. Sie erhalten eine unverbindliche Ersteinschätzung —
+          unentgeltlich und ohne Folgeverpflichtung.</p>
+        </div>
+        <div class="trust__card">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="4" y="9" width="12" height="8" rx="2" stroke="#2F5D4C" stroke-width="1.6" fill="none"/>
+              <path d="M7 9V6.5a3 3 0 0 1 6 0V9" stroke="#2F5D4C" stroke-width="1.6" fill="none"/>
+              <circle cx="10" cy="13" r="1.4" fill="#B97C3B"/>
+            </svg>
+            Ihre Daten, Ihre Kontrolle
+          </h3>
+          <p>Ihre Unterlagen werden nur zur Prüfung Ihrer Abrechnung verarbeitet. Details —
+          auch zur Datenverarbeitung durch das eingesetzte KI-Modell — finden Sie in der
+          <!-- TODO [2]: Link zur Datenschutzerklärung einsetzen -->
+          <a href="#datenschutz">Datenschutzerklärung</a>; Angaben zum Anbieter im
+          <!-- TODO [3]: Link zum Impressum einsetzen -->
+          <a href="#impressum">Impressum</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section id="faq" class="section--alt" aria-labelledby="faq-title">
+    <div class="wrap">
+      <p class="kicker">Noch Fragen?</p>
+      <h2 id="faq-title" class="section-title">Antworten auf die häufigsten Fragen</h2>
+      <p class="section-lead">Falls etwas offen bleibt: Schreiben Sie uns einfach an
+        <a href="mailto:info@nebenkosten-anwalt.de">info@nebenkosten-anwalt.de</a>.</p>
+      <div class="faq">
+        <details>
+          <summary>Was kostet die Prüfung?
+            <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </summary>
+          <div>
+            <p>Nichts. Die Prüfung läuft derzeit als private, unentgeltliche Testphase —
+            es gibt keine Gebühren, kein Abo und keine versteckten Kosten. Sie gehen
+            mit dem Hochladen Ihrer Unterlagen keinerlei Verpflichtung ein.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Welche Unterlagen brauche ich?
+            <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </summary>
+          <div>
+            <p>Ihre aktuelle Nebenkostenabrechnung und Ihren Mietvertrag — der Vertrag
+            ist wichtig, weil dort Umlageschlüssel und vereinbarte Kostenarten stehen.
+            Ein Handyfoto genügt, Sie brauchen keinen Scanner.</p>
+            <p>Freiwillig hilfreich: die Vorjahresabrechnung, die Heizkostenabrechnung
+            oder Zahlungsbelege.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Wie läuft die Prüfung ab — und wie lange dauert sie?
+            <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </summary>
+          <div>
+            <p>Ihre Unterlagen werden automatisiert mit KI-Unterstützung ausgewertet
+            und gesichtet. Anschließend melden wir uns zeitnah per E-Mail mit einer
+            ersten Einschätzung — ein festes Zeitversprechen geben wir in der
+            Testphase bewusst nicht.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Ich habe die Nachzahlung schon bezahlt. Lohnt sich die Prüfung trotzdem?
+            <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </summary>
+          <div>
+            <p>Ja, das kann sich lohnen. Eine Zahlung bedeutet nicht, dass Sie die
+            Abrechnung anerkannt haben. Für Einwendungen gilt grundsätzlich eine
+            Frist von zwölf Monaten ab Zugang der Abrechnung — ob Sie noch in
+            diesem Zeitfenster liegen, gehört zu den ersten Punkten, die wir prüfen.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Was prüfen Sie — und was nicht?
+            <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </summary>
+          <div>
+            <p>Wir prüfen Fristen, formelle Richtigkeit, Umlegbarkeit der Positionen,
+            den Abgleich mit Ihrem Mietvertrag, Verteilerschlüssel und die
+            rechnerische Plausibilität — den vollen Umfang finden Sie oben unter
+            <a href="#leistungsumfang">Leistungsumfang</a>.</p>
+            <p>Was wir nicht leisten: eine Rechtsberatung im rechtlichen Sinne oder
+            eine Vertretung gegenüber Ihrem Vermieter. Sie erhalten eine
+            unverbindliche Ersteinschätzung, mit der Sie selbst entscheiden,
+            wie Sie weiter vorgehen.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Was passiert mit meinen Daten?
+            <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </summary>
+          <div>
+            <p>Ihre Unterlagen werden ausschließlich zur Prüfung Ihrer Abrechnung
+            verarbeitet. Zur inhaltlichen Auswertung werden sie an das KI-Modell
+            Claude von Anthropic (USA) übermittelt — darauf weisen wir vor dem
+            Absenden ausdrücklich hin, und Sie willigen aktiv ein. Ihre Einwilligung
+            können Sie jederzeit widerrufen. Details stehen in der
+            <!-- TODO [2]: Link zur Datenschutzerklärung einsetzen -->
+            <a href="#datenschutz">Datenschutzerklärung</a>.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Bin ich danach zu irgendetwas verpflichtet?
+            <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </summary>
+          <div>
+            <p>Nein. Sie erhalten die Ersteinschätzung und entscheiden selbst, ob und
+            wie Sie sie nutzen. Es entsteht kein Vertrag, kein Mandat und keine
+            Zahlungspflicht — auch kein „Trinkgeld" oder Ähnliches.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Abschluss-CTA ============ -->
+  <section class="closing" aria-labelledby="closing-title">
+    <div class="wrap">
+      <div class="closing__box">
+        <h2 id="closing-title">Werfen wir gemeinsam einen Blick auf Ihre Abrechnung.</h2>
+        <p>Kostenlos, unverbindlich und ohne Papierkram — laden Sie Ihre Unterlagen hoch,
+        wir melden uns zeitnah bei Ihnen.</p>
+        <!-- TODO [1]: href durch Tally-Formular-Link ersetzen -->
+        <a class="btn" href="#tally-formular">Jetzt prüfen lassen</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ Footer ============ -->
+<footer>
+  <div class="wrap footer__grid">
+    <div class="footer__legal">
+      <p><strong>Nebenkosten-Anwalt</strong> — private, unentgeltliche Testphase.
+      Automatisierte Ersteinschätzung mit KI-Unterstützung; keine Rechtsberatung im
+      Sinne des RDG, kein Mandatsverhältnis.</p>
+    </div>
+    <nav aria-label="Rechtliches">
+      <ul class="footer__links">
+        <!-- TODO [3]: Link zum Impressum einsetzen -->
+        <li><a href="#impressum">Impressum</a></li>
+        <!-- TODO [2]: Link zur Datenschutzerklärung einsetzen -->
+        <li><a href="#datenschutz">Datenschutz</a></li>
+        <li><a href="mailto:info@nebenkosten-anwalt.de">Kontakt</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var hero = document.querySelector('.hero');
+    if (!hero) return;
+    var slides = Array.prototype.slice.call(hero.querySelectorAll('.slide'));
+    var dots = Array.prototype.slice.call(hero.querySelectorAll('.hero__dot'));
+    var index = 0;
+
+    function go(n) {
+      index = (n + slides.length) % slides.length;
+      slides.forEach(function (s, k) { s.classList.toggle('is-active', k === index); });
+      dots.forEach(function (d, k) {
+        d.classList.toggle('is-active', k === index);
+        d.setAttribute('aria-selected', k === index ? 'true' : 'false');
+      });
+    }
+
+    hero.querySelector('.hero__arrow--prev').addEventListener('click', function () { go(index - 1); });
+    hero.querySelector('.hero__arrow--next').addEventListener('click', function () { go(index + 1); });
+    dots.forEach(function (d, k) { d.addEventListener('click', function () { go(k); }); });
+
+    hero.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') go(index - 1);
+      if (e.key === 'ArrowRight') go(index + 1);
+    });
+
+    /* Wischgeste auf Mobilgeräten */
+    var startX = null;
+    hero.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
+    hero.addEventListener('touchend', function (e) {
+      if (startX === null) return;
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 48) go(dx < 0 ? index + 1 : index - 1);
+      startX = null;
+    }, { passive: true });
+  })();
+</script>
+
+</body>
+</html>
