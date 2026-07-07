@@ -406,7 +406,7 @@
           <line x1="2.5" y1="14.5" x2="17.5" y2="14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
       </button>
-      <a class="btn topbar__cta" href="https://tally.so/r/kdgJDM">Jetzt prüfen lassen</a>
+      <a class="btn topbar__cta" href="https://tally.so/r/kdgJDM" data-tally-open="kdgJDM" data-tally-layout="modal" data-tally-emoji-animation="none">Jetzt prüfen lassen</a>
     </div>
   </div>
   <nav class="mobile-nav" id="mobile-nav" aria-label="Hauptnavigation (mobil)" hidden>
@@ -437,7 +437,7 @@
               Abrechnung näher geprüft werden sollten. Ohne Kosten, ohne Verpflichtung.
             </p>
             <div class="slide__actions">
-              <a class="btn" href="https://tally.so/r/kdgJDM">Jetzt prüfen lassen</a>
+              <a class="btn" href="https://tally.so/r/kdgJDM" data-tally-open="kdgJDM" data-tally-layout="modal" data-tally-emoji-animation="none">Jetzt prüfen lassen</a>
               <a class="btn btn--ghost" href="#ablauf">So funktioniert’s</a>
             </div>
             <p class="slide__note">Kein Papierkram, keine Zahlungsdaten — nur Ihre Unterlagen.</p>
@@ -459,7 +459,7 @@
               Sie nach, bevor Sie zahlen oder widersprechen.
             </p>
             <div class="slide__actions">
-              <a class="btn" href="https://tally.so/r/kdgJDM">Jetzt prüfen lassen</a>
+              <a class="btn" href="https://tally.so/r/kdgJDM" data-tally-open="kdgJDM" data-tally-layout="modal" data-tally-emoji-animation="none">Jetzt prüfen lassen</a>
             </div>
             <p class="slide__note">Auch möglich, wenn Sie die Nachzahlung schon überwiesen haben.</p>
           </div>
@@ -479,7 +479,7 @@
               Abrechnung rechtzeitig bei Ihnen war. Genau das sehen wir uns mit an.
             </p>
             <div class="slide__actions">
-              <a class="btn" href="https://tally.so/r/kdgJDM">Jetzt prüfen lassen</a>
+              <a class="btn" href="https://tally.so/r/kdgJDM" data-tally-open="kdgJDM" data-tally-layout="modal" data-tally-emoji-animation="none">Jetzt prüfen lassen</a>
             </div>
             <p class="slide__note">Abrechnungszeitraum und Zugangsdatum genügen für den ersten Check.</p>
           </div>
@@ -842,7 +842,7 @@
         <h2 id="closing-title">Werfen wir gemeinsam einen Blick auf Ihre Abrechnung.</h2>
         <p>Kostenlos, unverbindlich und ohne Papierkram — laden Sie Ihre Unterlagen hoch,
         wir melden uns zeitnah bei Ihnen.</p>
-        <a class="btn" href="https://tally.so/r/kdgJDM">Jetzt prüfen lassen</a>
+        <a class="btn" href="https://tally.so/r/kdgJDM" data-tally-open="kdgJDM" data-tally-layout="modal" data-tally-emoji-animation="none">Jetzt prüfen lassen</a>
       </div>
     </div>
   </section>
@@ -945,6 +945,9 @@
     });
   })();
 </script>
+
+<!-- Tally-Formular als Popup-Modal (öffnet auf derselben Seite, ohne die Domain zu wechseln). Fällt auf normale Navigation zu tally.so zurück, falls JavaScript blockiert ist. -->
+<script async src="https://tally.so/widgets/embed.js"></script>
 
 </body>
 </html>
