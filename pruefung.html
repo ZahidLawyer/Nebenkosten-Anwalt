@@ -79,13 +79,14 @@
 
   /* ============ Seitenkopf ============ */
   .page-head { padding: 3.25rem 0 2rem; }
+  .page-head__inner { max-width: 40rem; margin: 0 auto; }
   .kicker {
     font-family: var(--sans); font-size: 0.85rem; font-weight: 700;
     letter-spacing: 0.09em; text-transform: uppercase; color: var(--amber);
     margin-bottom: 0.6rem;
   }
   .section-title { font-size: clamp(1.5rem, 3.5vw, 2.1rem); margin-bottom: 0.75rem; }
-  .section-lead { color: var(--ink-soft); max-width: 38rem; }
+  .section-lead { color: var(--ink-soft); }
 
   /* ============ Formular-Bereich ============ */
   .form-area { padding: 0 0 3.5rem; }
@@ -188,13 +189,15 @@
   <!-- ============ Seitenkopf ============ -->
   <section class="page-head">
     <div class="wrap">
-      <p class="kicker">Kostenlose Ersteinschätzung</p>
-      <h1 class="section-title">Ihre Unterlagen hochladen</h1>
-      <p class="section-lead">
-        Laden Sie Ihre Nebenkostenabrechnung und Ihren Mietvertrag hoch — ein Handyfoto
-        genügt. Sie erhalten eine erste Einschätzung, ob Positionen Ihrer Abrechnung
-        näher geprüft werden sollten. Ohne Kosten, ohne Verpflichtung.
-      </p>
+      <div class="page-head__inner">
+        <p class="kicker">Kostenlose Ersteinschätzung</p>
+        <h1 class="section-title">Ihre Unterlagen hochladen</h1>
+        <p class="section-lead">
+          Laden Sie Ihre Nebenkostenabrechnung und Ihren Mietvertrag hoch — ein Handyfoto
+          genügt. Sie erhalten eine erste Einschätzung, ob Positionen Ihrer Abrechnung
+          näher geprüft werden sollten. Ohne Kosten, ohne Verpflichtung.
+        </p>
+      </div>
     </div>
   </section>
 
