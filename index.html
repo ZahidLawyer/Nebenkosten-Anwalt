@@ -57,32 +57,83 @@
   .btn--ghost:hover { background: rgba(47, 93, 76, 0.08); color: var(--moss-deep); }
 
   /* ============ Kopfzeile ============ */
-  .topbar { border-bottom: 1px solid var(--line); background: var(--paper); }
+  .topbar {
+    position: sticky; top: 0; z-index: 30;
+    border-bottom: 1px solid var(--line); background: var(--paper);
+    box-shadow: 0 1px 6px rgba(36,49,43,0.06);
+  }
   .topbar__inner {
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
     padding-top: 1rem; padding-bottom: 1rem;
   }
   .brand {
     display: flex; align-items: center; gap: 0.6rem;
     font-family: var(--serif); font-size: 1.2rem; font-weight: 700;
-    color: var(--ink); text-decoration: none;
+    color: var(--ink); text-decoration: none; flex: none;
   }
   .brand svg { flex: none; }
+  .nav {
+    display: none;
+    align-items: center; gap: 1.75rem;
+    margin: 0 auto 0 1.5rem;
+  }
+  .nav a {
+    font-family: var(--sans); font-size: 0.95rem; font-weight: 600;
+    color: var(--ink); text-decoration: none;
+    padding-bottom: 3px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .nav a:hover, .nav a:focus-visible { color: var(--moss-deep); border-color: var(--moss-deep); }
+  .topbar__right { display: flex; align-items: center; gap: 0.65rem; flex: none; }
   .topbar__cta { font-size: 0.95rem; padding: 0.55rem 1.1rem; }
+  .nav-toggle {
+    display: inline-grid; place-items: center;
+    width: 2.5rem; height: 2.5rem;
+    border: 1px solid var(--line); border-radius: 6px;
+    background: var(--paper); color: var(--ink);
+    cursor: pointer;
+  }
+  .nav-toggle:hover, .nav-toggle:focus-visible { border-color: var(--moss-deep); color: var(--moss-deep); }
+  .mobile-nav {
+    display: flex; flex-direction: column;
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .mobile-nav[hidden] { display: none; }
+  .mobile-nav a {
+    padding: 0.9rem 1.25rem;
+    font-family: var(--sans); font-weight: 600; color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .mobile-nav a:hover, .mobile-nav a:focus-visible { color: var(--moss-deep); }
+  #ablauf, #leistungsumfang, #transparenz, #faq { scroll-margin-top: 5rem; }
 
   /* ============ Hero-Karussell ============ */
   .hero { position: relative; overflow: hidden; }
   .hero__slides { display: grid; }
   .slide {
     grid-area: 1 / 1;
+    position: relative;
+    min-height: clamp(30rem, 60vh, 38rem);
     opacity: 0; visibility: hidden;
     transition: opacity 0.45s ease, visibility 0.45s ease;
   }
   .slide.is-active { opacity: 1; visibility: visible; }
+  .slide__bg {
+    position: absolute; inset: 0; z-index: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center right;
+  }
+  .slide__overlay { position: absolute; inset: 0; z-index: 1; }
   .slide__inner {
-    display: grid; gap: 2rem; align-items: center;
+    position: relative; z-index: 2;
+    min-height: clamp(30rem, 60vh, 38rem);
+    display: flex; align-items: center;
     padding: 3rem 0 4.75rem;
   }
+  .slide__content { max-width: 34rem; }
   .slide__badge {
     display: inline-block;
     font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em;
@@ -98,8 +149,6 @@
   .slide__sub { max-width: 34rem; margin-bottom: 1.75rem; }
   .slide__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
   .slide__note { font-size: 0.9rem; margin-top: 1rem; }
-  .slide__art { max-width: 26rem; margin: 0 auto; }
-  .slide__art svg { display: block; width: 100%; height: auto; }
 
   /* Farbwelten der Folien */
   .slide--moss { background: var(--moss); color: #fff; }
@@ -109,25 +158,34 @@
   .slide--moss .btn:hover { background: #fff; }
   .slide--moss .btn--ghost { background: transparent; color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.7); }
   .slide--moss .btn--ghost:hover { background: rgba(255,255,255,0.1); }
+  .slide--moss .slide__overlay {
+    background: linear-gradient(to right, rgba(47,93,76,0.96) 0%, rgba(47,93,76,0.82) 45%, rgba(47,93,76,0.25) 100%);
+  }
 
   .slide--sand { background: #EFE6D6; color: var(--ink); }
   .slide--sand .slide__badge { color: var(--amber); }
   .slide--sand .slide__sub, .slide--sand .slide__note { color: var(--ink-soft); }
+  .slide--sand .slide__overlay {
+    background: linear-gradient(to right, rgba(239,230,214,0.96) 0%, rgba(239,230,214,0.82) 45%, rgba(239,230,214,0.25) 100%);
+  }
 
   .slide--ink { background: #24312B; color: #fff; }
   .slide--ink .slide__badge { color: #F3E3CE; }
   .slide--ink .slide__sub, .slide--ink .slide__note { color: rgba(255,255,255,0.8); }
   .slide--ink .btn { background: var(--paper); color: var(--moss-deep); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
   .slide--ink .btn:hover { background: #fff; }
+  .slide--ink .slide__overlay {
+    background: linear-gradient(to right, rgba(36,49,43,0.96) 0%, rgba(36,49,43,0.82) 45%, rgba(36,49,43,0.35) 100%);
+  }
 
   /* Pfeile + Punkte */
   .hero__arrow {
     position: absolute; top: 50%; transform: translateY(-50%);
     width: 2.75rem; height: 2.75rem;
     border: none; border-radius: 50%;
-    background: rgba(247,244,238,0.9); color: var(--ink);
+    background: rgba(247,244,238,0.95); color: var(--ink);
     display: grid; place-items: center;
-    cursor: pointer; z-index: 2;
+    cursor: pointer; z-index: 3;
     box-shadow: 0 1px 4px rgba(0,0,0,0.18);
   }
   .hero__arrow:hover { background: #fff; }
@@ -135,13 +193,13 @@
   .hero__arrow--next { right: 0.75rem; }
   .hero__dots {
     position: absolute; bottom: 1.25rem; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 0.55rem; z-index: 2;
+    display: flex; gap: 0.55rem; z-index: 3;
   }
   .hero__dot {
     width: 0.7rem; height: 0.7rem; padding: 0;
     border-radius: 50%; cursor: pointer;
-    border: 1.5px solid rgba(247,244,238,0.9);
-    background: rgba(36,49,43,0.25);
+    border: 1.5px solid rgba(247,244,238,0.95);
+    background: rgba(36,49,43,0.35);
   }
   .slide--sand ~ .hero__dots .hero__dot { border-color: rgba(36,49,43,0.4); }
   .hero__dot.is-active { background: var(--amber); border-color: var(--amber); }
@@ -256,10 +314,34 @@
   .footer__links a { color: var(--ink-soft); }
   .footer__legal { max-width: 44rem; }
 
+  /* ============ Kleinere Bildschirme (< 46rem) ============ */
+  @media (max-width: 45.99rem) {
+    .slide__overlay { background-blend-mode: normal; }
+    .slide--moss .slide__overlay {
+      background:
+        linear-gradient(to bottom, rgba(47,93,76,0.55) 0%, rgba(47,93,76,0.9) 55%, rgba(47,93,76,0.96) 100%),
+        linear-gradient(to right, rgba(47,93,76,0.85) 0%, rgba(47,93,76,0.6) 100%);
+    }
+    .slide--sand .slide__overlay {
+      background:
+        linear-gradient(to bottom, rgba(239,230,214,0.55) 0%, rgba(239,230,214,0.9) 55%, rgba(239,230,214,0.96) 100%),
+        linear-gradient(to right, rgba(239,230,214,0.85) 0%, rgba(239,230,214,0.6) 100%);
+    }
+    .slide--ink .slide__overlay {
+      background:
+        linear-gradient(to bottom, rgba(36,49,43,0.6) 0%, rgba(36,49,43,0.92) 55%, rgba(36,49,43,0.97) 100%),
+        linear-gradient(to right, rgba(36,49,43,0.88) 0%, rgba(36,49,43,0.65) 100%);
+    }
+    .slide__bg { object-position: 70% center; }
+    .slide__inner { align-items: flex-end; padding-bottom: 3rem; }
+  }
+
   /* ============ Größere Bildschirme ============ */
   @media (min-width: 46rem) {
-    .slide__inner { grid-template-columns: 1.1fr 0.9fr; padding: 4.25rem 0 5.25rem; }
-    .slide__art { max-width: none; margin: 0; }
+    .nav { display: flex; }
+    .nav-toggle { display: none; }
+    .mobile-nav { display: none !important; }
+    .slide__inner { padding: 4.25rem 0 5.25rem; }
     .hero__arrow--prev { left: 1.5rem; }
     .hero__arrow--next { right: 1.5rem; }
     .steps { grid-template-columns: 1fr 1fr; }
@@ -294,8 +376,29 @@
       </svg>
       Nebenkosten-Anwalt
     </a>
-    <a class="btn topbar__cta" href="https://tally.so/r/kdgJDM">Jetzt prüfen lassen</a>
+    <nav class="nav" aria-label="Hauptnavigation">
+      <a href="#ablauf">So funktioniert’s</a>
+      <a href="#leistungsumfang">Leistungsumfang</a>
+      <a href="#transparenz">Transparenz</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="topbar__right">
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Menü öffnen">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <line x1="2.5" y1="5.5"  x2="17.5" y2="5.5"  stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="2.5" y1="10"   x2="17.5" y2="10"   stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="2.5" y1="14.5" x2="17.5" y2="14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <a class="btn topbar__cta" href="https://tally.so/r/kdgJDM">Jetzt prüfen lassen</a>
+    </div>
   </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Hauptnavigation (mobil)" hidden>
+    <a href="#ablauf">So funktioniert’s</a>
+    <a href="#leistungsumfang">Leistungsumfang</a>
+    <a href="#transparenz">Transparenz</a>
+    <a href="#faq">FAQ</a>
+  </nav>
 </header>
 
 <main>
@@ -306,8 +409,10 @@
 
       <!-- Folie 1: Standard-Einstieg -->
       <div class="slide slide--moss is-active" role="group" aria-roledescription="Folie" aria-label="1 von 3">
+        <img class="slide__bg" src="assets/hero-1.png" alt="" aria-hidden="true" loading="eager" fetchpriority="high">
+        <div class="slide__overlay" aria-hidden="true"></div>
         <div class="wrap slide__inner">
-          <div>
+          <div class="slide__content">
             <span class="slide__badge">Private, unentgeltliche Testphase</span>
             <h1 class="slide__title">Nebenkostenabrechnung erhalten? Kostenlos prüfen lassen.</h1>
             <p class="slide__sub">
@@ -321,56 +426,15 @@
             </div>
             <p class="slide__note">Kein Papierkram, keine Zahlungsdaten — nur Ihre Unterlagen.</p>
           </div>
-          <!-- Motiv: Mieterin + Muster-Prüfergebnis -->
-          <div class="slide__art" aria-hidden="true">
-            <svg viewBox="0 0 360 300">
-              <defs><clipPath id="s1clip"><circle cx="60" cy="62" r="56"/></clipPath></defs>
-              <ellipse cx="180" cy="284" rx="140" ry="12" fill="rgba(0,0,0,0.12)"/>
-              <!-- Person -->
-              <g transform="translate(168 8) scale(1.55)">
-                <circle cx="60" cy="62" r="56" fill="rgba(247,244,238,0.16)"/>
-                <g clip-path="url(#s1clip)">
-                  <path d="M14 122 C26 88 94 88 106 122 Z" fill="#B97C3B"/>
-                  <rect x="52" y="74" width="16" height="18" rx="5" fill="#C68863"/>
-                  <ellipse cx="60" cy="54" rx="20" ry="23" fill="#E8B48C"/>
-                  <path d="M37 58 C34 26 86 26 83 58 C83 38 76 32 60 32 C44 32 37 38 37 58 Z" fill="#3E3229"/>
-                  <circle cx="60" cy="24" r="9" fill="#3E3229"/>
-                  <circle cx="52" cy="54" r="2.2" fill="#2A241E"/>
-                  <circle cx="68" cy="54" r="2.2" fill="#2A241E"/>
-                  <path d="M48 47 q4 -3 8 0" stroke="#3E3229" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-                  <path d="M64 47 q4 -3 8 0" stroke="#3E3229" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-                  <path d="M53 63 q7 6 14 0" stroke="#8A5A44" stroke-width="2" fill="none" stroke-linecap="round"/>
-                </g>
-              </g>
-              <!-- Muster-Dokument -->
-              <g transform="rotate(-4 105 195)">
-                <rect x="30" y="112" width="152" height="172" rx="8" fill="#FFFFFF" stroke="#24312B" stroke-width="2.5"/>
-                <line x1="46" y1="140" x2="130" y2="140" stroke="#24312B" stroke-width="3" stroke-linecap="round"/>
-                <line x1="46" y1="160" x2="164" y2="160" stroke="#D9D2C4" stroke-width="2.5" stroke-linecap="round"/>
-                <line x1="46" y1="177" x2="156" y2="177" stroke="#D9D2C4" stroke-width="2.5" stroke-linecap="round"/>
-                <rect x="40" y="188" width="130" height="19" rx="4" fill="#F3E3CE"/>
-                <line x1="46" y1="197" x2="158" y2="197" stroke="#B97C3B" stroke-width="2.5" stroke-linecap="round"/>
-                <line x1="46" y1="220" x2="150" y2="220" stroke="#D9D2C4" stroke-width="2.5" stroke-linecap="round"/>
-                <line x1="46" y1="244" x2="168" y2="244" stroke="#24312B" stroke-width="1.5"/>
-                <line x1="46" y1="257" x2="120" y2="257" stroke="#24312B" stroke-width="3" stroke-linecap="round"/>
-                <text x="106" y="238" transform="rotate(-16 106 238)" text-anchor="middle" fill="rgba(36,49,43,0.14)" font-family="sans-serif" font-size="26" font-weight="700" letter-spacing="6">MUSTER</text>
-                <circle cx="176" cy="272" r="16" fill="#2F5D4C"/>
-                <path d="M169 272l5 5 9 -10" stroke="#F7F4EE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              </g>
-              <!-- Beschriftung -->
-              <g>
-                <rect x="26" y="84" width="150" height="26" rx="13" fill="#24312B"/>
-                <text x="101" y="101" text-anchor="middle" fill="#F7F4EE" font-family="sans-serif" font-size="12.5">Musterdarstellung</text>
-              </g>
-            </svg>
-          </div>
         </div>
       </div>
 
       <!-- Folie 2: Nachzahlung -->
       <div class="slide slide--sand" role="group" aria-roledescription="Folie" aria-label="2 von 3">
+        <img class="slide__bg" src="assets/hero-2.png" alt="" aria-hidden="true" loading="lazy">
+        <div class="slide__overlay" aria-hidden="true"></div>
         <div class="wrap slide__inner">
-          <div>
+          <div class="slide__content">
             <span class="slide__badge">Kostenlos in der Testphase</span>
             <h2 class="slide__title">Nachzahlung höher als erwartet?</h2>
             <p class="slide__sub">
@@ -383,56 +447,15 @@
             </div>
             <p class="slide__note">Auch möglich, wenn Sie die Nachzahlung schon überwiesen haben.</p>
           </div>
-          <!-- Motiv: Mieter + markierte Nachzahlungszeile -->
-          <div class="slide__art" aria-hidden="true">
-            <svg viewBox="0 0 360 300">
-              <defs><clipPath id="s2clip"><circle cx="60" cy="62" r="56"/></clipPath></defs>
-              <ellipse cx="180" cy="284" rx="140" ry="12" fill="rgba(36,49,43,0.08)"/>
-              <g transform="translate(168 8) scale(1.55)">
-                <circle cx="60" cy="62" r="56" fill="#E3D9C4"/>
-                <g clip-path="url(#s2clip)">
-                  <path d="M14 122 C26 88 94 88 106 122 Z" fill="#2F5D4C"/>
-                  <rect x="52" y="74" width="16" height="18" rx="5" fill="#A66E4A"/>
-                  <ellipse cx="60" cy="54" rx="20" ry="23" fill="#C68863"/>
-                  <path d="M39 48 C39 28 81 28 81 48 C81 40 72 34 60 34 C48 34 39 40 39 48 Z" fill="#2A241E"/>
-                  <circle cx="52" cy="54" r="2.2" fill="#2A241E"/>
-                  <circle cx="68" cy="54" r="2.2" fill="#2A241E"/>
-                  <path d="M48 47 q4 -3 8 0" stroke="#2A241E" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-                  <path d="M64 47 q4 -3 8 0" stroke="#2A241E" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-                  <path d="M53 63 q7 6 14 0" stroke="#7A4A34" stroke-width="2" fill="none" stroke-linecap="round"/>
-                </g>
-              </g>
-              <g transform="rotate(-4 105 195)">
-                <rect x="30" y="112" width="152" height="172" rx="8" fill="#FFFFFF" stroke="#24312B" stroke-width="2.5"/>
-                <line x1="46" y1="140" x2="130" y2="140" stroke="#24312B" stroke-width="3" stroke-linecap="round"/>
-                <line x1="46" y1="160" x2="164" y2="160" stroke="#D9D2C4" stroke-width="2.5" stroke-linecap="round"/>
-                <line x1="46" y1="177" x2="156" y2="177" stroke="#D9D2C4" stroke-width="2.5" stroke-linecap="round"/>
-                <line x1="46" y1="194" x2="160" y2="194" stroke="#D9D2C4" stroke-width="2.5" stroke-linecap="round"/>
-                <!-- rot markierte Nachzahlungszeile -->
-                <rect x="40" y="206" width="130" height="19" rx="4" fill="none" stroke="#A9502F" stroke-width="2"/>
-                <line x1="48" y1="215" x2="130" y2="215" stroke="#A9502F" stroke-width="2.5" stroke-linecap="round"/>
-                <line x1="46" y1="244" x2="168" y2="244" stroke="#24312B" stroke-width="1.5"/>
-                <line x1="46" y1="257" x2="120" y2="257" stroke="#24312B" stroke-width="3" stroke-linecap="round"/>
-                <text x="106" y="170" transform="rotate(-16 106 170)" text-anchor="middle" fill="rgba(36,49,43,0.12)" font-family="sans-serif" font-size="26" font-weight="700" letter-spacing="6">MUSTER</text>
-              </g>
-              <!-- Lupe -->
-              <g transform="translate(120 176)">
-                <circle cx="34" cy="34" r="30" fill="rgba(255,255,255,0.5)" stroke="#2F5D4C" stroke-width="5"/>
-                <line x1="57" y1="59" x2="84" y2="88" stroke="#2F5D4C" stroke-width="8" stroke-linecap="round"/>
-              </g>
-              <g>
-                <rect x="26" y="84" width="150" height="26" rx="13" fill="#24312B"/>
-                <text x="101" y="101" text-anchor="middle" fill="#F7F4EE" font-family="sans-serif" font-size="12.5">Musterdarstellung</text>
-              </g>
-            </svg>
-          </div>
         </div>
       </div>
 
       <!-- Folie 3: Fristen / Umzug -->
       <div class="slide slide--ink" role="group" aria-roledescription="Folie" aria-label="3 von 3">
+        <img class="slide__bg" src="assets/hero-3.png" alt="" aria-hidden="true" loading="lazy">
+        <div class="slide__overlay" aria-hidden="true"></div>
         <div class="wrap slide__inner">
-          <div>
+          <div class="slide__content">
             <span class="slide__badge">Fristen-Check inklusive</span>
             <h2 class="slide__title">Abrechnung spät erhalten oder mitten im Jahr umgezogen?</h2>
             <p class="slide__sub">
@@ -443,48 +466,6 @@
               <a class="btn" href="https://tally.so/r/kdgJDM">Jetzt prüfen lassen</a>
             </div>
             <p class="slide__note">Abrechnungszeitraum und Zugangsdatum genügen für den ersten Check.</p>
-          </div>
-          <!-- Motiv: Mieter (älter) + Kalender-Dokument -->
-          <div class="slide__art" aria-hidden="true">
-            <svg viewBox="0 0 360 300">
-              <defs><clipPath id="s3clip"><circle cx="60" cy="62" r="56"/></clipPath></defs>
-              <ellipse cx="180" cy="284" rx="140" ry="12" fill="rgba(0,0,0,0.2)"/>
-              <g transform="translate(168 8) scale(1.55)">
-                <circle cx="60" cy="62" r="56" fill="rgba(247,244,238,0.12)"/>
-                <g clip-path="url(#s3clip)">
-                  <path d="M14 122 C26 88 94 88 106 122 Z" fill="#55655D"/>
-                  <rect x="52" y="74" width="16" height="18" rx="5" fill="#D9A876"/>
-                  <ellipse cx="60" cy="54" rx="20" ry="23" fill="#F0C9A0"/>
-                  <path d="M39 46 C39 28 81 28 81 46 C81 38 72 33 60 33 C48 33 39 38 39 46 Z" fill="#8C8578"/>
-                  <circle cx="52" cy="54" r="2" fill="#2A241E"/>
-                  <circle cx="68" cy="54" r="2" fill="#2A241E"/>
-                  <circle cx="52" cy="54" r="6.5" fill="none" stroke="#24312B" stroke-width="1.7"/>
-                  <circle cx="68" cy="54" r="6.5" fill="none" stroke="#24312B" stroke-width="1.7"/>
-                  <line x1="58.5" y1="54" x2="61.5" y2="54" stroke="#24312B" stroke-width="1.7"/>
-                  <path d="M53 64 q7 5 14 0" stroke="#8A5A44" stroke-width="2" fill="none" stroke-linecap="round"/>
-                </g>
-              </g>
-              <!-- Kalenderblatt -->
-              <g transform="rotate(-4 105 195)">
-                <rect x="30" y="112" width="152" height="172" rx="8" fill="#FFFFFF" stroke="#24312B" stroke-width="2.5"/>
-                <line x1="30" y1="146" x2="182" y2="146" stroke="#24312B" stroke-width="2.5"/>
-                <line x1="60" y1="102" x2="60" y2="124" stroke="#24312B" stroke-width="3" stroke-linecap="round"/>
-                <line x1="152" y1="102" x2="152" y2="124" stroke="#24312B" stroke-width="3" stroke-linecap="round"/>
-                <g fill="#D9D2C4">
-                  <circle cx="56" cy="170" r="5"/><circle cx="86" cy="170" r="5"/><circle cx="116" cy="170" r="5"/><circle cx="146" cy="170" r="5"/>
-                  <circle cx="56" cy="198" r="5"/><circle cx="116" cy="198" r="5"/><circle cx="146" cy="198" r="5"/>
-                  <circle cx="56" cy="226" r="5"/><circle cx="86" cy="226" r="5"/><circle cx="146" cy="226" r="5"/>
-                  <circle cx="86" cy="254" r="5"/><circle cx="116" cy="254" r="5"/>
-                </g>
-                <circle cx="86" cy="198" r="11" fill="#F3E3CE" stroke="#B97C3B" stroke-width="2.5"/>
-                <circle cx="116" cy="226" r="11" fill="none" stroke="#2F5D4C" stroke-width="2.5"/>
-                <path d="M111 226l4 4 7 -8" stroke="#2F5D4C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              </g>
-              <g>
-                <rect x="26" y="84" width="150" height="26" rx="13" fill="#F7F4EE"/>
-                <text x="101" y="101" text-anchor="middle" fill="#24312B" font-family="sans-serif" font-size="12.5">Musterdarstellung</text>
-              </g>
-            </svg>
           </div>
         </div>
       </div>
@@ -905,6 +886,47 @@
       if (Math.abs(dx) > 48) go(dx < 0 ? index + 1 : index - 1);
       startX = null;
     }, { passive: true });
+  })();
+
+  /* Mobile Navigation (Hamburger) */
+  (function () {
+    var toggle = document.querySelector('.nav-toggle');
+    var panel = document.getElementById('mobile-nav');
+    if (!toggle || !panel) return;
+
+    function closePanel() {
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+    function openPanel() {
+      panel.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+
+    toggle.addEventListener('click', function () {
+      var expanded = toggle.getAttribute('aria-expanded') === 'true';
+      if (expanded) { closePanel(); } else { openPanel(); }
+    });
+
+    panel.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', closePanel);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        closePanel();
+        toggle.focus();
+      }
+    });
+
+    document.addEventListener('click', function (e) {
+      if (toggle.getAttribute('aria-expanded') !== 'true') return;
+      if (!panel.contains(e.target) && !toggle.contains(e.target)) closePanel();
+    });
+
+    window.addEventListener('resize', function () {
+      if (window.innerWidth >= 736 && toggle.getAttribute('aria-expanded') === 'true') closePanel();
+    });
   })();
 </script>
 
