@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unterlagen hochladen — Nebenkosten-Anwalt</title>
+<meta name="description" content="Laden Sie Ihre Nebenkostenabrechnung und Ihren Mietvertrag hoch und erhalten Sie kostenlos eine erste Einschätzung.">
+<style>
+  /* ============ Grundgerüst (identisch zu index.html) ============ */
+  :root {
+    --ink:        #24312B;   /* dunkles Grünschwarz — Text */
+    --ink-soft:   #55655D;   /* gedämpftes Grüngrau — Nebentext */
+    --paper:      #F7F4EE;   /* warmes Papierweiß — Grundfläche */
+    --paper-deep: #EFEAE0;   /* Karten / abgesetzte Flächen */
+    --moss:       #2F5D4C;   /* Moosgrün — Primärfarbe, Buttons */
+    --moss-deep:  #24493C;   /* Hover */
+    --amber:      #B97C3B;   /* warmes Ocker — Akzente, Nummern */
+    --line:       #D9D2C4;   /* Trennlinien */
+    --serif: "Charter", "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+    --sans: "Avenir Next", "Segoe UI", "Trebuchet MS", system-ui, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body {
+    font-family: var(--sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 700; line-height: 1.2; }
+  a { color: var(--moss); }
+  .wrap { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem; }
+
+  .btn {
+    display: inline-block;
+    background: var(--moss);
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.9rem 1.9rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 0 var(--moss-deep);
+    transition: background 0.15s ease, transform 0.1s ease;
+    border: none; cursor: pointer;
+  }
+  .btn:hover, .btn:focus-visible { background: var(--moss-deep); }
+  .btn:active { transform: translateY(1px); box-shadow: none; }
+
+  /* ============ Kopfzeile (identisch zu index.html) ============ */
+  .topbar {
+    position: sticky; top: 0; z-index: 30;
+    border-bottom: 1px solid var(--line); background: var(--paper);
+    box-shadow: 0 1px 6px rgba(36,49,43,0.06);
+  }
+  .topbar__inner {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.6rem;
+    flex-wrap: wrap; row-gap: 0.5rem;
+    padding-top: 1rem; padding-bottom: 1rem;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-family: var(--serif); font-size: 1.2rem; font-weight: 700;
+    color: var(--ink); text-decoration: none;
+    min-width: 0; flex-shrink: 1;
+  }
+  .brand svg { flex: none; }
+  .brand__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .topbar__back {
+    font-family: var(--sans); font-size: 0.95rem; font-weight: 600;
+    color: var(--ink); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .topbar__back:hover, .topbar__back:focus-visible { color: var(--moss-deep); }
+
+  /* ============ Seitenkopf ============ */
+  .page-head { padding: 3.25rem 0 2rem; }
+  .kicker {
+    font-family: var(--sans); font-size: 0.85rem; font-weight: 700;
+    letter-spacing: 0.09em; text-transform: uppercase; color: var(--amber);
+    margin-bottom: 0.6rem;
+  }
+  .section-title { font-size: clamp(1.5rem, 3.5vw, 2.1rem); margin-bottom: 0.75rem; }
+  .section-lead { color: var(--ink-soft); max-width: 38rem; }
+
+  /* ============ Formular-Bereich ============ */
+  .form-area { padding: 0 0 3.5rem; }
+  .form-card {
+    max-width: 40rem; margin: 0 auto;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 0.5rem;
+    position: relative;
+  }
+  .form-card__iframe-wrap { position: relative; min-height: 22rem; }
+  .form-card iframe {
+    width: 100%; border: none; display: block; border-radius: 8px;
+    background: transparent;
+  }
+  .form-skeleton {
+    position: absolute; inset: 0.5rem;
+    display: flex; flex-direction: column; gap: 0.9rem;
+    padding: 1.5rem;
+    background: var(--paper);
+    border-radius: 8px;
+  }
+  .form-skeleton__bar {
+    height: 0.9rem; border-radius: 4px;
+    background: linear-gradient(90deg, var(--paper-deep) 25%, var(--line) 37%, var(--paper-deep) 63%);
+    background-size: 400% 100%;
+    animation: skeleton-shimmer 1.4s ease infinite;
+  }
+  .form-skeleton__bar--wide { width: 70%; }
+  .form-skeleton__bar--full { width: 100%; }
+  .form-skeleton__bar--short { width: 40%; }
+  .form-skeleton__bar--btn { width: 40%; height: 2.5rem; margin-top: 0.5rem; }
+  @keyframes skeleton-shimmer {
+    0% { background-position: 100% 50%; }
+    100% { background-position: 0 50%; }
+  }
+  .form-card.is-loaded .form-skeleton { display: none; }
+  .form-fallback {
+    text-align: center; font-size: 0.92rem; color: var(--ink-soft);
+    margin: 1rem auto 0; max-width: 40rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .form-skeleton__bar { animation: none; }
+  }
+
+  /* ============ Footer (identisch zu index.html) ============ */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 2rem 0 2.5rem;
+    font-size: 0.92rem; color: var(--ink-soft);
+  }
+  .footer__grid { display: grid; gap: 1.25rem; }
+  .footer__links { list-style: none; display: flex; flex-wrap: wrap; gap: 1.25rem; }
+  .footer__links a { color: var(--ink-soft); }
+  .footer__legal { max-width: 44rem; }
+
+  /* ============ Kleinere Bildschirme (< 46rem) ============ */
+  @media (max-width: 45.99rem) {
+    .topbar__inner { gap: 0.4rem; flex-wrap: nowrap; }
+    .brand { font-size: 1rem; gap: 0.4rem; }
+    .brand svg { width: 24px; height: 24px; }
+    .brand__text {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+    .topbar__back span.topbar__back-text { display: none; }
+  }
+
+  /* ============ Größere Bildschirme ============ */
+  @media (min-width: 46rem) {
+    .footer__grid { grid-template-columns: 1fr auto; align-items: start; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" href="index.html">
+      <!-- Logo: stilisiertes Abrechnungsblatt mit Prüfhaken -->
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+        <rect x="5" y="3" width="18" height="24" rx="2" fill="#F7F4EE" stroke="#2F5D4C" stroke-width="1.8"/>
+        <line x1="9" y1="9"  x2="19" y2="9"  stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round"/>
+        <line x1="9" y1="13" x2="17" y2="13" stroke="#D9D2C4" stroke-width="1.6" stroke-linecap="round"/>
+        <line x1="9" y1="17" x2="18" y2="17" stroke="#D9D2C4" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M11 22.5l2.5 2.5 5-5.5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <span class="brand__text">Nebenkosten-Anwalt</span>
+    </a>
+    <a class="topbar__back" href="index.html">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M9.5 3.5L5 8l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="topbar__back-text">Zurück zur Startseite</span>
+    </a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ Seitenkopf ============ -->
+  <section class="page-head">
+    <div class="wrap">
+      <p class="kicker">Kostenlose Ersteinschätzung</p>
+      <h1 class="section-title">Ihre Unterlagen hochladen</h1>
+      <p class="section-lead">
+        Laden Sie Ihre Nebenkostenabrechnung und Ihren Mietvertrag hoch — ein Handyfoto
+        genügt. Sie erhalten eine erste Einschätzung, ob Positionen Ihrer Abrechnung
+        näher geprüft werden sollten. Ohne Kosten, ohne Verpflichtung.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ Formular ============ -->
+  <section class="form-area">
+    <div class="wrap">
+      <div class="form-card" id="form-card">
+        <div class="form-card__iframe-wrap">
+          <div class="form-skeleton" aria-hidden="true">
+            <div class="form-skeleton__bar form-skeleton__bar--short"></div>
+            <div class="form-skeleton__bar form-skeleton__bar--wide"></div>
+            <div class="form-skeleton__bar form-skeleton__bar--full"></div>
+            <div class="form-skeleton__bar form-skeleton__bar--full"></div>
+            <div class="form-skeleton__bar form-skeleton__bar--btn"></div>
+          </div>
+          <iframe
+            id="tally-frame"
+            data-tally-src="https://tally.so/embed/kdgJDM?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+            title="Nebenkostenabrechnung prüfen lassen — Formular"
+            loading="lazy"
+            width="100%"
+            height="1"
+          ></iframe>
+        </div>
+      </div>
+      <p class="form-fallback">
+        Formular lädt nicht? <a href="https://tally.so/r/kdgJDM">Direkt bei Tally öffnen</a>.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ Footer (identisch zu index.html) ============ -->
+<footer>
+  <div class="wrap footer__grid">
+    <div class="footer__legal">
+      <p><strong>Nebenkosten-Anwalt</strong> — private, unentgeltliche Testphase.
+      Automatisierte Ersteinschätzung mit KI-Unterstützung; keine Rechtsberatung im
+      Sinne des RDG, kein Mandatsverhältnis.</p>
+    </div>
+    <nav aria-label="Rechtliches">
+      <ul class="footer__links">
+        <li><a href="impressum.html">Impressum</a></li>
+        <li><a href="datenschutz.html">Datenschutz</a></li>
+        <li><a href="mailto:info@nebenkosten-anwalt.de">Kontakt</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var frame = document.getElementById('tally-frame');
+    var card = document.getElementById('form-card');
+    if (!frame || !card) return;
+    frame.addEventListener('load', function () { card.classList.add('is-loaded'); });
+  })();
+</script>
+
+<!-- Offizielles Tally-Skript: löst data-tally-src ein und passt die iframe-Höhe dynamisch an den Formularinhalt an. -->
+<script async src="https://tally.so/widgets/embed.js"></script>
+
+</body>
+</html>
