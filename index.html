@@ -3,9 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nebenkosten-Anwalt — Nebenkostenabrechnung kostenlos prüfen lassen</title>
-<meta name="description" content="Nebenkostenabrechnung erhalten? Lassen Sie sie in unserer privaten Testphase kostenlos prüfen. Unterlagen hochladen, wir melden uns zeitnah mit einer Ersteinschätzung.">
-<!-- Links aktualisiert: Tally-Formular, Datenschutz, Impressum eingesetzt (2026-07-07) -->
+<title>Nebenkostenabrechnung kostenlos prüfen lassen — Nebenkosten-Anwalt</title>
+<meta name="description" content="Rund jede zweite Nebenkostenabrechnung ist laut Deutschem Mieterbund fehlerhaft. Abrechnung + Mietvertrag hochladen — Sie erhalten eine kostenlose, von einem Volljuristen geprüfte Ersteinschätzung.">
+<link rel="canonical" href="https://zahidlawyer.github.io/Nebenkosten-Anwalt/">
+<meta name="theme-color" content="#2F5D4C">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Crect x='5' y='3' width='18' height='24' rx='2' fill='%23F7F4EE' stroke='%232F5D4C' stroke-width='1.8'/%3E%3Cline x1='9' y1='9' x2='19' y2='9' stroke='%23B97C3B' stroke-width='1.6' stroke-linecap='round'/%3E%3Cline x1='9' y1='13' x2='17' y2='13' stroke='%23D9D2C4' stroke-width='1.6' stroke-linecap='round'/%3E%3Cline x1='9' y1='17' x2='18' y2='17' stroke='%23D9D2C4' stroke-width='1.6' stroke-linecap='round'/%3E%3Cpath d='M11 22.5l2.5 2.5 5-5.5' stroke='%232F5D4C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<!-- Open Graph / Social -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:site_name" content="Nebenkosten-Anwalt">
+<meta property="og:title" content="Nebenkostenabrechnung kostenlos prüfen lassen — Nebenkosten-Anwalt">
+<meta property="og:description" content="Rund jede zweite Nebenkostenabrechnung ist laut Deutschem Mieterbund fehlerhaft. Abrechnung + Mietvertrag hochladen — Sie erhalten eine kostenlose, von einem Volljuristen geprüfte Ersteinschätzung.">
+<meta property="og:url" content="https://zahidlawyer.github.io/Nebenkosten-Anwalt/">
+<meta property="og:image" content="https://zahidlawyer.github.io/Nebenkosten-Anwalt/assets/hero-1.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Nebenkostenabrechnung kostenlos prüfen lassen — Nebenkosten-Anwalt">
+<meta name="twitter:description" content="Rund jede zweite Nebenkostenabrechnung ist laut Deutschem Mieterbund fehlerhaft. Abrechnung + Mietvertrag hochladen — Sie erhalten eine kostenlose, von einem Volljuristen geprüfte Ersteinschätzung.">
+<meta name="twitter:image" content="https://zahidlawyer.github.io/Nebenkosten-Anwalt/assets/hero-1.png">
 <style>
   /* ============ Grundgerüst ============ */
   :root {
@@ -114,103 +128,43 @@
     border-bottom: 1px solid var(--line);
   }
   .mobile-nav a:hover, .mobile-nav a:focus-visible { color: var(--moss-deep); }
-  #ablauf, #leistungsumfang, #transparenz, #faq { scroll-margin-top: 5rem; }
+  #ablauf, #ergebnis, #leistungsumfang, #transparenz, #faq { scroll-margin-top: 5rem; }
 
-  /* ============ Hero-Karussell ============ */
-  .hero { position: relative; overflow: hidden; }
-  .hero__slides { display: grid; }
-  .slide {
-    grid-area: 1 / 1;
-    position: relative;
-    min-height: clamp(30rem, 60vh, 38rem);
-    opacity: 0; visibility: hidden;
-    transition: opacity 0.45s ease, visibility 0.45s ease;
+  /* ============ Hero ============ */
+  .hero {
+    background: linear-gradient(135deg, var(--moss) 0%, var(--moss-deep) 55%, #1C3A30 100%);
+    color: #fff; position: relative; overflow: hidden; padding: 0;
   }
-  .slide.is-active { opacity: 1; visibility: visible; }
-  .slide__bg {
-    position: absolute; inset: 0; z-index: 0;
-    width: 100%; height: 100%;
-    object-fit: cover; object-position: center right;
-  }
-  .slide__overlay { position: absolute; inset: 0; z-index: 1; }
-  .slide__inner {
-    position: relative; z-index: 2;
-    min-height: clamp(30rem, 60vh, 38rem);
-    display: flex; align-items: center;
-    padding: 3rem 0 4.75rem;
-  }
-  .slide__content { max-width: 34rem; }
-  .slide__badge {
+  .hero__inner { position: relative; z-index: 1; padding-top: 3.5rem; padding-bottom: 3.5rem; }
+  .hero__badge {
     display: inline-block;
     font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em;
-    border: 1px solid currentColor; border-radius: 999px;
-    padding: 0.25rem 0.85rem;
-    margin-bottom: 1.25rem;
+    color: #F3E3CE; border: 1px solid currentColor; border-radius: 999px;
+    padding: 0.25rem 0.85rem; margin-bottom: 1.25rem;
   }
-  .slide__title {
-    font-size: clamp(1.9rem, 5vw, 2.9rem);
-    letter-spacing: -0.01em;
-    margin-bottom: 1.1rem;
+  .hero__title {
+    font-size: clamp(1.9rem, 5vw, 2.9rem); letter-spacing: -0.01em;
+    max-width: 36rem; margin-bottom: 1.1rem;
   }
-  .slide__sub { max-width: 34rem; margin-bottom: 1.75rem; }
-  .slide__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
-  .slide__note { font-size: 0.9rem; margin-top: 1rem; }
-
-  /* Farbwelten der Folien */
-  .slide--moss { background: var(--moss); color: #fff; }
-  .slide--moss .slide__badge { color: #F3E3CE; }
-  .slide--moss .slide__sub, .slide--moss .slide__note { color: rgba(255,255,255,0.84); }
-  .slide--moss .btn { background: var(--paper); color: var(--moss-deep); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
-  .slide--moss .btn:hover { background: #fff; }
-  .slide--moss .btn--ghost { background: transparent; color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.7); }
-  .slide--moss .btn--ghost:hover { background: rgba(255,255,255,0.1); }
-  .slide--moss .slide__overlay {
-    background: linear-gradient(to right, rgba(47,93,76,0.96) 0%, rgba(47,93,76,0.82) 45%, rgba(47,93,76,0.25) 100%);
+  .hero__title sup { font-size: 0.5em; font-weight: 400; }
+  .hero__sub { max-width: 34rem; margin-bottom: 1.75rem; color: rgba(255,255,255,0.84); }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
+  .hero .btn { background: var(--paper); color: var(--moss-deep); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
+  .hero .btn:hover { background: #fff; }
+  .hero .btn--ghost { background: transparent; color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.7); }
+  .hero .btn--ghost:hover { background: rgba(255,255,255,0.1); }
+  .hero__note { font-size: 0.9rem; margin-top: 1rem; color: rgba(255,255,255,0.84); }
+  .hero__footnote { font-size: 0.78rem; margin-top: 1.5rem; color: rgba(255,255,255,0.65); max-width: 34rem; }
+  .hero__mark {
+    position: absolute; right: -1.5rem; top: 50%; transform: translateY(-50%);
+    width: 20rem; height: 20rem; opacity: 0.08; z-index: 0; pointer-events: none; display: none;
   }
 
-  .slide--sand { background: #EFE6D6; color: var(--ink); }
-  .slide--sand .slide__badge { color: var(--amber); }
-  .slide--sand .slide__sub, .slide--sand .slide__note { color: var(--ink-soft); }
-  .slide--sand .slide__overlay {
-    background: linear-gradient(to right, rgba(239,230,214,0.96) 0%, rgba(239,230,214,0.82) 45%, rgba(239,230,214,0.25) 100%);
-  }
-  .slide--sand .slide__bg { object-position: right 15%; }
-
-  .slide--ink { background: #24312B; color: #fff; }
-  .slide--ink .slide__badge { color: #F3E3CE; }
-  .slide--ink .slide__sub, .slide--ink .slide__note { color: rgba(255,255,255,0.8); }
-  .slide--ink .btn { background: var(--paper); color: var(--moss-deep); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
-  .slide--ink .btn:hover { background: #fff; }
-  .slide--ink .slide__overlay {
-    background: linear-gradient(to right, rgba(36,49,43,0.96) 0%, rgba(36,49,43,0.82) 45%, rgba(36,49,43,0.35) 100%);
-  }
-  .slide--ink .slide__bg { object-position: right 15%; }
-
-  /* Pfeile + Punkte */
-  .hero__arrow {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    width: 2.75rem; height: 2.75rem;
-    border: none; border-radius: 50%;
-    background: rgba(247,244,238,0.95); color: var(--ink);
-    display: grid; place-items: center;
-    cursor: pointer; z-index: 3;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
-  }
-  .hero__arrow:hover { background: #fff; }
-  .hero__arrow--prev { left: 0.75rem; }
-  .hero__arrow--next { right: 0.75rem; }
-  .hero__dots {
-    position: absolute; bottom: 1.25rem; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 0.55rem; z-index: 3;
-  }
-  .hero__dot {
-    width: 0.7rem; height: 0.7rem; padding: 0;
-    border-radius: 50%; cursor: pointer;
-    border: 1.5px solid rgba(247,244,238,0.95);
-    background: rgba(36,49,43,0.35);
-  }
-  .slide--sand ~ .hero__dots .hero__dot { border-color: rgba(36,49,43,0.4); }
-  .hero__dot.is-active { background: var(--amber); border-color: var(--amber); }
+  /* ============ Einwand-Leiste ============ */
+  .reassure { background: var(--paper-deep); border-bottom: 1px solid var(--line); padding: 0.9rem 0; }
+  .reassure__list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .reassure__item { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.92rem; color: var(--ink); }
+  .reassure__item svg { flex: none; margin-top: 0.15rem; }
 
   /* ============ Leistungsumfang ============ */
   .features { list-style: none; display: grid; gap: 1.75rem 2rem; }
@@ -224,6 +178,16 @@
   }
   .feature h3 { font-family: var(--sans); font-size: 1.02rem; font-weight: 700; color: var(--moss-deep); margin-bottom: 0.25rem; }
   .feature p { font-size: 0.95rem; color: var(--ink-soft); }
+  .feature-group + .feature-group { margin-top: 2rem; }
+  .feature-group__title {
+    font-family: var(--sans); font-size: 0.85rem; font-weight: 700;
+    letter-spacing: 0.09em; text-transform: uppercase; color: var(--moss-deep);
+    margin-bottom: 1.25rem;
+  }
+  .feature-group__title::before {
+    content: ""; display: block; width: 2rem; height: 2px;
+    background: var(--amber); margin-bottom: 0.6rem;
+  }
 
   /* ============ FAQ ============ */
   .faq { max-width: 46rem; }
@@ -278,6 +242,12 @@
     color: var(--amber);
   }
   .step p { font-size: 0.98rem; color: var(--ink-soft); }
+  .steps-prep {
+    border: 1px solid var(--line); background: var(--paper); border-radius: 8px;
+    padding: 0.8rem 1.1rem; max-width: 38rem; margin: 0 0 1.75rem;
+    font-size: 0.95rem; color: var(--ink-soft);
+  }
+  .steps-prep strong { color: var(--ink); }
 
   /* ============ Vertrauen & Transparenz ============ */
   .trust { display: grid; gap: 1.25rem; }
@@ -294,6 +264,41 @@
   }
   .trust__card p { font-size: 0.98rem; color: var(--ink-soft); }
   .trust__card p + p { margin-top: 0.6rem; }
+
+  /* ============ Ergebnis-Muster ============ */
+  .ergebnis__grid { display: grid; gap: 2.25rem; }
+  .doc-mock {
+    background: #fff; border: 1px solid var(--line); border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(36,49,43,0.08);
+    padding: 1.4rem 1.5rem; max-width: 30rem;
+  }
+  .doc-mock__head {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+    padding-bottom: 0.9rem; border-bottom: 1px solid var(--line); margin-bottom: 1.1rem;
+  }
+  .doc-mock__brand {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-family: var(--serif); font-weight: 700; font-size: 0.92rem; color: var(--ink);
+  }
+  .doc-mock__badge {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--amber); border: 1px solid var(--amber); border-radius: 999px;
+    padding: 0.15rem 0.6rem; flex: none;
+  }
+  .doc-mock__row { display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.9rem; color: var(--ink); margin-bottom: 0.75rem; }
+  .doc-mock__row svg { flex: none; margin-top: 0.1rem; }
+  .doc-mock__skeleton { margin-top: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .doc-mock__bar { height: 0.55rem; border-radius: 4px; background: var(--paper-deep); }
+  .doc-mock__bar--wide { width: 82%; }
+  .doc-mock__foot {
+    margin-top: 1.2rem; padding-top: 0.9rem; border-top: 1px solid var(--line);
+    display: flex; align-items: center; gap: 0.45rem;
+    font-size: 0.85rem; color: var(--moss-deep); font-weight: 600;
+  }
+  .doc-mock__note { font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.9rem; max-width: 30rem; }
+  .ergebnis__points { list-style: none; display: grid; gap: 1.1rem; margin-bottom: 1.6rem; }
+  .ergebnis__points li { font-size: 0.98rem; color: var(--ink-soft); }
+  .ergebnis__points strong { color: var(--ink); }
 
   /* ============ Abschluss-CTA ============ */
   .closing { text-align: left; }
@@ -327,32 +332,8 @@
     .topbar__inner { gap: 0.4rem; flex-wrap: nowrap; }
     .brand { font-size: 1rem; gap: 0.4rem; }
     .brand svg { width: 24px; height: 24px; }
-    .brand__text {
-      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-    }
     .topbar__cta { font-size: 0.82rem; padding: 0.5rem 0.75rem; }
     .nav-toggle { width: 2.2rem; height: 2.2rem; }
-    .slide__overlay { background-blend-mode: normal; }
-    .slide--moss .slide__overlay {
-      background:
-        linear-gradient(to bottom, rgba(47,93,76,0.12) 0%, rgba(47,93,76,0.72) 55%, rgba(47,93,76,0.88) 100%),
-        linear-gradient(to right, rgba(47,93,76,0.42) 0%, rgba(47,93,76,0.22) 100%);
-    }
-    .slide--sand .slide__overlay {
-      background:
-        linear-gradient(to bottom, rgba(239,230,214,0.12) 0%, rgba(239,230,214,0.72) 55%, rgba(239,230,214,0.88) 100%),
-        linear-gradient(to right, rgba(239,230,214,0.42) 0%, rgba(239,230,214,0.22) 100%);
-    }
-    .slide--ink .slide__overlay {
-      background:
-        linear-gradient(to bottom, rgba(36,49,43,0.15) 0%, rgba(36,49,43,0.76) 55%, rgba(36,49,43,0.9) 100%),
-        linear-gradient(to right, rgba(36,49,43,0.46) 0%, rgba(36,49,43,0.26) 100%);
-    }
-    .slide__bg { object-position: 70% center; }
-    .slide--sand .slide__bg, .slide--ink .slide__bg { object-position: 75% 12%; }
-    .slide__inner { align-items: flex-end; padding-bottom: 3rem; }
-    .hero__arrow { display: none; }
   }
 
   /* ============ Größere Bildschirme ============ */
@@ -360,25 +341,120 @@
     .nav { display: flex; }
     .nav-toggle { display: none; }
     .mobile-nav { display: none !important; }
-    .slide__inner { padding: 4.25rem 0 5.25rem; }
-    .hero__arrow--prev { left: 1.5rem; }
-    .hero__arrow--next { right: 1.5rem; }
+    .reassure__list { flex-direction: row; flex-wrap: wrap; gap: 1.5rem; }
+    .reassure__item { flex: 1 1 auto; }
     .steps { grid-template-columns: 1fr 1fr; }
     .features { grid-template-columns: 1fr 1fr; }
     .trust { grid-template-columns: 1fr 1fr 1fr; }
+    .ergebnis__grid { grid-template-columns: 1fr 1fr; align-items: center; }
+    .doc-mock { transform: rotate(-1deg); }
     .closing__box { padding: 3rem 3rem; }
     .footer__grid { grid-template-columns: 1fr auto; align-items: start; }
   }
   @media (min-width: 62rem) {
     .features { grid-template-columns: 1fr 1fr 1fr; }
+    .hero__mark { display: block; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .btn { transition: none; }
-    .slide { transition: none; }
     .faq__chev { transition: none; }
   }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Was kostet die Prüfung?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nichts. Die Prüfung läuft derzeit als private, unentgeltliche Testphase — es gibt keine Gebühren, kein Abo und keine versteckten Kosten. Sie gehen mit dem Hochladen Ihrer Unterlagen keinerlei Verpflichtung ein."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Welche Unterlagen brauche ich?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ihre aktuelle Nebenkostenabrechnung und Ihren Mietvertrag — der Vertrag ist wichtig, weil dort Umlageschlüssel und vereinbarte Kostenarten stehen. Ein Handyfoto genügt, Sie brauchen keinen Scanner. Weitere Belege brauchen Sie nicht vorab. Sollte die Prüfung einzelne Unterlagen zusätzlich erfordern, melden wir uns gezielt bei Ihnen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wer prüft meine Abrechnung?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Die Auswertung wird technisch unterstützt, die juristische Einschätzung und die Freigabe übernimmt ein Volljurist. Keine Ersteinschätzung verlässt das Haus ungeprüft."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie läuft die Prüfung ab — und wie lange dauert sie?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ihre Unterlagen werden strukturiert vor-ausgewertet; anschließend prüft ein Volljurist die Ersteinschätzung und gibt sie frei. Wir melden uns zeitnah per E-Mail — ein festes Zeitversprechen geben wir in der Testphase bewusst nicht."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Ich habe die Nachzahlung schon bezahlt. Lohnt sich die Prüfung trotzdem?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja, das kann sich lohnen. Eine Zahlung bedeutet nicht, dass Sie die Abrechnung anerkannt haben. Für Einwendungen gilt grundsätzlich eine Frist von zwölf Monaten ab Zugang der Abrechnung — ob Sie noch in diesem Zeitfenster liegen, gehört zu den ersten Punkten, die wir prüfen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was prüfen Sie — und was nicht?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Wir prüfen Fristen, formelle Richtigkeit, Umlegbarkeit der Positionen, den Abgleich mit Ihrem Mietvertrag, Verteilerschlüssel und die rechnerische Plausibilität — den vollen Umfang finden Sie oben unter Leistungsumfang. Was wir nicht leisten: eine Rechtsberatung im rechtlichen Sinne oder eine Vertretung gegenüber Ihrem Vermieter. Sie erhalten eine unverbindliche Ersteinschätzung, mit der Sie selbst entscheiden, wie Sie weiter vorgehen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was passiert mit meinen Daten?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ihre Unterlagen werden ausschließlich zur Prüfung Ihrer Abrechnung verarbeitet. Zur inhaltlichen Auswertung werden sie an das KI-Modell Claude von Anthropic (USA) übermittelt — darauf weisen wir vor dem Absenden ausdrücklich hin, und Sie willigen aktiv ein. Ihre Einwilligung können Sie jederzeit widerrufen. Details stehen in der Datenschutzerklärung."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Bin ich danach zu irgendetwas verpflichtet?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nein. Sie erhalten die Ersteinschätzung und entscheiden selbst, ob und wie Sie sie nutzen. Es entsteht kein Vertrag, kein Mandat und keine Zahlungspflicht — auch kein „Trinkgeld\" oder Ähnliches."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Nebenkosten-Anwalt",
+  "url": "https://zahidlawyer.github.io/Nebenkosten-Anwalt/",
+  "email": "info@nebenkosten-anwalt.de",
+  "logo": "https://zahidlawyer.github.io/Nebenkosten-Anwalt/assets/hero-1.png",
+  "areaServed": "DE",
+  "founder": {
+    "@type": "Person",
+    "name": "Zahid Akcay"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Eschenheimer Anlage 30",
+    "postalCode": "60318",
+    "addressLocality": "Frankfurt am Main",
+    "addressCountry": "DE"
+  }
+}
+</script>
 </head>
 <body>
 
@@ -397,6 +473,7 @@
     </a>
     <nav class="nav" aria-label="Hauptnavigation">
       <a href="#ablauf">So funktioniert’s</a>
+      <a href="#ergebnis">Ihr Ergebnis</a>
       <a href="#leistungsumfang">Leistungsumfang</a>
       <a href="#transparenz">Transparenz</a>
       <a href="#faq">FAQ</a>
@@ -409,11 +486,12 @@
           <line x1="2.5" y1="14.5" x2="17.5" y2="14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
       </button>
-      <a class="btn topbar__cta" href="pruefung.html">Jetzt prüfen lassen</a>
+      <a class="btn topbar__cta" href="pruefung.html">Kostenlos prüfen</a>
     </div>
   </div>
   <nav class="mobile-nav" id="mobile-nav" aria-label="Hauptnavigation (mobil)" hidden>
     <a href="#ablauf">So funktioniert’s</a>
+    <a href="#ergebnis">Ihr Ergebnis</a>
     <a href="#leistungsumfang">Leistungsumfang</a>
     <a href="#transparenz">Transparenz</a>
     <a href="#faq">FAQ</a>
@@ -422,86 +500,40 @@
 
 <main>
 
-  <!-- ============ Hero-Karussell ============ -->
-  <section class="hero" aria-roledescription="Karussell" aria-label="Einstiegs-Motive">
-    <div class="hero__slides">
-
-      <!-- Folie 1: Standard-Einstieg -->
-      <div class="slide slide--moss is-active" role="group" aria-roledescription="Folie" aria-label="1 von 3">
-        <img class="slide__bg" src="assets/hero-1.png" alt="" aria-hidden="true" loading="eager" fetchpriority="high">
-        <div class="slide__overlay" aria-hidden="true"></div>
-        <div class="wrap slide__inner">
-          <div class="slide__content">
-            <span class="slide__badge">Private, unentgeltliche Testphase</span>
-            <h1 class="slide__title">Nebenkostenabrechnung erhalten? Kostenlos prüfen lassen.</h1>
-            <p class="slide__sub">
-              Laden Sie Ihre Betriebskostenabrechnung und Ihren Mietvertrag hoch — ein
-              Handyfoto genügt. Sie erhalten eine erste Einschätzung, ob Positionen Ihrer
-              Abrechnung näher geprüft werden sollten. Ohne Kosten, ohne Verpflichtung.
-            </p>
-            <div class="slide__actions">
-              <a class="btn" href="pruefung.html">Jetzt prüfen lassen</a>
-              <a class="btn btn--ghost" href="#ablauf">So funktioniert’s</a>
-            </div>
-            <p class="slide__note">Kein Papierkram, keine Zahlungsdaten — nur Ihre Unterlagen.</p>
-          </div>
-        </div>
+  <!-- ============ Hero ============ -->
+  <section class="hero">
+    <svg class="hero__mark" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+      <rect x="5" y="3" width="18" height="24" rx="2" fill="none" stroke="#F7F4EE" stroke-width="1.5"/>
+      <line x1="9" y1="9"  x2="19" y2="9"  stroke="#F7F4EE" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="9" y1="13" x2="17" y2="13" stroke="#F7F4EE" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="9" y1="17" x2="18" y2="17" stroke="#F7F4EE" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M11 22.5l2.5 2.5 5-5.5" stroke="#F7F4EE" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div class="wrap hero__inner">
+      <span class="hero__badge">100 % kostenlos in der Testphase</span>
+      <h1 class="hero__title">Jede zweite Nebenkostenabrechnung ist fehlerhaft.<sup>1</sup> Ihre auch?</h1>
+      <p class="hero__sub">
+        Laden Sie Abrechnung und Mietvertrag hoch — ein Handyfoto genügt. Ein Volljurist prüft
+        Ihre Abrechnung und Sie erhalten eine kostenlose Ersteinschätzung mit den Punkten, die
+        Sie bei Ihrem Vermieter hinterfragen können.
+      </p>
+      <div class="hero__actions">
+        <a class="btn" href="pruefung.html">Jetzt kostenlos prüfen lassen</a>
+        <a class="btn btn--ghost" href="#ablauf">So funktioniert&rsquo;s</a>
       </div>
-
-      <!-- Folie 2: Nachzahlung -->
-      <div class="slide slide--sand" role="group" aria-roledescription="Folie" aria-label="2 von 3">
-        <img class="slide__bg" src="assets/hero-2.png" alt="" aria-hidden="true" loading="lazy">
-        <div class="slide__overlay" aria-hidden="true"></div>
-        <div class="wrap slide__inner">
-          <div class="slide__content">
-            <span class="slide__badge">Kostenlos in der Testphase</span>
-            <h2 class="slide__title">Nachzahlung höher als erwartet?</h2>
-            <p class="slide__sub">
-              Ob Umlageschlüssel, Fristen oder einzelne Kostenpositionen — viele
-              Abrechnungen lohnen einen zweiten Blick. Wir schauen kostenlos für
-              Sie nach, bevor Sie zahlen oder widersprechen.
-            </p>
-            <div class="slide__actions">
-              <a class="btn" href="pruefung.html">Jetzt prüfen lassen</a>
-            </div>
-            <p class="slide__note">Auch möglich, wenn Sie die Nachzahlung schon überwiesen haben.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Folie 3: Fristen / Umzug -->
-      <div class="slide slide--ink" role="group" aria-roledescription="Folie" aria-label="3 von 3">
-        <img class="slide__bg" src="assets/hero-3.png" alt="" aria-hidden="true" loading="lazy">
-        <div class="slide__overlay" aria-hidden="true"></div>
-        <div class="wrap slide__inner">
-          <div class="slide__content">
-            <span class="slide__badge">Fristen-Check inklusive</span>
-            <h2 class="slide__title">Abrechnung spät erhalten oder mitten im Jahr umgezogen?</h2>
-            <p class="slide__sub">
-              Dann kommt es besonders auf Zeiträume und Fristen an — etwa, ob die
-              Abrechnung rechtzeitig bei Ihnen war. Genau das sehen wir uns mit an.
-            </p>
-            <div class="slide__actions">
-              <a class="btn" href="pruefung.html">Jetzt prüfen lassen</a>
-            </div>
-            <p class="slide__note">Abrechnungszeitraum und Zugangsdatum genügen für den ersten Check.</p>
-          </div>
-        </div>
-      </div>
-
+      <p class="hero__note">Keine Zahlungsdaten, kein Abo, keine Verpflichtung. Die Zahl der Testplätze ist begrenzt.</p>
+      <p class="hero__footnote">&sup1; Nach Schätzung des Deutschen Mieterbunds ist etwa jede zweite Nebenkostenabrechnung fehlerhaft. Quelle: Deutscher Mieterbund e.&nbsp;V.</p>
     </div>
+  </section>
 
-    <!-- Steuerung -->
-    <button class="hero__arrow hero__arrow--prev" type="button" aria-label="Vorheriges Motiv">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11.5 3.5L6 9l5.5 5.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <button class="hero__arrow hero__arrow--next" type="button" aria-label="Nächstes Motiv">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M6.5 3.5L12 9l-5.5 5.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <div class="hero__dots" role="tablist" aria-label="Motiv wählen">
-      <button class="hero__dot is-active" type="button" role="tab" aria-selected="true" aria-label="Motiv 1"></button>
-      <button class="hero__dot" type="button" role="tab" aria-selected="false" aria-label="Motiv 2"></button>
-      <button class="hero__dot" type="button" role="tab" aria-selected="false" aria-label="Motiv 3"></button>
+  <!-- ============ Einwand-Leiste ============ -->
+  <section class="reassure" aria-label="Gut zu wissen">
+    <div class="wrap">
+      <ul class="reassure__list">
+        <li class="reassure__item"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="#2F5D4C" stroke-width="1.4"/><path d="M5.5 9.2l2.3 2.3 4.7-5" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> Auch wenn Sie schon bezahlt haben &mdash; Einwendungen sind bis zu 12 Monate möglich.</li>
+        <li class="reassure__item"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="#2F5D4C" stroke-width="1.4"/><path d="M5.5 9.2l2.3 2.3 4.7-5" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> Auch bei Umzug oder verspäteter Abrechnung &mdash; Fristen prüfen wir mit.</li>
+        <li class="reassure__item"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="#2F5D4C" stroke-width="1.4"/><path d="M5.5 9.2l2.3 2.3 4.7-5" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> Handyfoto genügt &mdash; kein Scanner, kein Papierkram.</li>
+      </ul>
     </div>
   </section>
 
@@ -511,9 +543,11 @@
       <p class="kicker">So funktioniert’s</p>
       <h2 id="ablauf-title" class="section-title">In vier Schritten zur Ersteinschätzung</h2>
       <p class="section-lead">
-        Sie brauchen weder Scanner noch Aktenordner — Fotos Ihrer Unterlagen mit dem
-        Handy reichen aus.
+        Sie brauchen weder Scanner noch Aktenordner — Fotos mit dem Handy reichen.
       </p>
+      <p class="steps-prep"><strong>Das sollten Sie bereithalten:</strong> Ihre
+      Nebenkostenabrechnung und Ihren Mietvertrag — jeweils alle Seiten, Handyfotos
+      genügen.</p>
       <ol class="steps">
         <li class="step">
           <span class="step__icon" aria-hidden="true">
@@ -528,7 +562,8 @@
           <div>
             <h3>Unterlagen hochladen</h3>
             <p>Nebenkostenabrechnung und Mietvertrag hochladen oder abfotografieren —
-            ein Handyfoto reicht. Weitere Belege können Sie freiwillig ergänzen.</p>
+            ein Handyfoto reicht. Mehr brauchen wir zunächst nicht: Falls einzelne Belege
+            nötig sind, fragen wir gezielt nach.</p>
           </div>
         </li>
         <li class="step">
@@ -543,9 +578,9 @@
             </svg>
           </span>
           <div>
-            <h3>Fristangaben eintragen</h3>
-            <p>Abrechnungszeitraum und Zugangsdatum angeben — daraus ergibt sich, welche
-            Fristen für Abrechnung und Widerspruch relevant sind.</p>
+            <h3>Eckdaten angeben</h3>
+            <p>Abrechnungsjahr und das Datum, an dem die Abrechnung bei Ihnen ankam —
+            daraus ergibt sich, welche Fristen für Sie laufen.</p>
           </div>
         </li>
         <li class="step">
@@ -560,8 +595,8 @@
           </span>
           <div>
             <h3>Kontaktdaten &amp; Einwilligung</h3>
-            <p>Name und E-Mail-Adresse hinterlassen und der Datenverarbeitung zustimmen —
-            transparent erklärt, jederzeit widerrufbar.</p>
+            <p>Name und E-Mail angeben und die Einwilligung zur Datenverarbeitung
+            bestätigen — jederzeit widerrufbar.</p>
           </div>
         </li>
         <li class="step">
@@ -573,12 +608,71 @@
             </svg>
           </span>
           <div>
-            <h3>Ersteinschätzung erhalten</h3>
-            <p>Wir sehen uns Ihre Unterlagen an und melden uns zeitnah per E-Mail mit
-            einer ersten Einschätzung und den nächsten möglichen Schritten.</p>
+            <h3>Wissen, woran Sie sind</h3>
+            <p>Sie erhalten per E-Mail eine von einem Volljuristen geprüfte
+            Ersteinschätzung: welche Positionen angreifbar sind, welche Fristen gelten und
+            wie Sie gegenüber Ihrem Vermieter vorgehen können.</p>
           </div>
         </li>
       </ol>
+    </div>
+  </section>
+
+  <!-- ============ Ergebnis-Muster ============ -->
+  <section id="ergebnis" aria-labelledby="ergebnis-title">
+    <div class="wrap">
+      <p class="kicker">Ihr Ergebnis</p>
+      <h2 id="ergebnis-title" class="section-title">So sieht Ihre Ersteinschätzung aus</h2>
+      <div class="ergebnis__grid">
+        <div>
+          <div class="doc-mock" role="img" aria-label="Beispieldarstellung einer Ersteinschätzung">
+            <div class="doc-mock__head">
+              <span class="doc-mock__brand">
+                <svg width="18" height="18" viewBox="0 0 30 30" fill="none" aria-hidden="true"><rect x="5" y="3" width="18" height="24" rx="2" fill="#F7F4EE" stroke="#2F5D4C" stroke-width="1.8"/><line x1="9" y1="9" x2="19" y2="9" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round"/><line x1="9" y1="13" x2="17" y2="13" stroke="#D9D2C4" stroke-width="1.6" stroke-linecap="round"/><line x1="9" y1="17" x2="18" y2="17" stroke="#D9D2C4" stroke-width="1.6" stroke-linecap="round"/><path d="M11 22.5l2.5 2.5 5-5.5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+                Nebenkosten-Anwalt — Ersteinschätzung
+              </span>
+              <span class="doc-mock__badge" aria-label="Beispieldarstellung">Muster</span>
+            </div>
+            <div class="doc-mock__row">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="#E3EDE7" stroke="#2F5D4C" stroke-width="1.2"/><path d="M5 8.2l2 2 3.9-4.3" stroke="#2F5D4C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Abrechnungsfrist: eingehalten</span>
+            </div>
+            <div class="doc-mock__row">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="#F6E9D6" stroke="#B97C3B" stroke-width="1.2"/><line x1="8" y1="4.6" x2="8" y2="8.8" stroke="#B97C3B" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.2" r="0.9" fill="#B97C3B"/></svg>
+              <span>Position &bdquo;Verwaltungskosten&ldquo;: nicht umlagefähig — Einwendung möglich</span>
+            </div>
+            <div class="doc-mock__row">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="#F6E9D6" stroke="#B97C3B" stroke-width="1.2"/><line x1="8" y1="4.6" x2="8" y2="8.8" stroke="#B97C3B" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.2" r="0.9" fill="#B97C3B"/></svg>
+              <span>Verteilerschlüssel: weicht vom Mietvertrag ab</span>
+            </div>
+            <div class="doc-mock__row">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="#E3EDE7" stroke="#2F5D4C" stroke-width="1.2"/><path d="M5 8.2l2 2 3.9-4.3" stroke="#2F5D4C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Empfehlung: Einwendung schriftlich bis TT.MM.JJJJ möglich</span>
+            </div>
+            <div class="doc-mock__skeleton" aria-hidden="true">
+              <div class="doc-mock__bar"></div>
+              <div class="doc-mock__bar doc-mock__bar--wide"></div>
+            </div>
+            <div class="doc-mock__foot">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l2.7 2.7 6.3-7" stroke="#2F5D4C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Geprüft und freigegeben: Volljurist
+            </div>
+          </div>
+          <p class="doc-mock__note">Muster — beispielhafte, vereinfachte Befunde. Ihre
+          Ersteinschätzung bezieht sich konkret auf Ihre Unterlagen.</p>
+        </div>
+        <div>
+          <ul class="ergebnis__points">
+            <li><strong>Klar statt Juristendeutsch:</strong> Sie sehen Punkt für Punkt, was
+            auffällig ist — und warum.</li>
+            <li><strong>Konkret:</strong> Sie erfahren, welche Positionen Sie beim Vermieter
+            hinterfragen können und welche Fristen gelten.</li>
+            <li><strong>Geprüft:</strong> Jede Ersteinschätzung wird von einem Volljuristen
+            freigegeben und kommt per E-Mail zu Ihnen.</li>
+          </ul>
+          <a class="btn" href="pruefung.html">Jetzt kostenlos prüfen lassen</a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -588,10 +682,12 @@
       <p class="kicker">Leistungsumfang</p>
       <h2 id="leistung-title" class="section-title">Was die kostenlose Ersteinschätzung umfasst</h2>
       <p class="section-lead">
-        Eine sorgfältige, KI-gestützte Durchsicht der Punkte, an denen
-        Nebenkostenabrechnungen typischerweise angreifbar sind.
+        Eine sorgfältige Durchsicht der Punkte, an denen Nebenkostenabrechnungen
+        typischerweise angreifbar sind — jede Ersteinschätzung von einem Volljuristen geprüft.
       </p>
-      <ul class="features">
+      <div class="feature-group">
+        <h3 class="feature-group__title">Fristen &amp; Form</h3>
+        <ul class="features">
         <li class="feature">
           <span class="feature__icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8.5" stroke="#2F5D4C" stroke-width="1.7"/><path d="M11 6.5V11l3.5 2" stroke="#B97C3B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -613,6 +709,21 @@
             dargestellt?</p>
           </div>
         </li>
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="2.5" width="14" height="17" rx="2" stroke="#2F5D4C" stroke-width="1.7"/><rect x="7" y="5.5" width="8" height="3.5" rx="1" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.3"/><circle cx="8" cy="13" r="1"  fill="#2F5D4C"/><circle cx="11" cy="13" r="1" fill="#2F5D4C"/><circle cx="14" cy="13" r="1" fill="#2F5D4C"/><circle cx="8" cy="16.5" r="1" fill="#2F5D4C"/><circle cx="11" cy="16.5" r="1" fill="#2F5D4C"/><circle cx="14" cy="16.5" r="1" fill="#2F5D4C"/></svg>
+          </span>
+          <div>
+            <h3>Rechnerische Prüfung</h3>
+            <p>Stimmen Summen, Anteile und der Abzug Ihrer geleisteten
+            Vorauszahlungen — oder ergibt die Nachforderung rechnerisch keinen Sinn?</p>
+          </div>
+        </li>
+        </ul>
+      </div>
+      <div class="feature-group">
+        <h3 class="feature-group__title">Inhalt &amp; Umlage</h3>
+        <ul class="features">
         <li class="feature">
           <span class="feature__icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 5h14M4 11h14M4 17h9" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round"/><circle cx="18" cy="17" r="2.6" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.5"/></svg>
@@ -644,16 +755,11 @@
             korrekt angewandt und rechnerisch richtig auf Ihre Wohnung umgelegt?</p>
           </div>
         </li>
-        <li class="feature">
-          <span class="feature__icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="2.5" width="14" height="17" rx="2" stroke="#2F5D4C" stroke-width="1.7"/><rect x="7" y="5.5" width="8" height="3.5" rx="1" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.3"/><circle cx="8" cy="13" r="1"  fill="#2F5D4C"/><circle cx="11" cy="13" r="1" fill="#2F5D4C"/><circle cx="14" cy="13" r="1" fill="#2F5D4C"/><circle cx="8" cy="16.5" r="1" fill="#2F5D4C"/><circle cx="11" cy="16.5" r="1" fill="#2F5D4C"/><circle cx="14" cy="16.5" r="1" fill="#2F5D4C"/></svg>
-          </span>
-          <div>
-            <h3>Rechnerische Prüfung</h3>
-            <p>Stimmen Summen, Anteile und der Abzug Ihrer geleisteten
-            Vorauszahlungen — oder ergibt die Nachforderung rechnerisch keinen Sinn?</p>
-          </div>
-        </li>
+        </ul>
+      </div>
+      <div class="feature-group">
+        <h3 class="feature-group__title">Verbrauch &amp; Auffälligkeiten</h3>
+        <ul class="features">
         <li class="feature">
           <span class="feature__icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3c2.5 3 5 5.2 5 8.5a5 5 0 0 1-10 0C6 8.2 8.5 6 11 3z" stroke="#2F5D4C" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12.5a2.2 2.2 0 0 0 2.2 2.2" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -671,22 +777,12 @@
           <div>
             <h3>Plausibilitäts-Check</h3>
             <p>Fallen einzelne Positionen aus dem Rahmen — etwa ungewöhnlich hohe
-            Beträge oder starke Sprünge gegenüber der Vorjahresabrechnung, falls
-            Sie diese mit hochladen?</p>
+            Beträge oder starke Sprünge gegenüber der Vorjahresabrechnung, sofern eine
+            Vorjahresabrechnung vorliegt?</p>
           </div>
         </li>
-        <li class="feature">
-          <span class="feature__icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3.5 4h15v10H10l-4 4v-4H3.5V4z" stroke="#2F5D4C" stroke-width="1.7" stroke-linejoin="round"/><path d="M7.5 9h7" stroke="#B97C3B" stroke-width="1.7" stroke-linecap="round"/></svg>
-          </span>
-          <div>
-            <h3>Verständliche Rückmeldung</h3>
-            <p>Sie erhalten die Ersteinschätzung in klarer Sprache — mit Hinweisen,
-            welche Punkte sich für eine Nachfrage oder Einwendung beim Vermieter
-            eignen könnten.</p>
-          </div>
-        </li>
-      </ul>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -697,34 +793,35 @@
       <h2 id="transparenz-title" class="section-title">Was Sie über diese Prüfung wissen sollten</h2>
       <p class="section-lead">
         Ihre Abrechnung und Ihr Mietvertrag sind Vertrauenssache. Deshalb sagen wir klar,
-        was wir tun — und was nicht.
+        wer prüft, wer dahinter steht — und was mit Ihren Daten passiert.
       </p>
       <div class="trust">
-        <div class="trust__card">
-          <h3>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <rect x="3" y="3" width="14" height="14" rx="3" stroke="#2F5D4C" stroke-width="1.6" fill="none"/>
-              <circle cx="7.5" cy="8" r="1.2" fill="#2F5D4C"/>
-              <circle cx="12.5" cy="8" r="1.2" fill="#2F5D4C"/>
-              <path d="M7 12.5h6" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round"/>
-            </svg>
-            KI-gestützte Ersteinschätzung
-          </h3>
-          <p>Die erste Auswertung Ihrer Unterlagen erfolgt automatisiert mit Unterstützung
-          künstlicher Intelligenz. Sie interagieren also mit einem KI-System — das sagen
-          wir Ihnen offen, wie es die EU-KI-Verordnung (Art. 50) vorsieht.</p>
-        </div>
         <div class="trust__card">
           <h3>
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <path d="M10 2l7 3v5c0 4-3 7-7 8-4-1-7-4-7-8V5l7-3z" stroke="#2F5D4C" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
               <path d="M7 9.5l2 2 4-4.5" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
             </svg>
-            Keine Rechtsberatung, kein Mandat
+            Von einem Volljuristen geprüft
           </h3>
-          <p>Während der Testphase entsteht kein Mandatsverhältnis und keine Rechtsberatung
-          im rechtlichen Sinne. Sie erhalten eine unverbindliche Ersteinschätzung —
-          unentgeltlich und ohne Folgeverpflichtung.</p>
+          <p>Jede Ersteinschätzung wird von einem Volljuristen geprüft und freigegeben, bevor
+          sie Sie erreicht. Technik unterstützt uns bei der Auswertung — die juristische
+          Bewertung und die Freigabe übernimmt immer ein Mensch.</p>
+        </div>
+        <div class="trust__card">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="4" y="2.5" width="12" height="15" rx="2" stroke="#2F5D4C" stroke-width="1.6" fill="none"/>
+              <line x1="7" y1="7" x2="13" y2="7" stroke="#B97C3B" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="7" y1="10" x2="12" y2="10" stroke="#D9D2C4" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M7 13.3l1.8 1.8 3.4-3.9" stroke="#2F5D4C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+            Wer dahinter steht
+          </h3>
+          <p>Nebenkosten-Anwalt wird von Zahid Akcay betrieben, Volljurist aus Frankfurt am
+          Main. Das Angebot befindet sich in einer privaten, unentgeltlichen Testphase: Sie
+          erhalten eine unverbindliche Ersteinschätzung — kein Mandat, keine Rechtsberatung
+          im rechtlichen Sinne, keine Folgeverpflichtung.</p>
         </div>
         <div class="trust__card">
           <h3>
@@ -735,9 +832,10 @@
             </svg>
             Ihre Daten, Ihre Kontrolle
           </h3>
-          <p>Ihre Unterlagen werden nur zur Prüfung Ihrer Abrechnung verarbeitet. Details —
-          auch zur Datenverarbeitung durch das eingesetzte KI-Modell — finden Sie in der
-          <a href="datenschutz.html">Datenschutzerklärung</a>; Angaben zum Anbieter im
+          <p>Ihre Unterlagen werden ausschließlich zur Prüfung Ihrer Abrechnung verwendet und
+          nach 90 Tagen gelöscht. Vor dem Absenden informieren wir Sie transparent über die
+          Datenverarbeitung, und Sie willigen aktiv ein — jederzeit widerrufbar. Details in der
+          <a href="datenschutz.html">Datenschutzerklärung</a>, Anbieterangaben im
           <a href="impressum.html">Impressum</a>.</p>
         </div>
       </div>
@@ -770,8 +868,18 @@
             <p>Ihre aktuelle Nebenkostenabrechnung und Ihren Mietvertrag — der Vertrag
             ist wichtig, weil dort Umlageschlüssel und vereinbarte Kostenarten stehen.
             Ein Handyfoto genügt, Sie brauchen keinen Scanner.</p>
-            <p>Freiwillig hilfreich: die Vorjahresabrechnung, die Heizkostenabrechnung
-            oder Zahlungsbelege.</p>
+            <p>Weitere Belege brauchen Sie nicht vorab. Sollte die Prüfung einzelne
+            Unterlagen zusätzlich erfordern, melden wir uns gezielt bei Ihnen.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Wer prüft meine Abrechnung?
+            <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </summary>
+          <div>
+            <p>Die Auswertung wird technisch unterstützt, die juristische Einschätzung und
+            die Freigabe übernimmt ein Volljurist. Keine Ersteinschätzung verlässt das Haus
+            ungeprüft.</p>
           </div>
         </details>
         <details>
@@ -779,10 +887,9 @@
             <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </summary>
           <div>
-            <p>Ihre Unterlagen werden automatisiert mit KI-Unterstützung ausgewertet
-            und gesichtet. Anschließend melden wir uns zeitnah per E-Mail mit einer
-            ersten Einschätzung — ein festes Zeitversprechen geben wir in der
-            Testphase bewusst nicht.</p>
+            <p>Ihre Unterlagen werden strukturiert vor-ausgewertet; anschließend prüft ein
+            Volljurist die Ersteinschätzung und gibt sie frei. Wir melden uns zeitnah per
+            E-Mail — ein festes Zeitversprechen geben wir in der Testphase bewusst nicht.</p>
           </div>
         </details>
         <details>
@@ -856,9 +963,12 @@
 <footer>
   <div class="wrap footer__grid">
     <div class="footer__legal">
-      <p><strong>Nebenkosten-Anwalt</strong> — private, unentgeltliche Testphase.
-      Automatisierte Ersteinschätzung mit KI-Unterstützung; keine Rechtsberatung im
-      Sinne des RDG, kein Mandatsverhältnis.</p>
+      <p><strong>Nebenkosten-Anwalt</strong> — private, unentgeltliche Testphase. Jede
+      Ersteinschätzung wird von einem Volljuristen geprüft; keine Rechtsberatung im Sinne
+      des RDG, kein Mandatsverhältnis.</p>
+      <p style="font-size:0.85rem;">Transparenzhinweis nach Art. 50 KI-VO: Bei der Auswertung
+      Ihrer Unterlagen kommt ein KI-System zum Einsatz. Details in der
+      <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
     </div>
     <nav aria-label="Rechtliches">
       <ul class="footer__links">
@@ -871,42 +981,6 @@
 </footer>
 
 <script>
-  (function () {
-    var hero = document.querySelector('.hero');
-    if (!hero) return;
-    var slides = Array.prototype.slice.call(hero.querySelectorAll('.slide'));
-    var dots = Array.prototype.slice.call(hero.querySelectorAll('.hero__dot'));
-    var index = 0;
-
-    function go(n) {
-      index = (n + slides.length) % slides.length;
-      slides.forEach(function (s, k) { s.classList.toggle('is-active', k === index); });
-      dots.forEach(function (d, k) {
-        d.classList.toggle('is-active', k === index);
-        d.setAttribute('aria-selected', k === index ? 'true' : 'false');
-      });
-    }
-
-    hero.querySelector('.hero__arrow--prev').addEventListener('click', function () { go(index - 1); });
-    hero.querySelector('.hero__arrow--next').addEventListener('click', function () { go(index + 1); });
-    dots.forEach(function (d, k) { d.addEventListener('click', function () { go(k); }); });
-
-    hero.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowLeft') go(index - 1);
-      if (e.key === 'ArrowRight') go(index + 1);
-    });
-
-    /* Wischgeste auf Mobilgeräten */
-    var startX = null;
-    hero.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
-    hero.addEventListener('touchend', function (e) {
-      if (startX === null) return;
-      var dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 48) go(dx < 0 ? index + 1 : index - 1);
-      startX = null;
-    }, { passive: true });
-  })();
-
   /* Mobile Navigation (Hamburger) */
   (function () {
     var toggle = document.querySelector('.nav-toggle');
