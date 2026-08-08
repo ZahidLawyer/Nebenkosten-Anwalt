@@ -249,6 +249,32 @@
   }
   .steps-prep strong { color: var(--ink); }
 
+  /* ============ Erklärvideo ============ */
+  .video {
+    max-width: 46rem;
+    margin: 0 0 2.25rem;
+  }
+  .video__frame {
+    position: relative;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+  }
+  .video__frame video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: var(--paper);
+  }
+  .video__caption {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin-top: 0.6rem;
+  }
+
   /* ============ Vertrauen & Transparenz ============ */
   .trust { display: grid; gap: 1.25rem; }
   .trust__card {
@@ -545,6 +571,26 @@
       <p class="section-lead">
         Sie brauchen weder Scanner noch Aktenordner — Fotos mit dem Handy reichen.
       </p>
+      <figure class="video">
+        <div class="video__frame">
+          <video
+            controls
+            preload="none"
+            playsinline
+            poster="assets/erklaervideo-poster.jpg"
+            width="1920" height="1080">
+            <source src="assets/erklaervideo.mp4" type="video/mp4">
+            Ihr Browser kann dieses Video nicht abspielen.
+            <a href="assets/erklaervideo.mp4">Video herunterladen</a> — die einzelnen
+            Schritte sind unterhalb auch als Text beschrieben.
+          </video>
+        </div>
+        <figcaption class="video__caption">
+          Der Ablauf in 59&nbsp;Sekunden — von der Abrechnung bis zu Ihren zwei Dokumenten.
+          Beispielhafte Darstellung, keine Zusage eines Ergebnisses.
+        </figcaption>
+      </figure>
+
       <p class="steps-prep"><strong>Das sollten Sie bereithalten:</strong> Ihre
       Nebenkostenabrechnung und Ihren Mietvertrag — jeweils alle Seiten, Handyfotos
       genügen.</p>
