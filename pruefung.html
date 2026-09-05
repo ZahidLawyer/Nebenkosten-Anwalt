@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unterlagen hochladen — Nebenkostenabrechnung prüfen lassen | Nebenkosten-Anwalt</title>
-<meta name="description" content="Nebenkostenabrechnung und Mietvertrag hochladen — Handyfoto genügt. Anwaltliche Prüfung durch Rechtsanwalt Zahid Akcay, Vergütung nur im Erfolgsfall.">
+<title>Unterlagen hochladen — kostenlose Vorprüfung | Nebenkosten-Anwalt</title>
+<meta name="description" content="Abrechnung und Mietvertrag hochladen — Handyfoto genügt. Kostenlose automatische Vorprüfung in wenigen Minuten, danach anwaltliche Prüfung durch Rechtsanwalt Zahid Akcay für 79,90 Euro.">
 <link rel="canonical" href="https://nebenkosten-anwalt.de/pruefung.html">
 <meta name="theme-color" content="#2F5D4C">
 <link rel="preconnect" href="https://tally.so">
@@ -235,6 +235,36 @@
     .btn { transition: none; }
   }
 
+  /* ============ Vorprüfung: Ergebnis und Bestellung ============ */
+  .ergebnis-panel {
+    max-width: 40rem; margin: 1.5rem auto 0;
+    background: #fff; border: 1px solid var(--line-strong); border-left: 4px solid var(--moss);
+    border-radius: 10px; padding: 1.4rem 1.5rem;
+  }
+  .ergebnis-panel[hidden], .bestellen[hidden] { display: none; }
+  .ergebnis-panel h2 { font-family: var(--serif); font-size: 1.25rem; margin-bottom: 0.6rem; }
+  .ergebnis-panel .status { display: flex; align-items: center; gap: 0.6rem; font-size: 0.97rem; color: var(--ink); }
+  .spinner {
+    width: 1rem; height: 1rem; flex: none; border-radius: 50%;
+    border: 2px solid var(--line-strong); border-top-color: var(--moss);
+    animation: dreh 0.9s linear infinite;
+  }
+  .spinner[hidden] { display: none; }
+  @keyframes dreh { to { transform: rotate(360deg); } }
+  .punkte { list-style: none; display: grid; gap: 0.7rem; margin: 1rem 0 0.5rem; }
+  .punkte li { display: grid; grid-template-columns: auto 1fr; gap: 0.55rem; align-items: start; }
+  .punkte li svg { margin-top: 0.2rem; }
+  .punkte strong { display: block; color: var(--ink); font-size: 0.98rem; }
+  .punkte span { color: var(--ink-soft); font-size: 0.93rem; }
+  .ergebnis-hinweis { font-size: 0.88rem; color: var(--ink-soft); border-top: 1px solid var(--line); padding-top: 0.8rem; margin-top: 0.9rem; }
+  .ergebnis-panel .form-fallback { text-align: left; margin-top: 0.8rem; }
+  .bestellen { max-width: 40rem; margin: 1.75rem auto 0; scroll-margin-top: 5rem; }
+  .bestellen .prep-box { margin-bottom: 1rem; }
+  .bestellen .form-card { margin-top: 0.5rem; }
+  /* Sichtbare Platzhalter — Bauwerkzeug, kein Gestaltungselement. */
+  .ph { display: inline-block; font-family: var(--sans); font-size: 0.9em; color: var(--amber-text); border: 1px dashed var(--amber); border-radius: 3px; padding: 0 0.35em; background: #fff; }
+  @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+
   /* ============ Footer ============ */
   footer {
     border-top: 1px solid var(--line-strong);
@@ -290,8 +320,9 @@
         <span class="page-badge">Rechtsanwalt Zahid Akcay · Kanzlei Akcay, Frankfurt am Main</span>
         <h1 class="section-title">Ihre Unterlagen hochladen</h1>
         <p class="section-lead">
-          Zwei Unterlagen, wenige Angaben — in wenigen Minuten erledigt. Ihr Prüfergebnis kommt
-          per E-Mail von Rechtsanwalt Zahid Akcay.
+          Zwei Unterlagen, wenige Angaben. Die Vorprüfung ist kostenlos und zeigt Ihnen in wenigen
+          Minuten, ob es Anhaltspunkte für Fehler gibt. Danach entscheiden Sie, ob ich als
+          Rechtsanwalt prüfe — für 79,90 Euro.
         </p>
       </div>
     </div>
@@ -315,37 +346,12 @@
   <div class="wrap">
     <ul class="assure">
       <li><svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2l7 3v5c0 4-3 7-7 8-4-1-7-4-7-8V5l7-3z" stroke="#2F5D4C" stroke-width="1.6" stroke-linejoin="round" fill="none"/><path d="M7 9.5l2 2 4-4.5" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-        Jedes Prüfergebnis prüfe und gebe ich als Rechtsanwalt frei.</li>
+        Die Vorprüfung ist kostenlos, automatisch und unverbindlich — ohne anwaltliche Prüfung.</li>
       <li><svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="2" stroke="#2F5D4C" stroke-width="1.6" fill="none"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9" stroke="#2F5D4C" stroke-width="1.6" fill="none"/><circle cx="10" cy="13" r="1.4" fill="#B97C3B"/></svg>
         Ihre Unterlagen unterliegen der anwaltlichen Verschwiegenheit und dienen nur Ihrer Prüfung.</li>
       <li><svg width="17" height="17" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="#2F5D4C" stroke-width="1.4"/><path d="M5.5 9.2l2.3 2.3 4.7-5" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Vergütung nur im Erfolgsfall: 180, 290 oder 450 Euro je nach Nachforderung, sonst 0 Euro. Keine Zahlungsdaten vorab, kein Abo.</li>
+        Die anwaltliche Prüfung kostet 79,90 Euro — bezahlt wird erst bei der Bestellung, nicht beim Hochladen.</li>
     </ul>
-  </div>
-
-  <!-- ============ Pflichtinformationen vor dem Auftrag (§ 312d, § 312j BGB) ============ -->
-  <div class="wrap">
-    <div class="prep-box auftrag-box">
-      <h2>Bevor Sie beauftragen</h2>
-      <ul>
-        <!-- Rückfrage R: Variante b. Bei Variante a: „… Prüfergebnis und, wenn sich ein Widerspruch lohnt, ein
-             vorbereitetes Schreiben an Ihren Vermieter, das Sie selbst absenden." -->
-        <li><span><strong>Leistung:</strong> anwaltliche Prüfung Ihrer Nebenkostenabrechnung durch Rechtsanwalt
-        Zahid Akcay — Prüfergebnis und, wenn sich ein Widerspruch lohnt, mein Schreiben an Ihren Vermieter.</span></li>
-        <li><span><strong>Kosten:</strong> 180 Euro (Nachforderung bis 500 Euro), 290 Euro (bis 1.000 Euro),
-        450 Euro (bis 2.000 Euro) — nur im Erfolgsfall, sonst 0 Euro. Endpreise ohne Umsatzsteuer. Kein Abo,
-        keine Zahlungsdaten vorab. Ihr Vermieter erstattet die Pauschale in der Regel nicht.</span></li>
-        <li><span><strong>Widerruf:</strong> Als Verbraucher können Sie den Auftrag innerhalb von 14 Tagen
-        widerrufen.</span></li>
-        <li><span><strong>Auftrag:</strong> Mit dem Absenden erteilen Sie einen zahlungspflichtigen Auftrag zu den
-        Mandatsbedingungen. Das Mandat beginnt mit meiner Bestätigung per E-Mail — Fristen werden durch das
-        Absenden nicht gewahrt.</span></li>
-      </ul>
-      <p><a href="mandatsbedingungen.html">Mandatsbedingungen</a> ·
-      <a href="mandatsbedingungen.html#verguetung">Vergütungsvereinbarung</a> ·
-      <a href="mandatsbedingungen.html#widerruf">Widerrufsbelehrung</a> ·
-      <a href="datenschutz.html">Datenschutzerklärung</a></p>
-    </div>
   </div>
 
   <!-- ============ Formular ============ -->
@@ -371,10 +377,11 @@
               Formular in neuem Tab öffnen
             </a>
           </div>
+          <!-- data-tally-src setzt das Skript unten, weil die Vorgangskennung (vorgang) je Aufruf neu erzeugt wird. -->
           <iframe
             id="tally-frame"
-            data-tally-src="https://tally.so/embed/kdgJDM?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
-            title="Nebenkostenabrechnung prüfen lassen — Formular"
+            data-tally-base="https://tally.so/embed/kdgJDM?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+            title="Kostenlose Vorprüfung — Formular"
             loading="lazy"
             width="100%"
             height="1"
@@ -383,11 +390,79 @@
       </div>
       <p class="form-fallback">
         Formular lädt nicht?
-        <a href="https://tally.so/r/kdgJDM" target="_blank" rel="noopener">Direkt bei Tally öffnen</a>.
+        <a id="tally-direkt" href="https://tally.so/r/kdgJDM" target="_blank" rel="noopener">Direkt bei Tally öffnen</a>.
       </p>
       <p class="form-trust">
-        Rechtsanwalt Zahid Akcay · anwaltliche Verschwiegenheit · Vergütung nur im Erfolgsfall
+        Kostenlose Vorprüfung · anwaltliche Verschwiegenheit · 79,90 Euro erst bei der Bestellung
       </p>
+      <noscript>
+        <p class="form-fallback">Ohne JavaScript erscheint das Ergebnis der Vorprüfung nicht auf dieser Seite —
+        Sie erhalten es per E-Mail, zusammen mit dem Link zur Bestellung.</p>
+      </noscript>
+
+      <!-- ============ B: Ergebnis der Vorprüfung ============ -->
+      <section class="ergebnis-panel" id="vorpruefung" hidden aria-live="polite" aria-labelledby="vp-title">
+        <h2 id="vp-title">Ihre Vorprüfung</h2>
+        <p class="status">
+          <span class="spinner" id="vp-spinner" aria-hidden="true"></span>
+          <span id="vp-status">Ihre Unterlagen sind unterwegs …</span>
+        </p>
+        <div id="vp-ergebnis" hidden>
+          <p id="vp-zusammenfassung"></p>
+          <ul class="punkte" id="vp-punkte"></ul>
+          <p class="ergebnis-hinweis" id="vp-hinweis">Dieses Ergebnis wurde automatisch von einem KI-System
+          erzeugt — ohne anwaltliche Prüfung (Transparenzhinweis nach Art. 50 KI-VO). Es ist unverbindlich,
+          kann Fehler übersehen oder falsch einordnen und ist keine Rechtsberatung. Ob ein Punkt trägt, sage ich
+          Ihnen in der anwaltlichen Prüfung.</p>
+        </div>
+        <p class="ergebnis-hinweis" id="vp-mail">Das Ergebnis kommt in jedem Fall auch per E-Mail an die Adresse,
+        die Sie angegeben haben — mit einem Link zurück auf diese Seite. Sie können die Seite also schließen.</p>
+        <p class="form-fallback" id="vp-manuell"><a href="#vorpruefung" id="vp-start">Formular schon abgeschickt?
+        Ergebnis abrufen</a></p>
+      </section>
+
+      <!-- ============ C: Anwaltliche Prüfung bestellen (§ 312d, § 312j BGB) ============ -->
+      <section class="bestellen" id="bestellen" hidden aria-labelledby="bestellen-title">
+        <div class="prep-box auftrag-box">
+          <h2 id="bestellen-title">Bevor Sie bestellen</h2>
+          <ul>
+            <li><span><strong>Leistung:</strong> anwaltliche Prüfung Ihrer Nebenkostenabrechnung durch
+            Rechtsanwalt Zahid Akcay — Prüfergebnis und, wenn sich ein Widerspruch lohnt, ein vorbereitetes
+            Schreiben an Ihren Vermieter, das Sie selbst absenden.</span></li>
+            <li><span><strong>Preis:</strong> 79,90 Euro, Endpreis ohne Umsatzsteuer, fällig jetzt bei der
+            Bestellung per Karte über den Zahlungsdienst Stripe. Kein Abo, keine weiteren Kosten. Ihr Vermieter
+            erstattet Ihnen diese Kosten in der Regel nicht.</span></li>
+            <li><span><strong>Widerruf:</strong> Als Verbraucher können Sie den Auftrag innerhalb von 14 Tagen
+            widerrufen.</span></li>
+            <li><span><strong>Mandat:</strong> Mit dem Absenden erteilen Sie einen zahlungspflichtigen Auftrag zu
+            den Mandatsbedingungen. Das Mandat beginnt mit meiner Bestätigung per E-Mail — Fristen werden durch die
+            Bestellung nicht gewahrt. Darf ich Sie nicht vertreten, erstatte ich den Betrag.</span></li>
+          </ul>
+          <p><a href="mandatsbedingungen.html">Mandatsbedingungen</a> ·
+          <a href="mandatsbedingungen.html#verguetung">Vergütungsvereinbarung</a> ·
+          <a href="mandatsbedingungen.html#widerruf">Widerrufsbelehrung</a> ·
+          <a href="datenschutz.html">Datenschutzerklärung</a></p>
+        </div>
+        <div class="form-card" id="bestell-card">
+          <div class="form-card__iframe-wrap">
+            <!-- Formular 2 (Bestellung, Tally mit Stripe-Zahlungsblock): ID eintragen, sobald das Formular gebaut ist. -->
+            <p class="form-fallback" id="bestell-platzhalter"><span class="ph">[ENTSCHEIDUNG ZAHID 18: Tally-Formular-2-ID für die Bestellung eintragen]</span></p>
+            <iframe
+              id="bestell-frame"
+              data-bestell-form="TALLY_FORMULAR_2_ID"
+              data-bestell-base="https://tally.so/embed/{ID}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+              title="Anwaltliche Prüfung bestellen — Formular"
+              loading="lazy"
+              width="100%"
+              height="1"
+            ></iframe>
+          </div>
+        </div>
+        <p class="form-fallback" id="bestell-fallback" hidden>
+          Bestellformular lädt nicht?
+          <a id="bestell-direkt" href="#bestellen" target="_blank" rel="noopener">Direkt bei Tally öffnen</a>.
+        </p>
+      </section>
 
       <!-- ============ Was danach passiert ============ -->
       <div class="after">
@@ -395,16 +470,17 @@
         <ol>
           <li><span><strong>Eingangsbestätigung.</strong> Sie erhalten sofort eine E-Mail,
           dass Ihre Unterlagen angekommen sind.</span></li>
+          <li><span><strong>Vorprüfung.</strong> Läuft automatisch; das Ergebnis erscheint in
+          wenigen Minuten hier auf der Seite und kommt per E-Mail. Kostenlos und
+          unverbindlich.</span></li>
+          <li><span><strong>Bestellung — wenn Sie möchten.</strong> Die anwaltliche Prüfung
+          kostet 79,90 Euro, bezahlt bei der Bestellung per Karte.</span></li>
           <li><span><strong>Auftragsbestätigung.</strong> Ich prüfe, ob ich Sie vertreten
-          darf, und bestätige Ihnen den Auftrag per E-Mail — erst damit beginnt das
-          Mandat.</span></li>
-          <li><span><strong>Prüfung und Freigabe.</strong> Ihre Abrechnung wird
-          ausgewertet; ich prüfe das Ergebnis und gebe es frei, bevor es
-          herausgeht.</span></li>
-          <!-- Rückfrage R: Variante b. Bei Variante a: „… und, wenn sich ein Widerspruch lohnt, ein auf Ihre
-               Abrechnung abgestimmtes Schreiben an Ihren Vermieter, das Sie selbst absenden." -->
-          <li><span><strong>Ihr Ergebnis.</strong> Sie bekommen Ihr Prüfergebnis per
-          E-Mail — und, wenn sich ein Widerspruch lohnt, eine Kopie meines Schreibens an
+          darf, und bestätige Ihnen den Auftrag per E-Mail — erst damit beginnt das Mandat.
+          Darf ich nicht, sage ich ab und erstatte den Betrag.</span></li>
+          <li><span><strong>Prüfung, Freigabe, Ergebnis.</strong> Ihre Abrechnung wird
+          ausgewertet; ich prüfe das Ergebnis und gebe es frei. Sie bekommen Ihr Prüfergebnis
+          per E-Mail — und, wenn sich ein Widerspruch lohnt, das vorbereitete Schreiben an
           Ihren Vermieter.</span></li>
         </ol>
       </div>
@@ -437,9 +513,28 @@
 
 <script>
   (function () {
+    /* ---------- Vorgangskennung: zufällig, nur in dieser Sitzung, kein Personenbezug ---------- */
+    var API = 'https://api.nebenkosten-anwalt.de';
+    var q = new URLSearchParams(location.search);
+    var lokal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    if (lokal && q.get('api')) API = q.get('api'); /* nur für den lokalen Test mit einer Mock-API */
+    var GUELTIG = /^[a-f0-9]{32}$/;
+    function neueId() {
+      var b = new Uint8Array(16); crypto.getRandomValues(b);
+      return Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+    }
+    var vorgang = q.get('vorgang');
+    if (!GUELTIG.test(vorgang || '')) { try { vorgang = sessionStorage.getItem('vorgang'); } catch (e) { vorgang = null; } }
+    if (!GUELTIG.test(vorgang || '')) vorgang = neueId();
+    try { sessionStorage.setItem('vorgang', vorgang); } catch (e) {}
+
+    /* ---------- Formular 1 laden (Tally füllt das versteckte Feld „vorgang" aus der URL) ---------- */
     var frame = document.getElementById('tally-frame');
     var card = document.getElementById('form-card');
     if (!frame || !card) return;
+    frame.setAttribute('data-tally-src', frame.getAttribute('data-tally-base') + '&vorgang=' + vorgang);
+    var direkt = document.getElementById('tally-direkt');
+    if (direkt) direkt.href = 'https://tally.so/r/kdgJDM?vorgang=' + vorgang;
 
     var loaded = false;
     frame.addEventListener('load', function () {
@@ -447,13 +542,125 @@
       card.classList.remove('is-stalled');
       card.classList.add('is-loaded');
     });
-
     /* Kommt das Tally-Skript nicht durch, bleibt das iframe bei height=1 stehen.
        Nach 4,5 s zeigt die Seite statt des endlosen Skeletons einen echten Ausweg. */
     window.setTimeout(function () {
       if (loaded && frame.clientHeight > 40) return;
       card.classList.add('is-stalled');
     }, 4500);
+
+    /* ---------- Ergebnis der Vorprüfung ---------- */
+    var panel = document.getElementById('vorpruefung');
+    var statusEl = document.getElementById('vp-status');
+    var spinner = document.getElementById('vp-spinner');
+    var ergebnisEl = document.getElementById('vp-ergebnis');
+    var zusammenfassung = document.getElementById('vp-zusammenfassung');
+    var punkteEl = document.getElementById('vp-punkte');
+    var manuell = document.getElementById('vp-manuell');
+    var laeuft = false, begonnen = 0, timer = null, fertig = false;
+
+    function status(text, mitSpinner) {
+      statusEl.textContent = text;
+      spinner.hidden = !mitSpinner;
+    }
+    function punkt(titel, kurz) {
+      var li = document.createElement('li');
+      li.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">' +
+        '<circle cx="8" cy="8" r="6.5" fill="#F6E9D6" stroke="#B97C3B" stroke-width="1.2"/>' +
+        '<line x1="8" y1="4.6" x2="8" y2="8.8" stroke="#B97C3B" stroke-width="1.5" stroke-linecap="round"/>' +
+        '<circle cx="8" cy="11.2" r="0.9" fill="#B97C3B"/></svg>';
+      var box = document.createElement('div');
+      var s = document.createElement('strong'); s.textContent = titel; box.appendChild(s);
+      if (kurz) { var k = document.createElement('span'); k.textContent = kurz; box.appendChild(k); }
+      li.appendChild(box);
+      punkteEl.appendChild(li);
+    }
+    function zeigeErgebnis(erg) {
+      fertig = true;
+      var n = (erg && typeof erg.anhaltspunkte === 'number') ? erg.anhaltspunkte : 0;
+      var liste = (erg && Array.isArray(erg.punkte)) ? erg.punkte : [];
+      punkteEl.innerHTML = '';
+      liste.forEach(function (x) { if (x && x.titel) punkt(String(x.titel), x.kurz ? String(x.kurz) : ''); });
+      status('Die Vorprüfung ist fertig.', false);
+      if (n > 0) {
+        zusammenfassung.textContent = n === 1
+          ? 'Die Vorprüfung hat einen Anhaltspunkt gefunden, der eine anwaltliche Prüfung lohnen könnte:'
+          : 'Die Vorprüfung hat ' + n + ' Anhaltspunkte gefunden, die eine anwaltliche Prüfung lohnen könnten:';
+      } else {
+        zusammenfassung.textContent = 'Die Vorprüfung hat keine Anhaltspunkte für typische Fehler gefunden. ' +
+          'Das heißt nicht, dass die Abrechnung fehlerfrei ist — nur, dass das Programm nichts Auffälliges erkannt hat.';
+      }
+      ergebnisEl.hidden = false;
+      manuell.hidden = true;
+      zeigeBestellen();
+    }
+    function abfragen() {
+      var vergangen = (Date.now() - begonnen) / 1000;
+      fetch(API + '/vorpruefung/' + vorgang, { cache: 'no-store' })
+        .then(function (r) {
+          if (r.status === 404) return { status: 'unbekannt' };
+          if (!r.ok) return { status: 'netz' };
+          return r.json();
+        })
+        .catch(function () { return { status: 'netz' }; })
+        .then(function (d) {
+          d = d || {};
+          if (d.status === 'fertig') { zeigeErgebnis(d.ergebnis); return; }
+          if (d.status === 'fehler') {
+            status('Die Vorprüfung konnte nicht abgeschlossen werden. Ich melde mich per E-Mail bei Ihnen.', false);
+            return;
+          }
+          if (vergangen > 900) {
+            status('Die Vorprüfung dauert gerade länger. Sie bekommen das Ergebnis per E-Mail — Sie können diese Seite schließen.', false);
+            manuell.hidden = false;
+            return;
+          }
+          if (d.status === 'laeuft') status('Die Vorprüfung läuft — das dauert wenige Minuten.', true);
+          else if (d.status === 'wartet') status('Ihre Unterlagen sind angekommen, die Vorprüfung startet gleich.', true);
+          else if (d.status === 'unbekannt') status(vergangen < 90 ? 'Ihre Unterlagen sind unterwegs …' : 'Noch nichts angekommen. Haben Sie das Formular abgeschickt? Sonst warten Sie bitte einen Moment.', true);
+          else status('Verbindung zum Prüfsystem wird aufgebaut …', true);
+          timer = window.setTimeout(abfragen, vergangen < 120 ? 5000 : 15000);
+        });
+    }
+    function starten() {
+      if (laeuft) return;
+      laeuft = true; begonnen = Date.now();
+      panel.hidden = false;
+      try { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
+      abfragen();
+    }
+    document.getElementById('vp-start').addEventListener('click', function (e) {
+      e.preventDefault();
+      if (fertig) return;
+      if (laeuft) { window.clearTimeout(timer); abfragen(); }
+      else starten();
+    });
+    /* Tally meldet das Absenden per postMessage — Ereignisname und Nutzlast: [ZU VERIFIZIEREN] */
+    window.addEventListener('message', function (e) {
+      if (typeof e.origin === 'string' && e.origin.indexOf('tally.so') === -1) return;
+      var d = e.data;
+      if (typeof d === 'string') { try { d = JSON.parse(d); } catch (err) { return; } }
+      if (d && d.event === 'Tally.FormSubmitted') starten();
+    });
+    /* Link aus der E-Mail: pruefung.html?vorgang=<id>[#bestellen] */
+    if (GUELTIG.test(q.get('vorgang') || '')) starten();
+
+    /* ---------- Bestellabschnitt (Formular 2) ---------- */
+    function zeigeBestellen() {
+      var b = document.getElementById('bestellen');
+      var f = document.getElementById('bestell-frame');
+      var id = f.getAttribute('data-bestell-form');
+      b.hidden = false;
+      if (id && /^[A-Za-z0-9]{4,}$/.test(id) && id !== 'TALLY_FORMULAR_2_ID') {
+        document.getElementById('bestell-platzhalter').hidden = true;
+        f.setAttribute('data-tally-src', f.getAttribute('data-bestell-base').replace('{ID}', id) + '&vorgang=' + vorgang);
+        var fb = document.getElementById('bestell-fallback');
+        fb.hidden = false;
+        document.getElementById('bestell-direkt').href = 'https://tally.so/r/' + id + '?vorgang=' + vorgang;
+        if (window.Tally && typeof window.Tally.loadEmbeds === 'function') window.Tally.loadEmbeds();
+      }
+      if (location.hash === '#bestellen') { try { b.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} }
+    }
   })();
 </script>
 
