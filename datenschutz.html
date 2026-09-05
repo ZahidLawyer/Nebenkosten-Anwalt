@@ -106,28 +106,32 @@
   <span class="ph">[ZU VERIFIZIEREN: aktueller DPF-Status der GitHub, Inc.]</span>. Weitere Informationen:
   <a href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a>.</p>
 
-  <h2>3. Ihr Auftrag über das Formular</h2>
-  <p>Wenn Sie über das Formular eine Prüfung Ihrer Nebenkostenabrechnung beauftragen, verarbeite ich:</p>
+  <h2>3. Vorprüfung und Auftrag über das Formular</h2>
+  <p>Die Prüfung läuft in zwei Stufen: Zuerst lassen Sie Ihre Unterlagen kostenlos automatisch vorprüfen; danach
+  können Sie die anwaltliche Prüfung bestellen. In beiden Stufen verarbeite ich:</p>
   <ul>
     <li><strong>Kontaktdaten:</strong> Name, Anschrift, E-Mail-Adresse</li>
     <li><strong>Angaben zum Mietverhältnis:</strong> Anschrift der Wohnung, Name und Anschrift des Vermieters, gegebenenfalls der Hausverwaltung, Abrechnungsjahr, Zugangsdatum der Abrechnung, Vorauszahlungen, Höhe der Nachforderung</li>
     <li><strong>Unterlagen:</strong> Mietvertrag, Nebenkostenabrechnung und weitere Dokumente, die Sie hochladen</li>
     <li><strong>Ihre Erklärungen:</strong> Auftrag, Annahme der Vergütungsvereinbarung, Einwilligung in die Einschaltung von Dienstleistern, gegebenenfalls Ihr Verlangen auf vorzeitigen Beginn</li>
-    <li><strong>Metadaten:</strong> Zeitpunkt der Übermittlung, technische Protokolldaten</li>
+    <li><strong>Zahlungsstatus:</strong> ob und wann der Festpreis gezahlt oder erstattet wurde — Ihre Kartendaten sehe ich nicht (Ziffer 6)</li>
+    <li><strong>Metadaten:</strong> Zeitpunkt der Übermittlung, eine zufällige Vorgangskennung ohne Personenbezug, technische Protokolldaten</li>
   </ul>
   <p>Ohne diese Daten ist eine Prüfung nicht möglich. Zwecke und Rechtsgrundlagen:</p>
   <div class="tabelle">
   <table>
     <tr><th>Zweck</th><th>Rechtsgrundlage</th></tr>
+    <tr><td>Kostenlose Vorprüfung: automatische Auswertung Ihrer Unterlagen, Kurzbefund auf der Seite und per E-Mail</td><td>Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahme auf Ihre Anfrage)</td></tr>
     <tr><td>Konfliktprüfung vor der Annahme des Auftrags (Objektadresse, Vermieter, Verwaltung gegen laufende Mandate)</td><td>Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahme) und lit. c DSGVO in Verbindung mit § 43a BRAO</td></tr>
     <tr><td>Durchführung des Mandats: Prüfung, Prüfergebnis, Schreiben an den Vermieter, Kommunikation mit Ihnen</td><td>Art. 6 Abs. 1 lit. b DSGVO (Mandatsvertrag)</td></tr>
+    <tr><td>Abwicklung der Zahlung des Festpreises über Stripe, Erstattungen</td><td>Art. 6 Abs. 1 lit. b DSGVO; Aufbewahrung nach lit. c DSGVO (steuerrechtliche Pflichten)</td></tr>
     <tr><td>Auftragsbestätigung, Rechnung, Handakte, Aufbewahrung</td><td>Art. 6 Abs. 1 lit. c DSGVO in Verbindung mit § 50 BRAO und steuerrechtlichen Pflichten</td></tr>
     <tr><td>Sicherer Betrieb der Website und der Prüf-Infrastruktur</td><td>Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse)</td></tr>
     <tr><td>Einschaltung von Dienstleistern für Ihren Auftrag</td><td>Berufsrechtlich Ihre Einwilligung nach § 43e Abs. 5 BRAO; datenschutzrechtlich Art. 6 Abs. 1 lit. b DSGVO <span class="ph">[ZU VERIFIZIEREN: ob die Übermittlung in ein Drittland zusätzlich auf Art. 49 Abs. 1 lit. a DSGVO gestützt werden soll oder die Standardvertragsklauseln allein tragen]</span></td></tr>
   </table>
   </div>
-  <p><strong>Ein Mandat entsteht nicht durch das Absenden des Formulars</strong>, sondern erst durch meine
-  Auftragsbestätigung per E-Mail. Fristen können über das Formular nicht gewahrt werden.</p>
+  <p><strong>Ein Mandat entsteht nicht durch das Hochladen oder die Vorprüfung</strong>, sondern erst durch meine
+  Auftragsbestätigung per E-Mail nach Ihrer Bestellung. Fristen können über das Formular nicht gewahrt werden.</p>
 
   <h2>4. Anwaltliche Verschwiegenheit und Dienstleister</h2>
   <p>Alles, was Sie mir anvertrauen, unterliegt der anwaltlichen Verschwiegenheitspflicht (§ 43a Abs. 2 BRAO,
@@ -160,11 +164,24 @@
     von 30 Tagen, sofern keine gesetzliche Aufbewahrungspflicht oder ein Verstoß gegen die Nutzungsrichtlinien vorliegt
     <span class="ph">[ZU VERIFIZIEREN: gegen die Account-Konfiguration zum Livegang]</span>.</li>
   </ul>
-  <p>Die technische Auswertung ersetzt keine anwaltliche Prüfung: Jedes Ergebnis prüfe und verantworte ich, bevor es
-  Sie erreicht. Transparenzhinweis nach Art. 50 der EU-Verordnung über Künstliche Intelligenz (KI-VO): Bei der
-  Auswertung Ihrer Unterlagen kommt ein KI-System zum Einsatz.</p>
+  <p>Bei der <strong>Vorprüfung</strong> erhalten Sie das Ergebnis dieser automatischen Auswertung direkt — ohne
+  anwaltliche Prüfung; darauf weise ich am Ergebnis hin. Die Seite ruft das Ergebnis über eine zufällige
+  Vorgangskennung bei meinem Prüfsystem ab (api.nebenkosten-anwalt.de); die Antwort enthält keine Personendaten.
+  Bei der <strong>anwaltlichen Prüfung</strong> ersetzt die technische Auswertung keine anwaltliche Prüfung: Jedes
+  Ergebnis prüfe und verantworte ich, bevor es Sie erreicht. Transparenzhinweis nach Art. 50 der EU-Verordnung über
+  Künstliche Intelligenz (KI-VO): Bei der Auswertung Ihrer Unterlagen kommt ein KI-System zum Einsatz.</p>
 
-  <h2>6. Empfänger und Auftragsverarbeiter</h2>
+  <h2>6. Zahlung über Stripe</h2>
+  <p>Den Festpreis der anwaltlichen Prüfung zahlen Sie im Bestellformular über den Zahlungsdienst
+  <strong>Stripe</strong> (Stripe Payments Europe, Ltd., 1 Grand Canal Street Lower, Grand Canal Dock, Dublin, Irland).
+  Ihre Kartendaten geben Sie direkt bei Stripe ein; ich erhalte nur Name, E-Mail-Adresse, Betrag und Zahlungsstatus.
+  Rechtsgrundlage ist die Durchführung des Vertrags (Art. 6 Abs. 1 lit. b DSGVO). Stripe kann Daten an die
+  Stripe, Inc. (USA) übermitteln
+  <span class="ph">[ZU VERIFIZIEREN: Übermittlungsgrundlage (Data Privacy Framework oder Standardvertragsklauseln), Auftragsverarbeitungsvertrag mit Stripe, Bedingungen des Tally-Zahlungsblocks]</span>.
+  Datenschutzerklärung von Stripe:
+  <a href="https://stripe.com/de/privacy" target="_blank" rel="noopener">stripe.com/de/privacy</a>.</p>
+
+  <h2>7. Empfänger und Auftragsverarbeiter</h2>
   <ul>
     <li><strong>Formular und Upload:</strong> Tally BV, August Van Lokerenstraat 71, 9050 Gent, Belgien. Tally speichert die
     Daten nach eigenen Angaben auf Servern innerhalb der Europäischen Union
@@ -174,6 +191,7 @@
     <li><strong>Prüf-Infrastruktur:</strong> Die übermittelten Daten werden auf einem Server innerhalb der Europäischen Union
     verarbeitet — <span class="ph">[ENTSCHEIDUNG ZAHID 11: Anbieter, Standort und Administrator des Prüfservers; Vertrag nach Art. 28 DSGVO und Vereinbarung nach § 43e Abs. 3 BRAO]</span>.</li>
     <li><strong>KI-Auswertung:</strong> siehe Ziffer 5.</li>
+    <li><strong>Zahlung:</strong> Stripe, siehe Ziffer 6.</li>
     <li><strong>E-Mail-Versand:</strong> Eingangsbestätigung, Auftragsbestätigung und Ergebnis erhalten Sie von
     info@nebenkosten-anwalt.de — <span class="ph">[ENTSCHEIDUNG ZAHID 11: Anbieter des Postausgangs]</span>.</li>
     <li><strong>Website:</strong> GitHub, Inc. (Ziffer 2).</li>
@@ -181,22 +199,22 @@
   <p>Kein Verkauf, keine Weitergabe zu Werbezwecken. An Ihren Vermieter oder dessen Verwaltung gehen nur die
   Angaben, die für das Schreiben in Ihrem Auftrag nötig sind.</p>
 
-  <h2>7. Speicherdauer</h2>
+  <h2>8. Speicherdauer</h2>
   <p>Unterlagen und Ergebnisse auf dem Prüfsystem lösche ich
   <span class="ph">[ENTSCHEIDUNG ZAHID 9: 90 Tage]</span> nach Abschluss der Prüfung. Unabhängig davon muss ich
   die Handakte — dazu gehören Ihr Auftrag, das Prüfergebnis und der Schriftwechsel — sechs Jahre aufbewahren
   (§ 50 Abs. 1 BRAO <span class="ph">[ZU VERIFIZIEREN: Satznummer und Fristbeginn]</span>); Rechnungen unterliegen
-  den steuerrechtlichen Aufbewahrungsfristen. Führt Ihre Anfrage nicht zu einem Mandat — etwa nach einer Absage
-  wegen der Konfliktprüfung —, lösche ich die Unterlagen nach
-  <span class="ph">[ENTSCHEIDUNG ZAHID 9: 30 Tagen]</span>.</p>
+  den steuerrechtlichen Aufbewahrungsfristen. Vorprüfungen ohne Bestellung lösche ich nach
+  <span class="ph">[ENTSCHEIDUNG ZAHID 9: 30 Tagen]</span>; dasselbe gilt, wenn ich einen Auftrag wegen der
+  Konfliktprüfung absage. Zahlungsbelege unterliegen den steuerrechtlichen Aufbewahrungsfristen.</p>
 
-  <h2>8. Keine Cookies, kein Tracking</h2>
+  <h2>9. Keine Cookies, kein Tracking</h2>
   <p>Diese Website setzt keine Cookies, die nicht für den Betrieb erforderlich sind. Sie bindet keine
   Analysewerkzeuge, keine Werbenetzwerke, keine sozialen Netzwerke und keine extern ausgelieferten Schriften ein;
   die verwendeten Schriften liegen auf demselben Server wie die Website. Deshalb gibt es hier kein
   Einwilligungsbanner — es wird keines gebraucht.</p>
 
-  <h2>9. Ihre Rechte</h2>
+  <h2>10. Ihre Rechte</h2>
   <p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16 DSGVO), Löschung (Art. 17 DSGVO),
   Einschränkung der Verarbeitung (Art. 18 DSGVO), Datenübertragbarkeit (Art. 20 DSGVO) und Widerspruch gegen
   Verarbeitungen, die auf einem berechtigten Interesse beruhen (Art. 21 DSGVO). Eine erteilte Einwilligung können
@@ -208,7 +226,7 @@
   Telefon +49 611 1408-0, <a href="mailto:poststelle@datenschutz.hessen.de">poststelle@datenschutz.hessen.de</a>,
   <a href="https://datenschutz.hessen.de" target="_blank" rel="noopener">datenschutz.hessen.de</a>.</p>
 
-  <h2>10. Änderungen</h2>
+  <h2>11. Änderungen</h2>
   <p>Diese Erklärung hat den Stand <span class="ph">[ENTSCHEIDUNG ZAHID 1: Datum des Livegangs]</span>. Ändert sich
   die Verarbeitung, ändert sich diese Erklärung.</p>
 </article>
