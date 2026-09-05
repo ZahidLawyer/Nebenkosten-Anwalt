@@ -5,3 +5,4 @@ TALLY_CHECKLISTE.md
 DEPLOY*.md
 _upload/
 .DS_Store
+_backup_*/
