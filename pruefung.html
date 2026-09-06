@@ -258,6 +258,33 @@
   .punkte span { color: var(--ink-soft); font-size: 0.93rem; }
   .ergebnis-hinweis { font-size: 0.88rem; color: var(--ink-soft); border-top: 1px solid var(--line); padding-top: 0.8rem; margin-top: 0.9rem; }
   .ergebnis-panel .form-fallback { text-align: left; margin-top: 0.8rem; }
+  /* Befundkarte (06.09.2026): Positionen erscheinen nacheinander, dann die Summenzeile. */
+  .befund { margin: 0.9rem 0 0.5rem; border: 1px solid #D9D2C4; border-radius: 10px; background: #FFFFFF; overflow: hidden; }
+  .befund[hidden] { display: none; }
+  .befund__row { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.6rem 0.9rem; border-top: 1px solid #EDE7DA; font-size: 0.95rem; opacity: 0; transform: translateY(6px); }
+  .befund__row:first-child { border-top: 0; }
+  .befund__row svg { flex: none; margin-top: 0.15rem; }
+  .befund__name { flex: 1; min-width: 0; }
+  .befund__name span { display: block; color: #55655D; font-size: 0.86rem; line-height: 1.4; margin-top: 0.1rem; }
+  .befund__betrag { flex: none; font-variant-numeric: tabular-nums; white-space: nowrap; color: #24312B; }
+  .befund__row--auffaellig .befund__betrag { color: #8F5A22; font-weight: 600; }
+  .befund__row--ok, .befund__row--ok .befund__betrag { color: #55655D; }
+  .befund__sum { padding: 0.9rem 0.9rem 0.95rem; border-top: 2px solid #2F5D4C; background: #F7F4EE; opacity: 0; transform: translateY(6px); }
+  .befund__sum-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+  .befund__sum-kopf strong { font-family: "Source Serif 4", Georgia, serif; font-size: 1.3rem; color: #24493C; }
+  .befund__sum-kopf span { font-size: 0.95rem; color: #24312B; }
+  .befund__bar { height: 8px; border-radius: 999px; background: #E4DCCB; margin-top: 0.6rem; overflow: hidden; }
+  .befund__bar i { display: block; height: 100%; width: 0; background: #2F5D4C; border-radius: 999px; transition: width 0.9s ease; }
+  .befund__bar-legende { display: flex; justify-content: space-between; gap: 0.6rem; font-size: 0.82rem; color: #55655D; margin-top: 0.3rem; }
+  .befund__row.is-in, .befund__sum.is-in { opacity: 1; transform: none; transition: opacity 0.45s ease, transform 0.45s ease; }
+  .ergebnis-vorbehalt { font-size: 0.88rem; color: #55655D; margin: 0.35rem 0 0.9rem; }
+  .ergebnis-vorbehalt[hidden] { display: none; }
+  .ergebnis-frist { font-size: 0.9rem; color: #24312B; margin: 0.2rem 0 0.8rem; }
+  .ergebnis-frist[hidden] { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .befund__row, .befund__sum { opacity: 1; transform: none; transition: none; }
+    .befund__bar i { transition: none; }
+  }
   .bestellen { max-width: 40rem; margin: 1.75rem auto 0; scroll-margin-top: 5rem; }
   .bestellen .prep-box { margin-bottom: 1rem; }
   .bestellen .form-card { margin-top: 0.5rem; }
@@ -411,6 +438,10 @@
         </p>
         <div id="vp-ergebnis" hidden>
           <p id="vp-zusammenfassung"></p>
+          <div class="befund" id="vp-befund" hidden role="table" aria-label="Positionen der Vorprüfung"></div>
+          <p class="ergebnis-vorbehalt" id="vp-vorbehalt" hidden>Automatisch ermittelt, ohne anwaltliche Prüfung.
+          Ob und wie viel Sie weniger zahlen, zeigt erst die anwaltliche Prüfung.</p>
+          <p class="ergebnis-frist" id="vp-frist" hidden></p>
           <ul class="punkte" id="vp-punkte"></ul>
           <p class="ergebnis-hinweis" id="vp-hinweis">Dieses Ergebnis ist automatisch erstellt — ohne
           anwaltliche Prüfung. Es ist unverbindlich, kann Fehler übersehen oder falsch einordnen und ist keine
@@ -524,6 +555,11 @@
     if (!GUELTIG.test(vorgang || '')) { try { vorgang = sessionStorage.getItem('vorgang'); } catch (e) { vorgang = null; } }
     if (!GUELTIG.test(vorgang || '')) vorgang = neueId();
     try { sessionStorage.setItem('vorgang', vorgang); } catch (e) {}
+    /* Tally füllt versteckte Felder aus der URL der EINBETTENDEN Seite (dokumentierter Weg für
+       das Standard-Embed mit embed.js). Deshalb steht die Kennung auch in der eigenen Adresse. */
+    if (q.get('vorgang') !== vorgang) {
+      try { history.replaceState(null, '', location.pathname + '?vorgang=' + vorgang + location.hash); } catch (e) {}
+    }
 
     /* ---------- Formular 1 laden (Tally füllt das versteckte Feld „vorgang" aus der URL) ---------- */
     var frame = document.getElementById('tally-frame');
@@ -553,8 +589,99 @@
     var ergebnisEl = document.getElementById('vp-ergebnis');
     var zusammenfassung = document.getElementById('vp-zusammenfassung');
     var punkteEl = document.getElementById('vp-punkte');
+    var befundEl = document.getElementById('vp-befund');
+    var vorbehaltEl = document.getElementById('vp-vorbehalt');
+    var fristEl = document.getElementById('vp-frist');
     var manuell = document.getElementById('vp-manuell');
     var laeuft = false, begonnen = 0, timer = null, fertig = false;
+    var ruhig = false;
+    try { ruhig = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    var SCHRITT = ruhig ? 0 : 650; /* Versatz zwischen zwei Zeilen der Befundkarte */
+
+    function euro(cent) {
+      var z = Math.round(cent) / 100;
+      try { return z.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'; }
+      catch (e) { return z.toFixed(2).replace('.', ',') + ' €'; }
+    }
+    function datumDe(iso) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
+      return m ? m[3] + '.' + m[2] + '.' + m[1] : '';
+    }
+    var ICON = {
+      auffaellig: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">' +
+        '<circle cx="8" cy="8" r="6.5" fill="#F6E9D6" stroke="#B97C3B" stroke-width="1.2"/>' +
+        '<line x1="8" y1="4.6" x2="8" y2="8.8" stroke="#B97C3B" stroke-width="1.5" stroke-linecap="round"/>' +
+        '<circle cx="8" cy="11.2" r="0.9" fill="#B97C3B"/></svg>',
+      pruefen: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">' +
+        '<circle cx="8" cy="8" r="6.5" fill="#EFEAE0" stroke="#7A8680" stroke-width="1.2"/>' +
+        '<path d="M6.2 6.3a1.8 1.8 0 1 1 2.6 1.6c-.5.3-.8.6-.8 1.2" stroke="#55655D" stroke-width="1.4" stroke-linecap="round" fill="none"/>' +
+        '<circle cx="8" cy="11.3" r="0.9" fill="#55655D"/></svg>',
+      ok: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">' +
+        '<circle cx="8" cy="8" r="6.5" fill="#E6EFEA" stroke="#2F5D4C" stroke-width="1.2"/>' +
+        '<path d="M5 8.2l2 2 4-4.3" stroke="#2F5D4C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'
+    };
+    var LABEL = { auffaellig: 'in der Regel nicht umlagefähig', pruefen: 'prüfen', ok: 'unauffällig' };
+
+    /* Befundkarte: Zeilen erscheinen nacheinander, zuletzt „Mögliche Ersparnis: bis zu X €". */
+    function baueBefund(erg) {
+      var positionen = (erg && Array.isArray(erg.positionen)) ? erg.positionen.filter(function (p) { return p && p.titel; }) : [];
+      var ersparnis = (erg && typeof erg.moegliche_ersparnis_cent === 'number') ? erg.moegliche_ersparnis_cent : 0;
+      var nachforderung = (erg && typeof erg.nachforderung_cent === 'number' && erg.nachforderung_cent > 0) ? erg.nachforderung_cent : null;
+      befundEl.innerHTML = '';
+      if (!positionen.length && ersparnis <= 0) { befundEl.hidden = true; vorbehaltEl.hidden = true; return 0; }
+      var rang = { auffaellig: 0, pruefen: 1, ok: 2 };
+      positionen.sort(function (a, b) { return (rang[a.status] === undefined ? 3 : rang[a.status]) - (rang[b.status] === undefined ? 3 : rang[b.status]); });
+      var zeilen = [];
+      positionen.forEach(function (p) {
+        var st = rang[p.status] === undefined ? 'ok' : p.status;
+        var row = document.createElement('div');
+        row.className = 'befund__row befund__row--' + st;
+        row.setAttribute('role', 'row');
+        row.innerHTML = ICON[st];
+        var name = document.createElement('div'); name.className = 'befund__name'; name.setAttribute('role', 'cell');
+        name.appendChild(document.createTextNode(String(p.titel)));
+        var sub = document.createElement('span');
+        sub.textContent = (st !== 'ok' && p.kurz) ? String(p.kurz) : LABEL[st];
+        name.appendChild(sub);
+        var betrag = document.createElement('div'); betrag.className = 'befund__betrag'; betrag.setAttribute('role', 'cell');
+        betrag.textContent = (typeof p.betrag_cent === 'number') ? euro(p.betrag_cent) : '—';
+        row.appendChild(name); row.appendChild(betrag);
+        befundEl.appendChild(row); zeilen.push(row);
+      });
+      var sum = document.createElement('div'); sum.className = 'befund__sum'; sum.setAttribute('role', 'row');
+      var kopf = document.createElement('div'); kopf.className = 'befund__sum-kopf';
+      var label = document.createElement('span'); label.textContent = 'Mögliche Ersparnis';
+      var wert = document.createElement('strong');
+      if (ersparnis > 0) wert.textContent = 'bis zu ' + euro(ersparnis);
+      else wert.textContent = 'noch nicht bezifferbar';
+      kopf.appendChild(label); kopf.appendChild(wert); sum.appendChild(kopf);
+      var balken = null;
+      if (ersparnis > 0 && nachforderung) {
+        balken = document.createElement('div'); balken.className = 'befund__bar';
+        var fuell = document.createElement('i'); balken.appendChild(fuell); sum.appendChild(balken);
+        var legende = document.createElement('div'); legende.className = 'befund__bar-legende';
+        var l1 = document.createElement('span'); l1.textContent = ersparnis >= nachforderung ? 'bis zur gesamten Nachforderung' : 'Anteil an der Nachforderung';
+        var l2 = document.createElement('span'); l2.textContent = 'Nachforderung ' + euro(nachforderung);
+        legende.appendChild(l1); legende.appendChild(l2); sum.appendChild(legende);
+        balken.setAttribute('data-anteil', String(Math.min(100, Math.round(ersparnis / nachforderung * 100))));
+      } else if (ersparnis <= 0) {
+        var erkl = document.createElement('div'); erkl.className = 'befund__bar-legende';
+        var e1 = document.createElement('span'); e1.textContent = 'Die markierten Positionen brauchen die anwaltliche Prüfung, bevor sich ein Betrag nennen lässt.';
+        erkl.appendChild(e1); sum.appendChild(erkl);
+      }
+      befundEl.appendChild(sum);
+      befundEl.hidden = false;
+      vorbehaltEl.hidden = true;
+      /* nacheinander einblenden */
+      zeilen.forEach(function (row, i) { window.setTimeout(function () { row.classList.add('is-in'); }, SCHRITT * i); });
+      var ende = SCHRITT * zeilen.length;
+      window.setTimeout(function () {
+        sum.classList.add('is-in');
+        vorbehaltEl.hidden = false;
+        if (balken) window.setTimeout(function () { balken.firstChild.style.width = balken.getAttribute('data-anteil') + '%'; }, ruhig ? 0 : 150);
+      }, ende);
+      return ende + (ruhig ? 0 : 500);
+    }
 
     function status(text, mitSpinner) {
       statusEl.textContent = text;
@@ -574,10 +701,26 @@
     }
     function zeigeErgebnis(erg) {
       fertig = true;
-      var n = (erg && typeof erg.anhaltspunkte === 'number') ? erg.anhaltspunkte : 0;
-      var liste = (erg && Array.isArray(erg.punkte)) ? erg.punkte : [];
+      erg = erg || {};
+      var n = (typeof erg.anhaltspunkte === 'number') ? erg.anhaltspunkte : 0;
+      var liste = Array.isArray(erg.punkte) ? erg.punkte : [];
+      var positionen = Array.isArray(erg.positionen) ? erg.positionen : [];
+      /* Punkte zu einzelnen Positionen stehen schon in der Karte; darunter nur die übrigen (Frist, Form, Vertrag). */
+      var titel = positionen.map(function (p) { return p && p.titel ? String(p.titel) + ':' : null; }).filter(Boolean);
       punkteEl.innerHTML = '';
-      liste.forEach(function (x) { if (x && x.titel) punkt(String(x.titel), x.kurz ? String(x.kurz) : ''); });
+      liste.forEach(function (x) {
+        if (!x || !x.titel) return;
+        var t = String(x.titel);
+        var zuPosition = titel.some(function (pt) { return t.indexOf(pt) === 0; });
+        if (!zuPosition) punkt(t, x.kurz ? String(x.kurz) : '');
+      });
+      var dauer = baueBefund(erg);
+      var frist = erg.frist || {};
+      if (frist.einwendung_bis && datumDe(frist.einwendung_bis)) {
+        fristEl.textContent = 'Einwendungen gegen diese Abrechnung sind bis zum ' + datumDe(frist.einwendung_bis) +
+          ' möglich (zwölf Monate ab Zugang). Fristen werden durch die Vorprüfung nicht gewahrt.';
+        fristEl.hidden = false;
+      } else { fristEl.hidden = true; }
       status('Die Vorprüfung ist fertig.', false);
       if (n > 0) {
         zusammenfassung.textContent = n === 1
@@ -589,7 +732,9 @@
       }
       ergebnisEl.hidden = false;
       manuell.hidden = true;
-      zeigeBestellen();
+      /* Bestellabschnitt nach der letzten Zeile — außer der Link aus der E-Mail zielt direkt darauf. */
+      if (location.hash === '#bestellen') zeigeBestellen();
+      else window.setTimeout(zeigeBestellen, dauer);
     }
     function abfragen() {
       var vergangen = (Date.now() - begonnen) / 1000;
@@ -632,7 +777,8 @@
       if (laeuft) { window.clearTimeout(timer); abfragen(); }
       else starten();
     });
-    /* Tally meldet das Absenden per postMessage — Ereignisname und Nutzlast: [ZU VERIFIZIEREN] */
+    /* Tally meldet das Absenden per postMessage als String-Nutzlast
+       ({"event":"Tally.FormSubmitted","payload":{...}}; Tally-Doku, geprüft 06.09.2026). */
     window.addEventListener('message', function (e) {
       if (typeof e.origin === 'string' && e.origin.indexOf('tally.so') === -1) return;
       var d = e.data;
