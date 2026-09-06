@@ -278,6 +278,12 @@
   .befund__bar-legende { display: flex; justify-content: space-between; gap: 0.6rem; font-size: 0.82rem; color: #55655D; margin-top: 0.3rem; }
   .befund__row.is-in, .befund__sum.is-in { opacity: 1; transform: none; transition: opacity 0.45s ease, transform 0.45s ease; }
   .ergebnis-vorbehalt { font-size: 0.88rem; color: #55655D; margin: 0.35rem 0 0.9rem; }
+  .vp-cta { margin: 1.1rem 0 0.4rem; display: flex; flex-direction: column; gap: 0.55rem; align-items: flex-start; }
+  .vp-cta[hidden] { display: none; }
+  .vp-button { display: inline-block; background: #2F5D4C; color: #FFFFFF; font-weight: 600; text-decoration: none;
+    padding: 0.85rem 1.3rem; border-radius: 8px; font-size: 1.02rem; line-height: 1.3; }
+  .vp-button:hover, .vp-button:focus-visible { background: #24493C; color: #FFFFFF; }
+  .vp-cta span { font-size: 0.86rem; color: #55655D; line-height: 1.45; }
   .ergebnis-vorbehalt[hidden] { display: none; }
   .ergebnis-frist { font-size: 0.9rem; color: #24312B; margin: 0.2rem 0 0.8rem; }
   .ergebnis-frist[hidden] { display: none; }
@@ -423,8 +429,8 @@
         Kostenlose Vorprüfung · anwaltliche Verschwiegenheit · 79,90 Euro erst bei der Bestellung
       </p>
       <noscript>
-        <p class="form-fallback">Ohne JavaScript erscheint das Ergebnis der Vorprüfung nicht auf dieser Seite —
-        Sie erhalten es per E-Mail, zusammen mit dem Link zur Bestellung.</p>
+        <p class="form-fallback">Ohne JavaScript kann diese Seite das Ergebnis der Vorprüfung nicht anzeigen.
+        Bitte aktivieren Sie JavaScript und laden Sie die Seite neu — vor einer Bestellung versende ich keine E-Mails.</p>
       </noscript>
       <p class="form-fallback" id="vp-manuell">Formular schon abgeschickt, aber kein Ergebnis zu sehen?
         <a href="#vorpruefung" id="vp-start">Ergebnis abrufen</a>.</p>
@@ -447,8 +453,11 @@
           anwaltliche Prüfung. Es ist unverbindlich, kann Fehler übersehen oder falsch einordnen und ist keine
           Rechtsberatung. Ob ein Punkt trägt, sage ich Ihnen in der anwaltlichen Prüfung.</p>
         </div>
-        <p class="ergebnis-hinweis" id="vp-mail">Das Ergebnis kommt in jedem Fall auch per E-Mail an die Adresse,
-        die Sie angegeben haben — mit einem Link zurück auf diese Seite. Sie können die Seite also schließen.</p>
+        <p class="vp-cta" id="vp-cta" hidden>
+          <a class="vp-button" href="#bestellen" id="vp-bestellen">Jetzt kostenpflichtig prüfen lassen — 79,90 Euro</a>
+          <span>Endpreis, keine Umsatzsteuer, fällig bei der Bestellung per Karte. Bezahlt wird erst im
+          Bestellformular — nicht durch diesen Klick. Vor einer Bestellung versende ich keine E-Mails.</span>
+        </p>
       </section>
 
       <!-- ============ C: Anwaltliche Prüfung bestellen (§ 312d, § 312j BGB) ============ -->
@@ -462,8 +471,11 @@
             <li><span><strong>Preis:</strong> 79,90 Euro, Endpreis ohne Umsatzsteuer, fällig jetzt bei der
             Bestellung per Karte über den Zahlungsdienst Stripe. Kein Abo, keine weiteren Kosten. Ihr Vermieter
             erstattet Ihnen diese Kosten in der Regel nicht.</span></li>
-            <li><span><strong>Widerruf:</strong> Als Verbraucher können Sie den Auftrag innerhalb von 14 Tagen
-            widerrufen.</span></li>
+            <li><span><strong>Widerruf:</strong> Als Verbraucher können Sie die Bestellung innerhalb von 14 Tagen
+            widerrufen. Mit der Bestellung verlangen Sie ausdrücklich, dass ich sofort — vor Ablauf der
+            Widerrufsfrist — mit der Prüfung beginne, und bestätigen, dass Sie wissen: Ihr Widerrufsrecht erlischt,
+            sobald ich die Prüfung vollständig erbracht habe. Widerrufen Sie vorher, zahlen Sie einen Anteil für die
+            bis dahin erbrachte Leistung.</span></li>
             <li><span><strong>Bestellung:</strong> Mit dem Absenden bestellen Sie zahlungspflichtig und erhalten
             sofort eine Bestellbestätigung per E-Mail. Über diese Website entsteht kein Mandatsverhältnis; Fristen
             werden durch die Bestellung nicht gewahrt. Darf ich Ihre Abrechnung nicht prüfen, weil sie einen
@@ -498,17 +510,16 @@
       <div class="after">
         <h2>Was danach passiert</h2>
         <ol>
-          <li><span><strong>Eingangsbestätigung.</strong> Sie erhalten sofort eine E-Mail,
-          dass Ihre Unterlagen angekommen sind.</span></li>
           <li><span><strong>Vorprüfung.</strong> Läuft automatisch; das Ergebnis erscheint in
-          wenigen Minuten hier auf der Seite und kommt per E-Mail. Kostenlos und
-          unverbindlich.</span></li>
-          <li><span><strong>Bestellung — wenn Sie möchten.</strong> Die anwaltliche Prüfung
-          kostet 79,90 Euro, bezahlt bei der Bestellung per Karte.</span></li>
+          wenigen Minuten hier auf der Seite — kostenlos und unverbindlich. E-Mails bekommen
+          Sie in diesem Schritt nicht.</span></li>
+          <li><span><strong>Bestellung — wenn Sie möchten.</strong> Über den Button unter dem
+          Ergebnis. Die anwaltliche Prüfung kostet 79,90 Euro, bezahlt bei der Bestellung per
+          Karte; mit der Bestellung verlangen Sie, dass ich sofort beginne.</span></li>
           <li><span><strong>Bestellbestätigung.</strong> Sie erhalten sofort eine Bestätigung
-          per E-Mail. Vor Beginn gleiche ich Objektadresse, Vermieter und Verwaltung mit
-          meinen laufenden Fällen ab; bei einer Berührung sage ich ab und erstatte den
-          Betrag.</span></li>
+          per E-Mail — mit den Bedingungen und der Widerrufsbelehrung. Vor Beginn gleiche ich
+          Objektadresse, Vermieter und Verwaltung mit meinen laufenden Fällen ab; bei einer
+          Berührung sage ich ab und erstatte den Betrag.</span></li>
           <li><span><strong>Prüfung, Freigabe, Ergebnis.</strong> Ihre Abrechnung wird
           ausgewertet; ich prüfe das Ergebnis und gebe es frei. Sie bekommen Ihr Prüfergebnis
           per E-Mail — und, wenn sich ein Widerspruch lohnt, das vorbereitete Schreiben an
@@ -620,7 +631,10 @@
         '<circle cx="8" cy="8" r="6.5" fill="#E6EFEA" stroke="#2F5D4C" stroke-width="1.2"/>' +
         '<path d="M5 8.2l2 2 4-4.3" stroke="#2F5D4C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'
     };
-    var LABEL = { auffaellig: 'in der Regel nicht umlagefähig', pruefen: 'prüfen', ok: 'unauffällig' };
+    /* Nur der Status -- keine Erklärung der Fehlerart (Inhaberentscheidung 06.09.2026). */
+    var LABEL = { auffaellig: 'auffällig', pruefen: 'prüfen', ok: 'unauffällig' };
+    var cta = document.getElementById('vp-cta');
+    function zeigeCta() { cta.hidden = false; }
 
     /* Befundkarte: Zeilen erscheinen nacheinander, zuletzt „Mögliche Ersparnis: bis zu X €". */
     function baueBefund(erg) {
@@ -641,7 +655,7 @@
         var name = document.createElement('div'); name.className = 'befund__name'; name.setAttribute('role', 'cell');
         name.appendChild(document.createTextNode(String(p.titel)));
         var sub = document.createElement('span');
-        sub.textContent = (st !== 'ok' && p.kurz) ? String(p.kurz) : LABEL[st];
+        sub.textContent = LABEL[st];
         name.appendChild(sub);
         var betrag = document.createElement('div'); betrag.className = 'befund__betrag'; betrag.setAttribute('role', 'cell');
         betrag.textContent = (typeof p.betrag_cent === 'number') ? euro(p.betrag_cent) : '—';
@@ -712,7 +726,7 @@
         if (!x || !x.titel) return;
         var t = String(x.titel);
         var zuPosition = titel.some(function (pt) { return t.indexOf(pt) === 0; });
-        if (!zuPosition) punkt(t, x.kurz ? String(x.kurz) : '');
+        if (!zuPosition) punkt(t, '');
       });
       var dauer = baueBefund(erg);
       var frist = erg.frist || {};
@@ -732,9 +746,10 @@
       }
       ergebnisEl.hidden = false;
       manuell.hidden = true;
-      /* Bestellabschnitt nach der letzten Zeile — außer der Link aus der E-Mail zielt direkt darauf. */
-      if (location.hash === '#bestellen') zeigeBestellen();
-      else window.setTimeout(zeigeBestellen, dauer);
+      /* Button „kostenpflichtig prüfen lassen" nach der letzten Zeile; der Bestellabschnitt öffnet erst
+         auf Klick — außer die Adresse zielt mit #bestellen direkt darauf. */
+      if (location.hash === '#bestellen') { zeigeCta(); zeigeBestellen(true); }
+      else window.setTimeout(zeigeCta, dauer);
     }
     function abfragen() {
       var vergangen = (Date.now() - begonnen) / 1000;
@@ -748,12 +763,18 @@
         .then(function (d) {
           d = d || {};
           if (d.status === 'fertig') { zeigeErgebnis(d.ergebnis); return; }
-          if (d.status === 'fehler') {
-            status('Die Vorprüfung konnte nicht abgeschlossen werden. Ich melde mich per E-Mail bei Ihnen.', false);
+          if (d.status === 'fehler' || d.status === 'ausgelastet') {
+            fertig = true;
+            status(d.status === 'ausgelastet'
+              ? 'Die kostenlose Vorprüfung ist heute ausgelastet. Versuchen Sie es morgen noch einmal — oder lassen Sie Ihre Abrechnung direkt anwaltlich prüfen.'
+              : 'Die automatische Vorprüfung konnte Ihre Unterlagen nicht auswerten — etwa, weil Fotos unscharf oder unvollständig sind. Sie können es mit neuen Aufnahmen noch einmal versuchen oder Ihre Abrechnung direkt anwaltlich prüfen lassen.', false);
+            manuell.hidden = true;
+            zeigeCta();
+            if (location.hash === '#bestellen') zeigeBestellen(true);
             return;
           }
           if (vergangen > 900) {
-            status('Die Vorprüfung dauert gerade länger. Sie bekommen das Ergebnis per E-Mail — Sie können diese Seite schließen.', false);
+            status('Die Vorprüfung dauert gerade länger als gewöhnlich. Lassen Sie die Seite geöffnet oder rufen Sie sie später über dieselbe Adresse wieder auf — sie enthält Ihre Vorgangskennung.', false);
             manuell.hidden = false;
             return;
           }
@@ -764,9 +785,10 @@
           timer = window.setTimeout(abfragen, vergangen < 120 ? 5000 : 15000);
         });
     }
-    function starten() {
-      if (laeuft) return;
-      laeuft = true; begonnen = Date.now();
+    function starten(neu) {
+      if (laeuft && !neu) return;
+      window.clearTimeout(timer);
+      laeuft = true; fertig = false; begonnen = Date.now();
       panel.hidden = false;
       try { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
       abfragen();
@@ -783,13 +805,17 @@
       if (typeof e.origin === 'string' && e.origin.indexOf('tally.so') === -1) return;
       var d = e.data;
       if (typeof d === 'string') { try { d = JSON.parse(d); } catch (err) { return; } }
-      if (d && d.event === 'Tally.FormSubmitted') starten();
+      if (d && d.event === 'Tally.FormSubmitted') starten(true); /* neues Absenden startet die Abfrage neu (z. B. nach 'fehler') */
     });
-    /* Link aus der E-Mail: pruefung.html?vorgang=<id>[#bestellen] */
+    /* Adresse mit Vorgangskennung (Lesezeichen, erneuter Aufruf): pruefung.html?vorgang=<id>[#bestellen] */
     if (GUELTIG.test(q.get('vorgang') || '')) starten();
+    document.getElementById('vp-bestellen').addEventListener('click', function (e) {
+      e.preventDefault();
+      zeigeBestellen(true);
+    });
 
     /* ---------- Bestellabschnitt (Formular 2) ---------- */
-    function zeigeBestellen() {
+    function zeigeBestellen(scrollen) {
       var b = document.getElementById('bestellen');
       var f = document.getElementById('bestell-frame');
       var id = f.getAttribute('data-bestell-form');
@@ -802,7 +828,7 @@
         document.getElementById('bestell-direkt').href = 'https://tally.so/r/' + id + '?vorgang=' + vorgang;
         if (window.Tally && typeof window.Tally.loadEmbeds === 'function') window.Tally.loadEmbeds();
       }
-      if (location.hash === '#bestellen') { try { b.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} }
+      if (scrollen || location.hash === '#bestellen') { try { b.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} }
     }
   })();
 </script>
