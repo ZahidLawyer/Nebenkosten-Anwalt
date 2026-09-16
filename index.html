@@ -281,6 +281,22 @@
   }
   .steps-prep strong { color: var(--ink); }
 
+  /* ============ Erklärvideo ============ */
+  .video { max-width: 46rem; margin: 0 0 2.25rem; }
+  .video__frame {
+    position: relative;
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+  }
+  .video__frame video {
+    display: block; width: 100%; height: 100%;
+    object-fit: cover; background: var(--paper);
+  }
+  .video__caption { font-size: 0.9rem; color: var(--ink-soft); margin-top: 0.6rem; }
+
 
   /* ============ Vertrauen & Transparenz ============ */
   .author {
@@ -760,6 +776,29 @@
         </p>
       </div>
 
+      <figure class="video reveal">
+        <div class="video__frame">
+          <video
+            controls
+            preload="none"
+            playsinline
+            poster="assets/erklaervideo-poster.jpg"
+            width="1920" height="1080">
+            <source src="assets/erklaervideo.mp4" type="video/mp4">
+            <track kind="captions" src="assets/erklaervideo.de.vtt" srclang="de" label="Deutsch" default>
+            Ihr Browser kann dieses Video nicht abspielen.
+            <a href="assets/erklaervideo.mp4">Video herunterladen</a> — die einzelnen
+            Schritte sind unterhalb auch als Text beschrieben.
+          </video>
+        </div>
+        <figcaption class="video__caption">
+          Der Ablauf in 59&nbsp;Sekunden — von der Abrechnung bis zu Ihren Dokumenten. Mit deutschen
+          Untertiteln. Die Aufnahme stammt aus der Testphase; die Tonspur nennt noch den damaligen Ablauf,
+          maßgeblich sind die Untertitel und der Text auf dieser Seite. Beispielhafte Darstellung, keine
+          Zusage eines Ergebnisses.
+        </figcaption>
+      </figure>
+
       <p class="steps-prep reveal"><strong>Das sollten Sie bereithalten:</strong> Ihre
       Nebenkostenabrechnung und Ihren Mietvertrag — jeweils alle Seiten, Handyfotos
       genügen.</p>
@@ -775,10 +814,11 @@
             </svg>
           </span>
           <div>
-            <h3>Unterlagen hochladen — kostenlos</h3>
+            <h3>Unterlagen hochladen — die Vorprüfung ist kostenlos</h3>
             <p>Nebenkostenabrechnung und Mietvertrag hochladen oder abfotografieren, dazu
             Abrechnungsjahr, das Datum, an dem die Abrechnung ankam, und Ihre Kontaktdaten.
-            Das kostet nichts und verpflichtet zu nichts.</p>
+            Die Vorprüfung kostet nichts und verpflichtet zu nichts. Die anwaltliche Prüfung
+            bestellen Sie erst danach, zum Festpreis von 79,90 Euro.</p>
           </div>
         </li>
         <li class="step reveal" style="--i:1">
