@@ -605,6 +605,7 @@
     var fristEl = document.getElementById('vp-frist');
     var manuell = document.getElementById('vp-manuell');
     var laeuft = false, begonnen = 0, timer = null, fertig = false;
+    var gezeigterLauf = null, erwarteNeuenLauf = false; /* Laufnummer des angezeigten Befunds (API-Feld 'lauf') */
     var ruhig = false;
     try { ruhig = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
     var SCHRITT = ruhig ? 0 : 650; /* Versatz zwischen zwei Zeilen der Befundkarte */
@@ -713,8 +714,9 @@
       li.appendChild(box);
       punkteEl.appendChild(li);
     }
-    function zeigeErgebnis(erg) {
+    function zeigeErgebnis(erg, lauf) {
       fertig = true;
+      if (typeof lauf === 'number') gezeigterLauf = lauf;
       erg = erg || {};
       var n = (typeof erg.anhaltspunkte === 'number') ? erg.anhaltspunkte : 0;
       var liste = Array.isArray(erg.punkte) ? erg.punkte : [];
@@ -763,7 +765,14 @@
         .catch(function () { return { status: 'netz' }; })
         .then(function (d) {
           d = d || {};
-          if (d.status === 'fertig') { zeigeErgebnis(d.ergebnis); return; }
+          if (d.status === 'fertig' && erwarteNeuenLauf && typeof d.lauf === 'number' && d.lauf === gezeigterLauf && vergangen < 90) {
+            /* Nach erneutem Absenden liegt der alte Befund noch vor; der neue Lauf startet erst,
+               wenn n8n die Unterlagen weitergereicht hat. Bis zu 90 s auf eine neue Laufnummer warten. */
+            status('Ihre Unterlagen sind unterwegs …', true);
+            timer = window.setTimeout(abfragen, 5000);
+            return;
+          }
+          if (d.status === 'fertig') { erwarteNeuenLauf = false; zeigeErgebnis(d.ergebnis, d.lauf); return; }
           if (d.status === 'fehler' || d.status === 'ausgelastet') {
             fertig = true;
             status(d.status === 'ausgelastet'
@@ -790,6 +799,7 @@
     function starten(neu) {
       if (laeuft && !neu) return;
       window.clearTimeout(timer);
+      erwarteNeuenLauf = !!neu && typeof gezeigterLauf === 'number';
       laeuft = true; fertig = false; begonnen = Date.now();
       panel.hidden = false;
       try { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
