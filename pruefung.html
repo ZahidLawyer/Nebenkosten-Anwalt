@@ -756,6 +756,7 @@
       fetch(API + '/vorpruefung/' + vorgang, { cache: 'no-store' })
         .then(function (r) {
           if (r.status === 404) return { status: 'unbekannt' };
+          if (r.status === 429) return { status: 'pause' };
           if (!r.ok) return { status: 'netz' };
           return r.json();
         })
@@ -781,8 +782,9 @@
           if (d.status === 'laeuft') status('Die Vorprüfung läuft — das dauert wenige Minuten.', true);
           else if (d.status === 'wartet') status('Ihre Unterlagen sind angekommen, die Vorprüfung startet gleich.', true);
           else if (d.status === 'unbekannt') status(vergangen < 90 ? 'Ihre Unterlagen sind unterwegs …' : 'Noch nichts angekommen. Haben Sie das Formular abgeschickt? Sonst warten Sie bitte einen Moment.', true);
+          else if (d.status === 'pause') status('Das Prüfsystem ist gerade stark ausgelastet. Die Seite fragt in einer halben Minute automatisch wieder nach.', true);
           else status('Verbindung zum Prüfsystem wird aufgebaut …', true);
-          timer = window.setTimeout(abfragen, vergangen < 120 ? 5000 : 15000);
+          timer = window.setTimeout(abfragen, d.status === 'pause' ? 30000 : (vergangen < 120 ? 5000 : 15000));
         });
     }
     function starten(neu) {
