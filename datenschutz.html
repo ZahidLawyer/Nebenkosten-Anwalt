@@ -143,27 +143,29 @@
   Weg ist dann allerdings nicht mehr möglich.</p>
 
   <h2>5. Einsatz von KI zur Auswertung</h2>
-  <!-- ENTSCHEIDUNG ZAHID 10: Der folgende Absatz beschreibt den heutigen Ist-Zustand (direkte Anthropic-API, USA).
-       Bei Umstellung auf Amazon Bedrock (Region Frankfurt) lautet der Absatz:
-       „Für die technische Auswertung Ihrer Unterlagen setze ich das KI-Modell Claude ein, bereitgestellt über Amazon
-       Bedrock der Amazon Web Services EMEA SARL, Region Frankfurt am Main. Die Verarbeitung findet in der Europäischen
-       Union statt; eine Übermittlung in ein Drittland erfolgt dafür nicht. Eingaben und Ausgaben werden nach den
-       Bedingungen von AWS nicht zum Training von Modellen verwendet [ZU VERIFIZIEREN]." -->
-  <p>Für die technische Auswertung Ihrer Unterlagen setze ich das KI-Modell <strong>Claude von Anthropic</strong>
-  (Anthropic, Inc., San Francisco, USA) ein
-  <span class="ph">[ENTSCHEIDUNG ZAHID 10: direkte Anthropic-API (USA, heutiger Stand) oder Amazon Bedrock, Region Frankfurt]</span>.
-  Dabei werden die hochgeladenen Dokumente und die zugehörigen Angaben an Anthropic übermittelt.</p>
+  <!-- Inhaberentscheidung 16.09.2026 (Entscheidung 10): Zielzustand Amazon Bedrock, Region Frankfurt. Bis zur
+       technischen Umstellung läuft die Auswertung noch über die Anthropic-API (USA); der Übergangsabsatz unten
+       deckt diesen Zustand. Nach der Umstellung den Übergangsabsatz streichen. -->
+  <p>Für die technische Auswertung Ihrer Unterlagen setze ich das KI-Modell <strong>Claude</strong> des
+  Herstellers Anthropic ein, bereitgestellt über <strong>Amazon Bedrock</strong> der Amazon Web Services EMEA SARL
+  (38 Avenue John F. Kennedy, L-1855 Luxemburg), Region Frankfurt am Main. Dabei werden die hochgeladenen Dokumente
+  und die zugehörigen Angaben an diesen Dienst übermittelt.</p>
   <ul>
-    <li><strong>Drittlandtransfer USA:</strong> Die Übermittlung erfolgt auf Grundlage der EU-Standardvertragsklauseln
-    (Art. 46 Abs. 2 lit. c DSGVO) im Rahmen des von Anthropic bereitgestellten Data Processing Addendums
-    (<a href="https://www.anthropic.com/legal/data-processing-addendum" target="_blank" rel="noopener">anthropic.com/legal/data-processing-addendum</a>)
-    <span class="ph">[ZU VERIFIZIEREN: DPA im eigenen Account abgeschlossen; DPF-Status von Anthropic; § 43e Abs. 4 BRAO — vergleichbarer Geheimnisschutz im Ausland]</span>.</li>
-    <li><strong>Kein Training mit Ihren Daten:</strong> Ich nutze Claude über die kommerzielle Anthropic-API. Nach den
-    kommerziellen Nutzungsbedingungen von Anthropic werden Eingaben und Ausgaben aus der API nicht zum Training von
-    KI-Modellen verwendet.</li>
-    <li><strong>Speicherung bei Anthropic:</strong> Anthropic löscht Ein- und Ausgaben aus der API standardmäßig innerhalb
-    von 30 Tagen, sofern keine gesetzliche Aufbewahrungspflicht oder ein Verstoß gegen die Nutzungsrichtlinien vorliegt
-    <span class="ph">[ZU VERIFIZIEREN: gegen die Account-Konfiguration zum Livegang]</span>.</li>
+    <li><strong>Verarbeitung in der EU:</strong> Die Auswertung findet in einem Rechenzentrum in der Europäischen
+    Union statt; eine Übermittlung in ein Drittland erfolgt dafür nicht. Mit AWS besteht ein Vertrag zur
+    Auftragsverarbeitung nach Art. 28 DSGVO
+    <span class="ph">[ZU VERIFIZIEREN: AWS-DPA im eigenen Konto abgeschlossen; Vereinbarung nach § 43e Abs. 3 BRAO]</span>.</li>
+    <li><strong>Kein Training mit Ihren Daten:</strong> Nach den Bedingungen von Amazon Bedrock werden Ein- und
+    Ausgaben weder von AWS noch von Anthropic zum Training von KI-Modellen verwendet und nicht dauerhaft gespeichert
+    <span class="ph">[ZU VERIFIZIEREN: Bedrock-Nutzungsbedingungen und Protokollierungseinstellungen zum Livegang]</span>.</li>
+    <li><strong>Übergang:</strong> Bis zum Abschluss der Umstellung auf Amazon Bedrock kann die Auswertung noch
+    unmittelbar über die Programmierschnittstelle von Anthropic, PBC (San Francisco, USA) laufen. Für diesen Fall
+    erfolgt die Übermittlung in die USA auf Grundlage der EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO)
+    im Rahmen des Data Processing Addendums von Anthropic
+    (<a href="https://www.anthropic.com/legal/data-processing-addendum" target="_blank" rel="noopener">anthropic.com/legal/data-processing-addendum</a>);
+    Ein- und Ausgaben werden nach den kommerziellen Nutzungsbedingungen nicht zum Training verwendet und standardmäßig
+    innerhalb von 30 Tagen gelöscht
+    <span class="ph">[ZU VERIFIZIEREN: DPA im eigenen Account abgeschlossen; DPF-Status von Anthropic; § 43e Abs. 4 BRAO — vergleichbarer Geheimnisschutz im Ausland; Account-Konfiguration zum Livegang]</span>.</li>
   </ul>
   <p>Bei der <strong>Vorprüfung</strong> erhalten Sie das Ergebnis dieser automatischen Auswertung direkt — ohne
   anwaltliche Prüfung; das Ergebnis ist als automatisch erstellt gekennzeichnet. Die Seite ruft das Ergebnis über eine zufällige
@@ -189,8 +191,11 @@
     (<a href="https://tally.so/help/privacy-policy" target="_blank" rel="noopener">tally.so/help/privacy-policy</a>).
     Das Formular lädt ein Skript von tally.so — die einzige Fremdressource dieser Website.
     <span class="ph">[ZU VERIFIZIEREN: Auftragsverarbeitungsvertrag mit Tally und Verpflichtung nach § 43e Abs. 3 BRAO]</span></li>
-    <li><strong>Prüf-Infrastruktur:</strong> Die übermittelten Daten werden auf einem Server innerhalb der Europäischen Union
-    verarbeitet — <span class="ph">[ENTSCHEIDUNG ZAHID 11: Anbieter, Standort und Administrator des Prüfservers; Vertrag nach Art. 28 DSGVO und Vereinbarung nach § 43e Abs. 3 BRAO]</span>.</li>
+    <li><strong>Prüf-Infrastruktur:</strong> Die übermittelten Daten werden auf einem virtuellen Server verarbeitet, den
+    ich bei der IONOS SE, Elgendorfer Straße 57, 56410 Montabaur, angemietet habe; der Server steht in Berlin. Mit dem
+    Anbieter besteht ein Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO. Die technische Administration des
+    Prüfsystems übernimmt ein von mir beauftragter Dienstleister, der nach § 43e Abs. 3 BRAO in Textform zur
+    Verschwiegenheit verpflichtet ist und mit dem ein Vertrag zur Auftragsverarbeitung besteht.</li>
     <li><strong>KI-Auswertung:</strong> siehe Ziffer 5.</li>
     <li><strong>Zahlung:</strong> Stripe, siehe Ziffer 6.</li>
     <li><strong>E-Mail-Versand:</strong> Bestellbestätigung und Prüfergebnis erhalten Sie von
@@ -202,11 +207,11 @@
 
   <h2>8. Speicherdauer</h2>
   <p>Unterlagen und Ergebnisse auf dem Prüfsystem lösche ich
-  <span class="ph">[ENTSCHEIDUNG ZAHID 9: 90 Tage]</span> nach Abschluss der Prüfung. Unabhängig davon bewahre ich
+  90 Tage nach Abschluss der Prüfung. Unabhängig davon bewahre ich
   Bestellung, Prüfergebnis und Schriftwechsel so lange auf, wie berufs- und steuerrechtliche Vorgaben es verlangen
   (§ 50 Abs. 1 BRAO <span class="ph">[ZU VERIFIZIEREN: Satznummer, Fristbeginn und Reichweite ohne Mandatsverhältnis]</span>);
   Rechnungen unterliegen den steuerrechtlichen Aufbewahrungsfristen. Vorprüfungen ohne Bestellung lösche ich nach
-  <span class="ph">[ENTSCHEIDUNG ZAHID 9: 30 Tagen]</span>; dasselbe gilt, wenn ich einen Auftrag wegen der
+  30 Tagen; dasselbe gilt, wenn ich einen Auftrag wegen der
   Konfliktprüfung absage. Zahlungsbelege unterliegen den steuerrechtlichen Aufbewahrungsfristen.</p>
 
   <h2>9. Keine Cookies, kein Tracking</h2>
