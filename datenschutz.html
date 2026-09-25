@@ -102,8 +102,7 @@
   übermittelt — IP-Adresse, Zeitstempel, aufgerufene Seite, Browsertyp —, um die Seite auszuliefern und den
   Betrieb abzusichern. Rechtsgrundlage ist das berechtigte Interesse an einem sicheren und funktionsfähigen
   Betrieb (Art. 6 Abs. 1 lit. f DSGVO). GitHub ist nach dem EU-US Data Privacy Framework zertifiziert; die
-  Übermittlung in die USA stützt sich auf den Angemessenheitsbeschluss der EU-Kommission (Art. 45 DSGVO)
-  <span class="ph">[ZU VERIFIZIEREN: aktueller DPF-Status der GitHub, Inc.]</span>. Weitere Informationen:
+  Übermittlung in die USA stützt sich auf den Angemessenheitsbeschluss der EU-Kommission (Art. 45 DSGVO). Weitere Informationen:
   <a href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a>.</p>
 
   <h2>3. Vorprüfung und Bestellung über das Formular</h2>
@@ -127,7 +126,7 @@
     <tr><td>Abwicklung der Zahlung des Festpreises über Stripe, Erstattungen</td><td>Art. 6 Abs. 1 lit. b DSGVO; Aufbewahrung nach lit. c DSGVO (steuerrechtliche Pflichten)</td></tr>
     <tr><td>Bestellbestätigung, Rechnung, Aufbewahrung</td><td>Art. 6 Abs. 1 lit. c DSGVO in Verbindung mit berufs- und steuerrechtlichen Aufbewahrungspflichten (Handakte, § 50 Abs. 1 Satz 2 und 3 BRAO)</td></tr>
     <tr><td>Sicherer Betrieb der Website und der Prüf-Infrastruktur</td><td>Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse)</td></tr>
-    <tr><td>Einschaltung von Dienstleistern für Ihr Mandat</td><td>Berufsrechtlich Ihre Einwilligung nach § 43e Abs. 5 BRAO; datenschutzrechtlich Art. 6 Abs. 1 lit. b DSGVO <span class="ph">[ZU VERIFIZIEREN: ob die Übermittlung in ein Drittland zusätzlich auf Art. 49 Abs. 1 lit. a DSGVO gestützt werden soll oder die Standardvertragsklauseln allein tragen]</span></td></tr>
+    <tr><td>Einschaltung von Dienstleistern für Ihr Mandat</td><td>Berufsrechtlich Ihre Einwilligung nach § 43e Abs. 5 BRAO; datenschutzrechtlich Art. 6 Abs. 1 lit. b DSGVO; eine Übermittlung in ein Drittland stützt sich auf die in den Ziffern 5 und 6 genannten Garantien (Art. 45, 46 DSGVO), nicht auf Ihre Einwilligung</td></tr>
   </table>
   </div>
   <p><strong>Mit Ihrer Bestellung beginnt ein Mandat.</strong> Es umfasst die Prüfung und zwei Schreiben und endet
@@ -152,6 +151,9 @@
   (38 Avenue John F. Kennedy, L-1855 Luxemburg), Region Frankfurt am Main. Dabei werden die hochgeladenen Dokumente
   und die zugehörigen Angaben an diesen Dienst übermittelt.</p>
   <ul>
+    <li><span class="ph">[ENTSCHEIDUNG ZAHID 2: Gemessen am 25.09.2026 läuft die Auswertung ausschließlich über die
+    Programmierschnittstelle von Anthropic in den USA; Amazon Bedrock ist nicht eingerichtet. Vor dem Livegang entweder
+    auf Bedrock umstellen oder diese Ziffer auf den Anthropic-Weg als Regelfall umschreiben.]</span></li>
     <li><strong>Verarbeitung in der EU:</strong> Die Auswertung findet in einem Rechenzentrum in der Europäischen
     Union statt; eine Übermittlung in ein Drittland erfolgt dafür nicht. Mit AWS besteht ein Vertrag zur
     Auftragsverarbeitung nach Art. 28 DSGVO
@@ -166,7 +168,7 @@
     (<a href="https://www.anthropic.com/legal/data-processing-addendum" target="_blank" rel="noopener">anthropic.com/legal/data-processing-addendum</a>);
     Ein- und Ausgaben werden nach den kommerziellen Nutzungsbedingungen nicht zum Training verwendet und standardmäßig
     innerhalb von 30 Tagen gelöscht
-    <span class="ph">[ZU VERIFIZIEREN: DPA im eigenen Account abgeschlossen; DPF-Status von Anthropic; § 43e Abs. 4 BRAO — vergleichbarer Geheimnisschutz im Ausland; Account-Konfiguration zum Livegang]</span>.</li>
+    <span class="ph">[ZU VERIFIZIEREN: Löschfrist der Anthropic-API zum Livegang (30 Tage?); § 43e Abs. 4 BRAO — vergleichbarer Geheimnisschutz im Ausland]</span>.</li>
   </ul>
   <p>Bei der <strong>Vorprüfung</strong> erhalten Sie das Ergebnis dieser automatischen Auswertung direkt — ohne
   anwaltliche Prüfung; das Ergebnis ist als automatisch erstellt gekennzeichnet. Die Seite ruft das Ergebnis über eine zufällige
@@ -179,19 +181,20 @@
   <p>Den Festpreis der anwaltlichen Prüfung zahlen Sie im Bestellformular über den Zahlungsdienst
   <strong>Stripe</strong> (Stripe Payments Europe, Ltd., 1 Grand Canal Street Lower, Grand Canal Dock, Dublin, Irland).
   Ihre Kartendaten geben Sie direkt bei Stripe ein; ich erhalte nur Name, E-Mail-Adresse, Betrag und Zahlungsstatus.
-  Rechtsgrundlage ist die Durchführung des Vertrags (Art. 6 Abs. 1 lit. b DSGVO). Stripe kann Daten an die
-  Stripe, Inc. (USA) übermitteln
-  <span class="ph">[ZU VERIFIZIEREN: Übermittlungsgrundlage (Data Privacy Framework oder Standardvertragsklauseln), Auftragsverarbeitungsvertrag mit Stripe, Bedingungen des Tally-Zahlungsblocks]</span>.
+  Rechtsgrundlage ist die Durchführung des Vertrags (Art. 6 Abs. 1 lit. b DSGVO). Stripe verarbeitet die Zahlungsdaten
+  als eigener Verantwortlicher, nicht in meinem Auftrag. Stripe kann Daten an Stripe-Gesellschaften in den USA
+  übermitteln; die Stripe, LLC ist nach dem EU-US Data Privacy Framework zertifiziert (Art. 45 DSGVO)
+  <span class="ph">[ZU VERIFIZIEREN: Bedingungen des Tally-Zahlungsblocks]</span>.
   Datenschutzerklärung von Stripe:
   <a href="https://stripe.com/de/privacy" target="_blank" rel="noopener">stripe.com/de/privacy</a>.</p>
 
   <h2>7. Empfänger und Auftragsverarbeiter</h2>
   <ul>
-    <li><strong>Formular und Upload:</strong> Tally BV, August Van Lokerenstraat 71, 9050 Gent, Belgien. Tally speichert die
+    <li><strong>Formular und Upload:</strong> Tally BV, Sint-Pietersnieuwstraat 11, 9000 Gent, Belgien. Tally speichert die
     Daten nach eigenen Angaben auf Servern innerhalb der Europäischen Union
     (<a href="https://tally.so/help/privacy-policy" target="_blank" rel="noopener">tally.so/help/privacy-policy</a>).
     Das Formular lädt ein Skript von tally.so — die einzige Fremdressource dieser Website.
-    <span class="ph">[ZU VERIFIZIEREN: Auftragsverarbeitungsvertrag mit Tally und Verpflichtung nach § 43e Abs. 3 BRAO]</span></li>
+    <span class="ph">[ZU VERIFIZIEREN: Abschluss der Auftragsverarbeitungsvereinbarung im Tally-Konto; Verpflichtung nach § 43e Abs. 3 BRAO]</span></li>
     <li><strong>Prüf-Infrastruktur:</strong> Die übermittelten Daten werden auf einem virtuellen Server verarbeitet, den
     ich bei der IONOS SE, Elgendorfer Straße 57, 56410 Montabaur, angemietet habe; der Server steht in Berlin. Mit dem
     Anbieter besteht ein Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO. Administriert wird der Server
@@ -199,8 +202,8 @@
     <li><strong>KI-Auswertung:</strong> siehe Ziffer 5.</li>
     <li><strong>Zahlung:</strong> Stripe, siehe Ziffer 6.</li>
     <li><strong>E-Mail-Versand:</strong> Bestellbestätigung und Prüfergebnis erhalten Sie von
-    info@nebenkosten-anwalt.de. Das Postfach und der Versand laufen über die united-domains AG, Gautinger Straße 10,
-    82319 Starnberg <span class="ph">[ZU VERIFIZIEREN: Anschrift, Serverstandort und Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO]</span>.</li>
+    info@nebenkosten-anwalt.de. Das Postfach und der Versand laufen über die united-domains GmbH, Gautinger Straße 10,
+    82319 Starnberg <span class="ph">[ZU VERIFIZIEREN: Serverstandort; Auftragsverarbeitungsvereinbarung im Kundenkonto abgeschlossen]</span>.</li>
     <li><strong>Website:</strong> GitHub, Inc. (Ziffer 2).</li>
   </ul>
   <p>Kein Verkauf, keine Weitergabe zu Werbezwecken. An Ihren Vermieter oder dessen Verwaltung gehen nur die
