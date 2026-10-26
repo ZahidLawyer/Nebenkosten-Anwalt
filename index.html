@@ -570,6 +570,23 @@
     .topbar__cta { padding: 0.55rem 0.9rem; }
   }
 
+  /* Handy: „Was Sie über diese Prüfung wissen sollten" als Wischleiste wie die Mandantenstimmen */
+  @media (max-width: 45.99rem) {
+    .trust {
+      display: flex; gap: 1rem;
+      overflow-x: auto; overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory; scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+      padding: 0.25rem 0 1rem;
+    }
+    .trust::-webkit-scrollbar { display: none; }
+    .trust > .trust__card { flex: 0 0 calc(100% - 2.5rem); scroll-snap-align: start; }
+    .js .trust > .trust__card.reveal { opacity: 1; transform: none; }
+  }
+  @media (min-width: 46rem) {
+    .js .trust-leiste .stimmen__steuerung { display: none; }
+  }
+
   /* ============ Ab 46rem: Raster ============ */
   @media (min-width: 46rem) {
     .reassure__list { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
@@ -627,7 +644,7 @@
       "name": "Was ist die Vorprüfung — und was kann sie nicht?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Ein Programm liest Ihre Abrechnung und Ihren Mietvertrag und meldet Ihnen in wenigen Minuten, ob es Anhaltspunkte für typische Fehler gibt — zum Beispiel Kosten, die nicht umgelegt werden dürfen, oder eine Frist, die überschritten sein könnte. Die Vorprüfung ist keine anwaltliche Prüfung und keine Rechtsberatung. Sie kann Fehler übersehen oder falsch einordnen und nennt keine Beträge. Ob ein Punkt wirklich trägt, sage ich Ihnen erst in der anwaltlichen Prüfung — die bestellen Sie danach, wenn Sie möchten."
+        "text": "Die Vorprüfung meldet Ihnen in wenigen Minuten, ob es Auffälligkeiten in Ihrer Abrechnung gibt — zum Beispiel Kosten, die nicht umgelegt werden dürfen, oder eine Frist, die überschritten sein könnte. Die Vorprüfung ist keine anwaltliche Prüfung und keine Rechtsberatung. Sie kann Fehler übersehen oder falsch einordnen und nennt keine Beträge. Ob ein Punkt wirklich trägt, sage ich Ihnen erst in der anwaltlichen Prüfung — die bestellen Sie danach, wenn Sie möchten."
       }
     },
     {
@@ -922,9 +939,9 @@
           </span>
           <div>
             <h3>Vorprüfung — sofort</h3>
-            <p>Ein Programm liest Ihre Unterlagen und meldet Ihnen in wenigen Minuten, ob es
-            Anhaltspunkte für typische Fehler gibt — automatisch, ohne anwaltliche Prüfung,
-            unverbindlich. Das Ergebnis erscheint direkt auf der Seite.</p>
+            <p>Die Vorprüfung meldet Ihnen in wenigen Minuten, ob es Auffälligkeiten in Ihrer
+            Abrechnung gibt — automatisch, ohne anwaltliche Prüfung, unverbindlich. Das Ergebnis
+            erscheint direkt auf der Seite.</p>
           </div>
         </li>
         <li class="step reveal" style="--i:2">
@@ -1247,7 +1264,8 @@
         </div>
       </div>
 
-      <div class="trust">
+      <div class="trust-leiste">
+      <div class="trust" id="trust-liste" aria-label="Hinweise, waagerecht wischen">
         <div class="trust__card reveal" style="--i:0">
           <h3>
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -1289,6 +1307,18 @@
           im <a href="impressum.html">Impressum</a>.</p>
         </div>
       </div>
+        <div class="stimmen__steuerung">
+          <div class="stimmen__punkte" role="group" aria-label="Hinweis wählen"></div>
+          <div class="stimmen__pfeile">
+            <button type="button" class="stimmen__pfeil" data-richtung="-1" aria-label="Vorheriger Hinweis">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button type="button" class="stimmen__pfeil" data-richtung="1" aria-label="Nächster Hinweis">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1317,7 +1347,7 @@
             <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </summary>
           <div>
-            <p>Ein Programm liest Ihre Abrechnung und Ihren Mietvertrag und meldet Ihnen in wenigen Minuten, ob es Anhaltspunkte für typische Fehler gibt — zum Beispiel Kosten, die nicht umgelegt werden dürfen, oder eine Frist, die überschritten sein könnte.</p>
+            <p>Die Vorprüfung meldet Ihnen in wenigen Minuten, ob es Auffälligkeiten in Ihrer Abrechnung gibt — zum Beispiel Kosten, die nicht umgelegt werden dürfen, oder eine Frist, die überschritten sein könnte.</p>
             <p>Die Vorprüfung ist keine anwaltliche Prüfung und keine Rechtsberatung. Sie kann Fehler übersehen oder falsch einordnen und nennt keine Beträge. Ob ein Punkt wirklich trägt, sage ich Ihnen erst in der anwaltlichen Prüfung — die bestellen Sie danach, wenn Sie möchten.</p>
           </div>
         </details>
@@ -1482,8 +1512,9 @@
 
   /* Mandantenstimmen: Pfeile und Punkte zur Wischleiste. Ohne JS bleibt der
      waagerechte Scroll mit Einrasten; die Steuerung ist dann ausgeblendet. */
-  (function () {
-    var liste = document.getElementById('stimmen-liste');
+  /* Dieselbe Steuerung für die Vertrauenskarten (Wischleiste nur auf dem Handy). */
+  ['stimmen-liste', 'trust-liste'].forEach(function (id) {
+    var liste = document.getElementById(id);
     if (!liste) return;
     var karten = Array.prototype.slice.call(liste.children);
     var punkte = liste.parentNode.querySelector('.stimmen__punkte');
@@ -1526,7 +1557,7 @@
     liste.addEventListener('scroll', function () { clearTimeout(t); t = setTimeout(melde, 60); }, { passive: true });
     window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(baue, 120); });
     baue();
-  })();
+  });
 
   /* Porträt: fehlt die Datei, bleibt das Monogramm stehen statt eines kaputten Bildes. */
   (function () {
