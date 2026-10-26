@@ -137,6 +137,7 @@
   .nav a:hover { color: var(--moss-deep); border-color: var(--moss-deep); }
   .topbar__right { display: flex; align-items: center; gap: 0.5rem; flex: none; }
   .topbar__cta { font-size: 0.95rem; padding: 0.55rem 1.1rem; white-space: nowrap; }
+  .topbar__cta .cta-kurz { display: none; }
   .nav-toggle {
     display: inline-grid; place-items: center; flex: none;
     width: 2.5rem; height: 2.5rem;
@@ -556,6 +557,19 @@
     .hero .doc-mock__note { max-width: 30rem; }
   }
 
+  /* Handy: kurzer Button, damit „Nebenkosten-Anwalt“ ganz lesbar bleibt */
+  @media (max-width: 45.99rem) {
+    .topbar__cta .cta-lang { display: none; }
+    .topbar__cta .cta-kurz { display: inline; }
+  }
+  /* Sehr schmale Handys (unter 24rem): Kopfzeile etwas enger setzen */
+  @media (max-width: 23.99rem) {
+    .brand { font-size: 0.88rem; gap: 0.3rem; }
+    .brand svg { width: 22px; height: 22px; }
+    .topbar__right { gap: 0.35rem; }
+    .topbar__cta { padding: 0.5rem 0.6rem; }
+  }
+
   /* ============ Ab 46rem: Raster ============ */
   @media (min-width: 46rem) {
     .reassure__list { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
@@ -758,7 +772,7 @@
           <line x1="2.5" y1="14.5" x2="17.5" y2="14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
       </button>
-      <a class="btn topbar__cta" href="pruefung.html">Abrechnung prüfen lassen</a>
+      <a class="btn topbar__cta" href="pruefung.html"><span class="cta-lang">Abrechnung prüfen lassen</span><span class="cta-kurz">Jetzt prüfen</span></a>
     </div>
   </div>
   <nav class="mobile-nav" id="mobile-nav" aria-label="Hauptnavigation (mobil)" hidden>
