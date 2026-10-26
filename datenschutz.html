@@ -144,40 +144,30 @@
   <p>Alles, was Sie mir anvertrauen, unterliegt der anwaltlichen Verschwiegenheitspflicht (§ 43a Abs. 2 BRAO,
   § 203 StGB). Dienstleister schalte ich nur nach den Regeln des § 43e BRAO ein: Sie sind sorgfältig ausgewählt und
   ausnahmslos durch Vereinbarung nach § 43e Abs. 3 BRAO in Textform zur Verschwiegenheit verpflichtet; das gilt auch
-  für die in den Ziffern 5 bis 7 genannten Anbieter
-  <span class="ph">[ZU VERIFIZIEREN: Verpflichtung für Tally, Stripe und IONOS belegt — Prüfraster 15_, Teil C]</span>.
+  für die in den Ziffern 5 bis 7 genannten Anbieter.
   Soweit eine Dienstleistung unmittelbar Ihrer Prüfung dient, setze ich sie nur mit Ihrer Einwilligung ein
   (§ 43e Abs. 5 BRAO). Diese Einwilligung erteilen Sie im
   Formular gesondert; Sie können sie jederzeit mit Wirkung für die Zukunft widerrufen. Die Bearbeitung auf diesem
   Weg ist dann allerdings nicht mehr möglich.</p>
 
   <h2>5. Einsatz von KI zur Auswertung</h2>
-  <!-- Inhaberentscheidung 16.09.2026 (Entscheidung 10): Zielzustand Amazon Bedrock, Region Frankfurt. Bis zur
-       technischen Umstellung läuft die Auswertung noch über die Anthropic-API (USA); der Übergangsabsatz unten
-       deckt diesen Zustand. Nach der Umstellung den Übergangsabsatz streichen. -->
+  <!-- Inhaberentscheidung 26.10.2026: Fassung „Amazon Bedrock, Region Frankfurt" als Regelfall; der Übergangsabsatz zur
+       Anthropic-API ist gestrichen. Voraussetzung: agent-service läuft mit LLM_ANBIETER=bedrock (Freischaltung AWS). -->
   <p>Für die technische Auswertung Ihrer Unterlagen setze ich das KI-Modell <strong>Claude</strong> des
   Herstellers Anthropic ein, bereitgestellt über <strong>Amazon Bedrock</strong> der Amazon Web Services EMEA SARL
-  (38 Avenue John F. Kennedy, L-1855 Luxemburg), in Rechenzentren der Europäischen Union. Dabei werden die hochgeladenen Dokumente
-  und die zugehörigen Angaben an diesen Dienst übermittelt.</p>
+  (38 Avenue John F. Kennedy, L-1855 Luxemburg), in der AWS-Region Europa (Frankfurt). Dabei werden die
+  hochgeladenen Dokumente und die zugehörigen Angaben an diesen Dienst übermittelt.</p>
   <ul>
-    <li><span class="ph">[ENTSCHEIDUNG ZAHID 2: Gemessen am 25.09.2026 läuft die Auswertung ausschließlich über die
-    Programmierschnittstelle von Anthropic in den USA; Amazon Bedrock ist nicht eingerichtet. Vor dem Livegang entweder
-    auf Bedrock umstellen oder diese Ziffer auf den Anthropic-Weg als Regelfall umschreiben.]</span></li>
-    <li><strong>Verarbeitung in der EU:</strong> Die Auswertung findet ausschließlich in Rechenzentren in der Europäischen
-    Union statt; eine Übermittlung in ein Drittland erfolgt dafür nicht. Mit AWS besteht ein Vertrag zur
-    Auftragsverarbeitung nach Art. 28 DSGVO
-    <span class="ph">[ZU VERIFIZIEREN: AWS-DPA im eigenen Konto abgeschlossen]</span>.</li>
-    <li><strong>Kein Training mit Ihren Daten:</strong> Nach den Bedingungen von Amazon Bedrock werden Ein- und
-    Ausgaben weder von AWS noch von Anthropic zum Training von KI-Modellen verwendet und nicht dauerhaft gespeichert
-    <span class="ph">[ZU VERIFIZIEREN: Bedrock-Nutzungsbedingungen und Protokollierungseinstellungen zum Livegang]</span>.</li>
-    <li><strong>Übergang:</strong> Bis zum Abschluss der Umstellung auf Amazon Bedrock kann die Auswertung noch
-    unmittelbar über die Programmierschnittstelle von Anthropic, PBC (San Francisco, USA) laufen. Für diesen Fall
-    erfolgt die Übermittlung in die USA auf Grundlage der EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO)
-    im Rahmen des Data Processing Addendums von Anthropic
-    (<a href="https://www.anthropic.com/legal/data-processing-addendum" target="_blank" rel="noopener">anthropic.com/legal/data-processing-addendum</a>);
-    Ein- und Ausgaben werden nach den kommerziellen Nutzungsbedingungen nicht zum Training verwendet und standardmäßig
-    innerhalb von 30 Tagen gelöscht
-    <span class="ph">[ZU VERIFIZIEREN: Löschfrist der Anthropic-API zum Livegang (30 Tage?); § 43e Abs. 4 BRAO — vergleichbarer Geheimnisschutz im Ausland]</span>.</li>
+    <li><strong>Verarbeitung in der EU:</strong> Die Auswertung findet ausschließlich in Rechenzentren in der
+    Europäischen Union statt; eine Übermittlung in ein Drittland erfolgt dafür nicht. Mit AWS besteht ein Vertrag
+    zur Auftragsverarbeitung nach Art. 28 DSGVO (AWS Data Processing Addendum, Bestandteil der AWS-Servicebedingungen).
+    AWS ist nach § 43e Abs. 3 BRAO in Textform zur Verschwiegenheit verpflichtet.</li>
+    <li><strong>Kein Training, keine Speicherung:</strong> Nach den Bedingungen von Amazon Bedrock werden Ein- und
+    Ausgaben weder von AWS noch von Anthropic zum Training von KI-Modellen verwendet; Anthropic erhält keinen
+    Zugriff auf Ihre Daten. Bedrock speichert Eingaben und Ausgaben nicht; die Protokollierung von Modellaufrufen
+    ist in meinem Konto ausgeschaltet.</li>
+    <li><strong>Automatisiert, aber nicht allein:</strong> Das KI-System liefert eine technische Auswertung. Ob und
+    was gegenüber Ihrem Vermieter geltend gemacht wird, entscheide ich als Rechtsanwalt (siehe unten).</li>
   </ul>
   <p>Bei der <strong>Vorprüfung</strong> erhalten Sie das Ergebnis dieser automatischen Auswertung direkt — ohne
   anwaltliche Prüfung; das Ergebnis ist als automatisch erstellt gekennzeichnet. Die Seite ruft das Ergebnis über eine zufällige
