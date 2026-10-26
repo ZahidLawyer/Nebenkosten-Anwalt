@@ -545,6 +545,17 @@
     .author { padding: 1.4rem 1.25rem; }
   }
 
+  /* Handy (unter 46rem): Muster-Prüfergebnis und Einwand-Leiste ausblenden —
+     der Hero endet mit dem Hinweistext, danach folgt direkt „So funktioniert’s“. */
+  @media (max-width: 45.99rem) {
+    .hero .doc-mock, .hero .doc-mock__note, .reassure { display: none; }
+  }
+  /* Tablet (46–62rem): Muster unter dem Text, mit Abstand */
+  @media (min-width: 46rem) and (max-width: 61.99rem) {
+    .hero .doc-mock { margin-top: 2.5rem; max-width: 30rem; }
+    .hero .doc-mock__note { max-width: 30rem; }
+  }
+
   /* ============ Ab 46rem: Raster ============ */
   @media (min-width: 46rem) {
     .reassure__list { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
