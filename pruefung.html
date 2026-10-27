@@ -241,7 +241,11 @@
     background: #fff; border: 1px solid var(--line-strong); border-left: 4px solid var(--moss);
     border-radius: 10px; padding: 1.4rem 1.5rem;
   }
-  .ergebnis-panel[hidden], .bestellen[hidden] { display: none; }
+  .ergebnis-panel[hidden], .bestellen[hidden], .bezahlt-box[hidden], .bezahl-weiter[hidden] { display: none; }
+  .bezahlt-box { margin: 0 auto 1.5rem; max-width: 40rem; scroll-margin-top: 5rem; }
+  .bezahlt-box h2 { font-size: 1.35rem; margin-bottom: 0.5rem; }
+  .bezahl-weiter { margin-top: 1rem; }
+  .bezahl-weiter p + p { margin-top: 0.75rem; }
   .ergebnis-panel h2 { font-family: var(--serif); font-size: 1.25rem; margin-bottom: 0.6rem; }
   .ergebnis-panel .status { display: flex; align-items: center; gap: 0.6rem; font-size: 0.97rem; color: var(--ink); }
   .spinner {
@@ -353,7 +357,7 @@
   <section class="page-head">
     <div class="wrap">
       <div class="page-head__inner">
-        <span class="page-badge">Rechtsanwalt Zahid Akcay · Kanzlei Akcay, Frankfurt am Main</span>
+        <span class="page-badge">Rechtsanwalt Zahid Akcay, Kanzlei Akcay, Frankfurt am Main</span>
         <h1 class="section-title">Ihre Unterlagen hochladen</h1>
         <p class="section-lead">
           Zwei Unterlagen, wenige Angaben. Die Vorprüfung ist kostenlos und zeigt Ihnen in wenigen
@@ -393,6 +397,11 @@
   <!-- ============ Formular ============ -->
   <section class="form-area">
     <div class="wrap">
+      <!-- Rückkehr von der Stripe-Bezahlseite (?bezahlt=1, seit 27.10.2026). -->
+      <div class="prep-box auftrag-box bezahlt-box" id="bezahlt-box" hidden role="status" aria-live="polite">
+        <h2>Vielen Dank, Ihre Zahlung ist eingegangen</h2>
+        <p id="bezahlt-text">Ich buche gerade Ihre Bestellung. Das dauert etwa eine Minute.</p>
+      </div>
       <div class="form-card" id="form-card">
         <div class="form-card__iframe-wrap">
           <div class="form-skeleton" aria-hidden="true">
@@ -429,7 +438,7 @@
         <a id="tally-direkt" href="https://tally.so/r/kdgJDM" target="_blank" rel="noopener">Direkt bei Tally öffnen</a>.
       </p>
       <p class="form-trust">
-        Kostenlose Vorprüfung · anwaltliche Verschwiegenheit · beim Hochladen zahlen Sie nichts
+        Kostenlose Vorprüfung, anwaltliche Verschwiegenheit, beim Hochladen zahlen Sie nichts
       </p>
       <noscript>
         <p class="form-fallback">Ohne JavaScript kann diese Seite das Ergebnis der Vorprüfung nicht anzeigen.
@@ -458,8 +467,8 @@
         </div>
         <p class="vp-cta" id="vp-cta" hidden>
           <a class="vp-button" href="#bestellen" id="vp-bestellen">Jetzt kostenpflichtig prüfen lassen — 79,90 Euro</a>
-          <span>Endpreis einschließlich Umsatzsteuer, fällig bei der Bestellung per Karte. Bezahlt wird erst im
-          Bestellformular — nicht durch diesen Klick. Vor einer Bestellung versende ich keine E-Mails.</span>
+          <span>Endpreis einschließlich Umsatzsteuer. Bezahlt wird erst auf der sicheren Bezahlseite von Stripe, mit
+          Karte, PayPal, Apple Pay oder Google Pay — nicht durch diesen Klick. Vor einer Bestellung versende ich keine E-Mails.</span>
         </p>
       </section>
 
@@ -475,17 +484,19 @@
             Ihren Vermieter, das Sie selbst absenden.</span></li>
             <li><span><strong>Preis:</strong> 79,90 Euro einmalig, Endpreis einschließlich Umsatzsteuer, kein Abo.</span></li>
           </ul>
-          <p><a href="mandatsbedingungen.html">Mandatsbedingungen und Vergütung</a> ·
-          <a href="mandatsbedingungen.html#widerruf">Widerrufsbelehrung</a> ·
+          <p><a href="mandatsbedingungen.html">Mandatsbedingungen und Vergütung</a>,
+          <a href="mandatsbedingungen.html#widerruf">Widerrufsbelehrung</a>,
           <a href="datenschutz.html">Datenschutzerklärung</a></p>
         </div>
         <div class="form-card" id="bestell-card">
           <div class="form-card__iframe-wrap">
-            <!-- Formular 2 (Bestellung, Tally mit Stripe-Zahlungsblock), ID q4rND8 (eingetragen 19.09.2026). -->
+            <!-- Formular 2 (Bestellung), ID q4rND8. Seit 27.10.2026 ohne Zahlungsblock: nach dem Absenden geht es
+                 auf den Stripe-Zahlungslink (data-zahlungslink), dort ist der zahlungspflichtige Klick „Zahlen". -->
             <p class="form-fallback" id="bestell-platzhalter">Das Bestellformular wird geladen. Dafür muss JavaScript in Ihrem Browser aktiv sein.</p>
             <iframe
               id="bestell-frame"
               data-bestell-form="q4rND8"
+              data-zahlungslink="https://buy.stripe.com/4gM4gA1fK9O60L38Yy38400"
               data-bestell-base="https://tally.so/embed/{ID}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
               title="Anwaltliche Prüfung bestellen — Formular"
               loading="lazy"
@@ -498,6 +509,11 @@
           Bestellformular lädt nicht?
           <a id="bestell-direkt" href="#bestellen" target="_blank" rel="noopener">Direkt bei Tally öffnen</a>.
         </p>
+        <div class="prep-box auftrag-box bezahl-weiter" id="bezahl-weiter" hidden role="status" aria-live="polite">
+          <p><strong>Weiter zur Bezahlung.</strong> Sie werden zur sicheren Bezahlseite von Stripe weitergeleitet
+          (Karte, PayPal, Apple Pay oder Google Pay). Erst dort bestellen Sie mit „Zahlen“ zahlungspflichtig.</p>
+          <p><a class="vp-button" id="bezahl-link" href="#">Zur Bezahlseite</a></p>
+        </div>
       </section>
 
       <!-- ============ Was danach passiert ============ -->
@@ -508,8 +524,8 @@
           wenigen Minuten hier auf der Seite — kostenlos und unverbindlich. E-Mails bekommen
           Sie in diesem Schritt nicht.</span></li>
           <li><span><strong>Bestellung — wenn Sie möchten.</strong> Über den Button unter dem
-          Ergebnis. Den Festpreis sehen Sie dort, bevor Sie bestellen; bezahlt wird bei der
-          Bestellung per Karte, und mit der Bestellung verlangen Sie, dass ich sofort beginne.</span></li>
+          Ergebnis. Den Festpreis sehen Sie dort, bevor Sie bestellen; bezahlt wird danach auf
+          der sicheren Bezahlseite von Stripe (Karte, PayPal, Apple Pay oder Google Pay), und mit der Bestellung verlangen Sie, dass ich sofort beginne.</span></li>
           <li><span><strong>Bestellbestätigung.</strong> Sie erhalten sofort eine Bestätigung
           per E-Mail — mit den Bedingungen und der Widerrufsbelehrung. Vor Beginn gleiche ich
           Objektadresse, Vermieter und Verwaltung mit meinen laufenden Fällen ab; bei einer
@@ -826,7 +842,11 @@
       if (typeof e.origin === 'string' && e.origin.indexOf('tally.so') === -1) return;
       var d = e.data;
       if (typeof d === 'string') { try { d = JSON.parse(d); } catch (err) { return; } }
-      if (d && d.event === 'Tally.FormSubmitted') starten(true); /* neues Absenden startet die Abfrage neu (z. B. nach 'fehler') */
+      if (!d || d.event !== 'Tally.FormSubmitted') return;
+      var p = d.payload || {};
+      var bestellId = document.getElementById('bestell-frame').getAttribute('data-bestell-form');
+      if (p.formId && p.formId === bestellId) { nachBestellformular(p); return; }
+      starten(true); /* Formular 1: neues Absenden startet die Abfrage neu (z. B. nach 'fehler') */
     });
     /* Adresse mit Vorgangskennung (Lesezeichen, erneuter Aufruf): pruefung.html?vorgang=<id>[#bestellen] */
     if (GUELTIG.test(q.get('vorgang') || '')) starten();
@@ -834,6 +854,70 @@
       e.preventDefault();
       zeigeBestellen(true);
     });
+
+    /* ---------- Formular 2 abgeschickt -> Stripe-Zahlungslink (seit 27.10.2026) ----------
+       Hat das Formular noch den Tally-Zahlungsblock (alter Weg), ist schon bezahlt: dann nichts tun.
+       Sonst weiter zum Zahlungslink; der Vorgang geht als client_reference_id mit, daran bucht n8n die Zahlung. */
+    function antwort(f) {
+      var a = f && f.answer;
+      if (a && typeof a === 'object') return a.value !== undefined ? a.value : a.raw;
+      return f ? (f.value !== undefined ? f.value : a) : null;
+    }
+    function nachBestellformular(p) {
+      var felder = Array.isArray(p.fields) ? p.fields : [];
+      var mitZahlung = felder.some(function (f) { return String(f && f.type || '').toUpperCase() === 'PAYMENT'; });
+      if (mitZahlung) return;
+      var link = document.getElementById('bestell-frame').getAttribute('data-zahlungslink');
+      if (!link || !/^https:\/\/buy\.stripe\.com\//.test(link)) return;
+      var email = null;
+      felder.forEach(function (f) {
+        var v = antwort(f);
+        if (!email && String(f && f.type || '').toUpperCase() === 'INPUT_EMAIL' && typeof v === 'string') email = v.trim();
+      });
+      var ziel = link + '?client_reference_id=' + vorgang + '&locale=de' +
+        (email && /^[^@\s]+@[^@\s]+$/.test(email) ? '&prefilled_email=' + encodeURIComponent(email) : '');
+      try { sessionStorage.setItem('bezahl_vorgang', vorgang); } catch (e) {}
+      var box = document.getElementById('bezahl-weiter');
+      document.getElementById('bezahl-link').href = ziel;
+      box.hidden = false;
+      try { box.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+      if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track('weiter_zur_zahlung'); } catch (e) {} }
+      window.setTimeout(function () { window.location.href = ziel; }, 1200);
+    }
+
+    /* ---------- Rückkehr von Stripe: ?bezahlt=1 ---------- */
+    if (q.get('bezahlt') === '1') {
+      var bbox = document.getElementById('bezahlt-box');
+      var btext = document.getElementById('bezahlt-text');
+      var bekannt = null;
+      try { bekannt = sessionStorage.getItem('bezahl_vorgang'); } catch (e) { bekannt = null; }
+      bbox.hidden = false;
+      try { bbox.scrollIntoView({ block: 'start' }); } catch (e) {}
+      try { history.replaceState(null, '', location.pathname + '?vorgang=' + vorgang + quelleParam); } catch (e) {}
+      if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track('zahlung_zurueck'); } catch (e) {} }
+      var spaet = 'Ihre Zahlung ist eingegangen. Die Bestellbestätigung mit den Mandatsbedingungen und der ' +
+        'Vergütungsvereinbarung kommt in den nächsten Minuten per E-Mail. Bleibt sie aus, schreiben Sie mir bitte an ' +
+        'info@nebenkosten-anwalt.de.';
+      if (!GUELTIG.test(bekannt || '') || bekannt !== vorgang) {
+        btext.textContent = spaet;
+      } else {
+        var seit = Date.now();
+        (function pruefeBuchung() {
+          fetch(API + '/vorpruefung/' + vorgang, { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.json() : {}; })
+            .catch(function () { return {}; })
+            .then(function (d) {
+              if (d && d.bestellt) {
+                btext.textContent = 'Ihre Bestellung ist gebucht. Die Bestellbestätigung mit den Mandatsbedingungen und der ' +
+                  'Vergütungsvereinbarung ist per E-Mail unterwegs. Ich melde mich mit dem Prüfergebnis.';
+                return;
+              }
+              if (Date.now() - seit > 150000) { btext.textContent = spaet; return; }
+              window.setTimeout(pruefeBuchung, 8000);
+            });
+        })();
+      }
+    }
 
     /* ---------- Bestellabschnitt (Formular 2) ---------- */
     function zeigeBestellen(scrollen) {
