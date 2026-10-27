@@ -484,6 +484,19 @@
     font-size: 0.88rem; color: var(--ink-soft); max-width: 40rem;
     border-left: 3px solid var(--line-strong); padding-left: 0.9rem; margin-bottom: 1.75rem;
   }
+  .danach {
+    display: flex; gap: 1rem; align-items: flex-start; max-width: 44rem; margin-top: 2.5rem;
+    padding: 1.25rem 1.4rem; background: #fff; border: 1px solid var(--line-strong);
+    border-left: 4px solid var(--amber); border-radius: 8px;
+  }
+  .danach svg { flex: none; margin-top: 0.15rem; }
+  .danach__kicker {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--amber-text); margin-bottom: 0.3rem;
+  }
+  .danach h3 { font-size: 1.15rem; margin-bottom: 0.4rem; }
+  .danach p { font-size: 0.95rem; color: var(--ink-soft); margin-bottom: 0.6rem; }
+  .danach__link { font-weight: 600; color: var(--moss); text-underline-offset: 3px; }
 
   /* ============ Abschluss-CTA ============ */
   .closing { text-align: left; }
@@ -1042,6 +1055,23 @@
         </li>
       </ul>
       <a class="btn" href="pruefung.html">Abrechnung prüfen lassen</a>
+
+      <aside class="danach reveal" aria-labelledby="danach-title">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <rect x="2.5" y="6" width="17" height="13" rx="2" stroke="#2F5D4C" stroke-width="1.8" fill="none"/>
+          <path d="M3.5 7.5l7.5 5.5 7.5-5.5" stroke="#2F5D4C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="20.5" cy="18.5" r="4.5" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.4"/>
+          <path d="M22.3 17.2a2.2 2.2 0 1 0 .3 2.1M22.4 15.9v1.5h-1.5" stroke="#B97C3B" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+        <div>
+          <p class="danach__kicker">Und danach?</p>
+          <h3 id="danach-title">Wenn Ihr Vermieter antwortet</h3>
+          <p>Mit meinen Schreiben ist die Prüfung abgeschlossen. Antwortet Ihr Vermieter, lasse ich Sie damit
+          nicht allein: Ich prüfe seine Antwort und entwerfe Ihre Erwiderung, oder ich vertrete Sie ihm gegenüber.
+          Das ist ein neues Mandat zum Festpreis, über das Sie erst entscheiden, wenn die Antwort da ist.</p>
+          <a class="danach__link" href="vermieter-antwortet.html">So geht es weiter, wenn Ihr Vermieter antwortet</a>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -1418,7 +1448,7 @@
           </summary>
           <div>
             <p>Das Mandat endet, sobald ich Ihnen die Schreiben zugesandt habe; die Antwort Ihres Vermieters ist darin nicht mehr enthalten. Wünschen Sie dazu meine Unterstützung — etwa eine Erwiderung oder die Vertretung gegenüber dem Vermieter —, schreiben Sie mir. Dafür schließen wir ein neues Mandat zum Festpreis: 99 Euro für eine aktualisierte Rechtseinschätzung mit dem Entwurf einer Erwiderung, die Sie selbst absenden, oder 199 Euro, wenn ich Sie gegenüber Ihrem Vermieter vertrete (bis zu drei Schreiben, streitiger Betrag bis 2.000 Euro). Beide Preise sind Endpreise inklusive Umsatzsteuer; darüber hinaus nenne ich Ihnen die Vergütung, bevor Sie mich beauftragen.</p>
-            <p>Einzelheiten stehen in den <a href="mandatsbedingungen.html#neues-mandat">Mandatsbedingungen</a>.</p>
+            <p>Wie Sie mich beauftragen, steht auf der Seite <a href="vermieter-antwortet.html">Ihr Vermieter hat geantwortet</a>; die Einzelheiten in den <a href="mandatsbedingungen.html#neues-mandat">Mandatsbedingungen</a>.</p>
           </div>
         </details>
         <details>
@@ -1454,7 +1484,8 @@
     <div class="footer__legal">
       <p><strong>Nebenkosten-Anwalt</strong> ist ein Angebot der Kanzlei Akcay, Rechtsanwalt
       Zahid Akcay, Frankfurt am Main. Jedes Prüfergebnis prüfe und gebe ich selbst frei. Das Mandat
-      beginnt mit Ihrer Bestellung und endet mit der Zusendung der Schreiben.</p>
+      beginnt mit Ihrer Bestellung und endet mit der Zusendung der Schreiben. Ihr Vermieter hat
+      geantwortet? <a href="vermieter-antwortet.html">So geht es weiter</a>.</p>
     </div>
     <nav aria-label="Rechtliches">
       <ul class="footer__links">
