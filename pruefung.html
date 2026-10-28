@@ -688,20 +688,27 @@
     var cta = document.getElementById('vp-cta');
     function zeigeCta() { cta.hidden = false; }
 
-    /* Saldo-, Summen- und Ergebniszeilen sind keine Kostenpositionen. Test 28.10.2026: Das Modell las
-       „Saldo HzVG“ und „Saldo Hausenebenkosten“ als Positionen und meldete sie als Anhaltspunkte. */
-    var KEINE_POSITION = /^\s*(saldo|summe|zwischensumme|gesamtsumme|gesamtbetrag|gesamtkosten|vorauszahlung|abschl[aä]g|nachzahlung|nachforderung|guthaben|abrechnungsergebnis|ergebnis)/i;
+    /* Summen- und Ergebniszeilen sind keine Kostenpositionen. „Saldo …“ aus einer Messdienst-Abrechnung ist
+       der Anteil für Heizung oder Wasser: bleibt sichtbar, „prüfen“ allein deshalb ist kein Anhaltspunkt
+       (Test 28.10.2026; der Prüfdienst macht es seit 28.10.2026 genauso). */
+    var KEINE_POSITION = /^\s*(summe|zwischensumme|gesamtsumme|gesamtbetrag|gesamtkosten\b|ihr kostenanteil|kostenanteil\b|vorauszahlung|abschl|nachzahlung|nachforderung|guthaben|abrechnungsergebnis|ergebnis\b)/i;
     function istKostenposition(p) { return !!(p && p.titel && !KEINE_POSITION.test(String(p.titel))); }
+    function ohneSaldoPruefen(p) {
+      return (p.status === 'pruefen' && /^\s*saldo/i.test(String(p.titel))) ? { titel: p.titel, betrag_cent: p.betrag_cent, status: 'ok' } : p;
+    }
 
-    /* Betrag für „Mögliche Ersparnis“ (Inhaberentscheidung 28.10.2026: Gibt es Anhaltspunkte, steht dort immer
-       ein Betrag). Obergrenze, keine Zusage: Summe der markierten Positionen, höchstens die Nachforderung; gibt es
-       Punkte ohne Positionsbezug (Frist, Mindestangaben, Vertrag, Verteilerschlüssel insgesamt), die ganze
-       Nachforderung. Ein höherer Wert des Dienstes (nicht umlagefähige Kosten, verspäteter Zugang) geht vor. */
+    /* Betrag für „Mögliche Ersparnis“ (Inhaberentscheidungen 28.10.2026: Gibt es Anhaltspunkte, steht dort immer
+       ein Betrag; er stützt sich auf die AUFFÄLLIGEN Positionen, „prüfen“ zählt nur, wenn es keine auffälligen mit
+       Betrag gibt; eine „bis zu“-Zahl, die selten erreicht wird, wäre irreführend). Obergrenze, keine Zusage,
+       höchstens die Nachforderung; gibt es Punkte ohne Positionsbezug (Frist, Mindestangaben, Vertrag,
+       Verteilerschlüssel insgesamt), die ganze Nachforderung. Ein höherer Wert des Dienstes geht vor. */
+    function mitBetrag(p) { return typeof p.betrag_cent === 'number' && p.betrag_cent > 0; }
     function ersparnisObergrenze(markiert, andere, nachforderung, dienst) {
-      var summe = markiert.reduce(function (s, p) {
-        return s + ((typeof p.betrag_cent === 'number' && p.betrag_cent > 0) ? p.betrag_cent : 0);
-      }, 0);
-      var wert = summe, quelle = 'positionen';
+      var basis = markiert.filter(function (p) { return p.status === 'auffaellig' && mitBetrag(p); });
+      var quelle = 'auffaellig';
+      if (!basis.length) { basis = markiert.filter(function (p) { return p.status === 'pruefen' && mitBetrag(p); }); quelle = 'pruefen'; }
+      var summe = basis.reduce(function (s, p) { return s + p.betrag_cent; }, 0);
+      var wert = summe;
       if (nachforderung) {
         if (andere > 0) { wert = nachforderung; quelle = 'nachforderung'; }
         else wert = Math.min(summe, nachforderung);
@@ -710,7 +717,7 @@
       return { cent: wert, quelle: wert > 0 ? quelle : 'keine' };
     }
 
-    function befundZeile(p) {
+    function befundZeile(p, ohneBetrag) {
       var st = (p.status === 'auffaellig' || p.status === 'pruefen') ? p.status : 'ok';
       var row = document.createElement('div');
       row.className = 'befund__row befund__row--' + st;
@@ -721,7 +728,7 @@
       sub.textContent = LABEL[st];
       name.appendChild(sub);
       var betrag = document.createElement('div'); betrag.className = 'befund__betrag';
-      betrag.textContent = (typeof p.betrag_cent === 'number') ? euro(p.betrag_cent) : '—';
+      betrag.textContent = (!ohneBetrag && typeof p.betrag_cent === 'number') ? euro(p.betrag_cent) : '—';
       row.appendChild(name); row.appendChild(betrag);
       return row;
     }
@@ -735,7 +742,7 @@
       }
       var zeilen = [];
       b.markiert.forEach(function (p) {
-        var row = befundZeile(p);
+        var row = befundZeile(p, b.unsicher);
         befundEl.appendChild(row); zeilen.push(row);
       });
       if (b.unauffaellig.length) {
@@ -747,7 +754,7 @@
         text.textContent = (b.markiert.length ? 'Weitere ' : '') + zahl + (zahl === 1 ? ' Position' : ' Positionen') + ': unauffällig';
         kopfzeile.appendChild(text);
         weitere.appendChild(kopfzeile);
-        b.unauffaellig.forEach(function (p) { weitere.appendChild(befundZeile(p)); });
+        b.unauffaellig.forEach(function (p) { weitere.appendChild(befundZeile(p, b.unsicher)); });
         befundEl.appendChild(weitere); zeilen.push(weitere);
       }
       var sum = null, balken = null;
@@ -768,8 +775,10 @@
           legende.appendChild(l1); legende.appendChild(l2); sum.appendChild(legende);
           balken.setAttribute('data-anteil', String(Math.min(100, Math.round(ersparnis / nachforderung * 100))));
         }
-        var hinweis = { positionen: 'Obergrenze: Summe der markierten Positionen.',
+        var hinweis = { auffaellig: 'Obergrenze: Summe der auffälligen Positionen.',
+                        pruefen: 'Obergrenze: Summe der markierten Positionen.',
                         nachforderung: 'Obergrenze: die gesamte Nachforderung.',
+                        unsicher: 'Die Beträge ließen sich nicht sicher lesen, etwa wegen eines unscharfen Fotos. Ich prüfe sie in der anwaltlichen Prüfung am Original.',
                         keine: 'Die markierten Positionen brauchen die anwaltliche Prüfung, bevor sich ein Betrag nennen lässt.' }[b.ersparnis.quelle];
         if (hinweis) {
           var h = document.createElement('div'); h.className = 'befund__sum-hinweis'; h.textContent = hinweis; sum.appendChild(h);
@@ -815,7 +824,7 @@
       erg = erg || {};
       var liste = Array.isArray(erg.punkte) ? erg.punkte : [];
       var alle = Array.isArray(erg.positionen) ? erg.positionen.filter(function (p) { return p && p.titel; }) : [];
-      var positionen = alle.filter(istKostenposition);
+      var positionen = alle.filter(istKostenposition).map(ohneSaldoPruefen);
       var markiert = positionen.filter(function (p) { return p.status === 'auffaellig'; })
         .concat(positionen.filter(function (p) { return p.status === 'pruefen'; }));
       var unauffaellig = positionen.filter(function (p) { return p.status !== 'auffaellig' && p.status !== 'pruefen'; });
@@ -833,9 +842,12 @@
       var n = markiert.length + andere;
       var nachforderung = (typeof erg.nachforderung_cent === 'number' && erg.nachforderung_cent > 0) ? erg.nachforderung_cent : null;
       var dienst = (typeof erg.moegliche_ersparnis_cent === 'number') ? erg.moegliche_ersparnis_cent : 0;
+      /* Summenprobe des Prüfdienstes (seit 28.10.2026): gelesene Anteile passen nicht zur Summe der Abrechnung */
+      var unsicher = !!(erg.summenprobe && erg.summenprobe.stimmig === false);
       var dauer = baueBefund({
-        markiert: markiert, unauffaellig: unauffaellig, anzahl: n, nachforderung: nachforderung,
-        ersparnis: ersparnisObergrenze(markiert, andere, nachforderung, dienst)
+        markiert: markiert, unauffaellig: unauffaellig, anzahl: n, nachforderung: nachforderung, unsicher: unsicher,
+        ersparnis: unsicher ? { cent: dienst, quelle: dienst > 0 ? 'dienst' : 'unsicher' }
+                            : ersparnisObergrenze(markiert, andere, nachforderung, dienst)
       });
       var frist = erg.frist || {};
       if (frist.einwendung_bis && datumDe(frist.einwendung_bis)) {
