@@ -256,6 +256,7 @@
   .spinner[hidden] { display: none; }
   @keyframes dreh { to { transform: rotate(360deg); } }
   .punkte { list-style: none; display: grid; gap: 0.7rem; margin: 1rem 0 0.5rem; }
+  .punkte:empty { display: none; }
   .punkte li { display: grid; grid-template-columns: auto 1fr; gap: 0.55rem; align-items: start; }
   .punkte li svg { margin-top: 0.2rem; }
   .punkte strong { display: block; color: var(--ink); font-size: 0.98rem; }
@@ -291,8 +292,21 @@
   .ergebnis-vorbehalt[hidden] { display: none; }
   .ergebnis-frist { font-size: 0.9rem; color: #24312B; margin: 0.2rem 0 0.8rem; }
   .ergebnis-frist[hidden] { display: none; }
+  .befund__weitere { border-top: 1px solid #EDE7DA; opacity: 0; transform: translateY(6px); }
+  .befund__weitere:first-child { border-top: 0; }
+  .befund__weitere > summary { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.9rem; min-height: 44px;
+    box-sizing: border-box; cursor: pointer; list-style: none; font-size: 0.95rem; color: #2F5D4C; font-weight: 600; }
+  .befund__weitere > summary::-webkit-details-marker { display: none; }
+  .befund__weitere > summary svg { flex: none; }
+  .befund__weitere > summary::after { content: ""; flex: none; width: 0.45rem; height: 0.45rem; margin: 0 0.2rem 0.2rem auto;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform 0.2s ease; }
+  .befund__weitere[open] > summary::after { transform: rotate(-135deg); margin-bottom: -0.2rem; }
+  .befund__weitere > summary:focus-visible { outline: 3px solid #B97C3B; outline-offset: -3px; }
+  .befund__weitere .befund__row { opacity: 1; transform: none; }
+  .befund__weitere.is-in { opacity: 1; transform: none; transition: opacity 0.45s ease, transform 0.45s ease; }
+  .befund__sum-hinweis { font-size: 0.82rem; color: #55655D; margin-top: 0.3rem; }
   @media (prefers-reduced-motion: reduce) {
-    .befund__row, .befund__sum { opacity: 1; transform: none; transition: none; }
+    .befund__row, .befund__sum, .befund__weitere { opacity: 1; transform: none; transition: none; }
     .befund__bar i { transition: none; }
   }
   .bestellen { max-width: 40rem; margin: 1.75rem auto 0; scroll-margin-top: 5rem; }
@@ -459,11 +473,11 @@
         </p>
         <div id="vp-ergebnis" hidden>
           <p id="vp-zusammenfassung"></p>
-          <div class="befund" id="vp-befund" hidden role="table" aria-label="Positionen der Vorprüfung"></div>
+          <ul class="punkte" id="vp-punkte"></ul>
+          <div class="befund" id="vp-befund" hidden role="group" aria-label="Positionen der Vorprüfung"></div>
           <p class="ergebnis-vorbehalt" id="vp-vorbehalt" hidden>Automatisch ermittelt, ohne anwaltliche Prüfung.
           Ob und wie viel Sie weniger zahlen, zeigt erst die anwaltliche Prüfung.</p>
           <p class="ergebnis-frist" id="vp-frist" hidden></p>
-          <ul class="punkte" id="vp-punkte"></ul>
           <p class="ergebnis-hinweis" id="vp-hinweis">Dieses Ergebnis ist automatisch erstellt — ohne
           anwaltliche Prüfung. Es ist unverbindlich, kann Fehler übersehen oder falsch einordnen und ist keine
           Rechtsberatung. Ob ein Punkt trägt, sage ich Ihnen in der anwaltlichen Prüfung.</p>
@@ -673,61 +687,101 @@
     var cta = document.getElementById('vp-cta');
     function zeigeCta() { cta.hidden = false; }
 
-    /* Befundkarte: Zeilen erscheinen nacheinander, zuletzt „Mögliche Ersparnis: bis zu X €". */
-    function baueBefund(erg) {
-      var positionen = (erg && Array.isArray(erg.positionen)) ? erg.positionen.filter(function (p) { return p && p.titel; }) : [];
-      var ersparnis = (erg && typeof erg.moegliche_ersparnis_cent === 'number') ? erg.moegliche_ersparnis_cent : 0;
-      var nachforderung = (erg && typeof erg.nachforderung_cent === 'number' && erg.nachforderung_cent > 0) ? erg.nachforderung_cent : null;
+    /* Saldo-, Summen- und Ergebniszeilen sind keine Kostenpositionen. Test 28.10.2026: Das Modell las
+       „Saldo HzVG“ und „Saldo Hausenebenkosten“ als Positionen und meldete sie als Anhaltspunkte. */
+    var KEINE_POSITION = /^\s*(saldo|summe|zwischensumme|gesamtsumme|gesamtbetrag|gesamtkosten|vorauszahlung|abschl[aä]g|nachzahlung|nachforderung|guthaben|abrechnungsergebnis|ergebnis)/i;
+    function istKostenposition(p) { return !!(p && p.titel && !KEINE_POSITION.test(String(p.titel))); }
+
+    /* Betrag für „Mögliche Ersparnis“ (Inhaberentscheidung 28.10.2026: Gibt es Anhaltspunkte, steht dort immer
+       ein Betrag). Obergrenze, keine Zusage: Summe der markierten Positionen, höchstens die Nachforderung; gibt es
+       Punkte ohne Positionsbezug (Frist, Mindestangaben, Vertrag, Verteilerschlüssel insgesamt), die ganze
+       Nachforderung. Ein höherer Wert des Dienstes (nicht umlagefähige Kosten, verspäteter Zugang) geht vor. */
+    function ersparnisObergrenze(markiert, andere, nachforderung, dienst) {
+      var summe = markiert.reduce(function (s, p) {
+        return s + ((typeof p.betrag_cent === 'number' && p.betrag_cent > 0) ? p.betrag_cent : 0);
+      }, 0);
+      var wert = summe, quelle = 'positionen';
+      if (nachforderung) {
+        if (andere > 0) { wert = nachforderung; quelle = 'nachforderung'; }
+        else wert = Math.min(summe, nachforderung);
+      }
+      if (dienst > 0 && dienst >= wert) return { cent: dienst, quelle: 'dienst' };
+      return { cent: wert, quelle: wert > 0 ? quelle : 'keine' };
+    }
+
+    function befundZeile(p) {
+      var st = (p.status === 'auffaellig' || p.status === 'pruefen') ? p.status : 'ok';
+      var row = document.createElement('div');
+      row.className = 'befund__row befund__row--' + st;
+      row.innerHTML = ICON[st];
+      var name = document.createElement('div'); name.className = 'befund__name';
+      name.appendChild(document.createTextNode(String(p.titel)));
+      var sub = document.createElement('span');
+      sub.textContent = LABEL[st];
+      name.appendChild(sub);
+      var betrag = document.createElement('div'); betrag.className = 'befund__betrag';
+      betrag.textContent = (typeof p.betrag_cent === 'number') ? euro(p.betrag_cent) : '—';
+      row.appendChild(name); row.appendChild(betrag);
+      return row;
+    }
+
+    /* Befundkarte: oben nur die markierten Positionen (das sind die Anhaltspunkte aus dem Satz darüber),
+       nacheinander eingeblendet; die unauffälligen eingeklappt darunter; zuletzt „Mögliche Ersparnis“. */
+    function baueBefund(b) {
       befundEl.innerHTML = '';
-      if (!positionen.length && ersparnis <= 0) { befundEl.hidden = true; vorbehaltEl.hidden = true; return 0; }
-      var rang = { auffaellig: 0, pruefen: 1, ok: 2 };
-      positionen.sort(function (a, b) { return (rang[a.status] === undefined ? 3 : rang[a.status]) - (rang[b.status] === undefined ? 3 : rang[b.status]); });
+      if (!b.markiert.length && !b.unauffaellig.length && b.ersparnis.cent <= 0) {
+        befundEl.hidden = true; vorbehaltEl.hidden = true; return 0;
+      }
       var zeilen = [];
-      positionen.forEach(function (p) {
-        var st = rang[p.status] === undefined ? 'ok' : p.status;
-        var row = document.createElement('div');
-        row.className = 'befund__row befund__row--' + st;
-        row.setAttribute('role', 'row');
-        row.innerHTML = ICON[st];
-        var name = document.createElement('div'); name.className = 'befund__name'; name.setAttribute('role', 'cell');
-        name.appendChild(document.createTextNode(String(p.titel)));
-        var sub = document.createElement('span');
-        sub.textContent = LABEL[st];
-        name.appendChild(sub);
-        var betrag = document.createElement('div'); betrag.className = 'befund__betrag'; betrag.setAttribute('role', 'cell');
-        betrag.textContent = (typeof p.betrag_cent === 'number') ? euro(p.betrag_cent) : '—';
-        row.appendChild(name); row.appendChild(betrag);
+      b.markiert.forEach(function (p) {
+        var row = befundZeile(p);
         befundEl.appendChild(row); zeilen.push(row);
       });
-      var sum = document.createElement('div'); sum.className = 'befund__sum'; sum.setAttribute('role', 'row');
-      var kopf = document.createElement('div'); kopf.className = 'befund__sum-kopf';
-      var label = document.createElement('span'); label.textContent = 'Mögliche Ersparnis';
-      var wert = document.createElement('strong');
-      if (ersparnis > 0) wert.textContent = 'bis zu ' + euro(ersparnis);
-      else wert.textContent = 'noch nicht bezifferbar';
-      kopf.appendChild(label); kopf.appendChild(wert); sum.appendChild(kopf);
-      var balken = null;
-      if (ersparnis > 0 && nachforderung) {
-        balken = document.createElement('div'); balken.className = 'befund__bar';
-        var fuell = document.createElement('i'); balken.appendChild(fuell); sum.appendChild(balken);
-        var legende = document.createElement('div'); legende.className = 'befund__bar-legende';
-        var l1 = document.createElement('span'); l1.textContent = ersparnis >= nachforderung ? 'bis zur gesamten Nachforderung' : 'Anteil an der Nachforderung';
-        var l2 = document.createElement('span'); l2.textContent = 'Nachforderung ' + euro(nachforderung);
-        legende.appendChild(l1); legende.appendChild(l2); sum.appendChild(legende);
-        balken.setAttribute('data-anteil', String(Math.min(100, Math.round(ersparnis / nachforderung * 100))));
-      } else if (ersparnis <= 0) {
-        var erkl = document.createElement('div'); erkl.className = 'befund__bar-legende';
-        var e1 = document.createElement('span'); e1.textContent = 'Die markierten Positionen brauchen die anwaltliche Prüfung, bevor sich ein Betrag nennen lässt.';
-        erkl.appendChild(e1); sum.appendChild(erkl);
+      if (b.unauffaellig.length) {
+        var weitere = document.createElement('details'); weitere.className = 'befund__weitere';
+        var kopfzeile = document.createElement('summary');
+        var zahl = b.unauffaellig.length;
+        kopfzeile.innerHTML = ICON.ok;
+        var text = document.createElement('span');
+        text.textContent = (b.markiert.length ? 'Weitere ' : '') + zahl + (zahl === 1 ? ' Position' : ' Positionen') + ': unauffällig';
+        kopfzeile.appendChild(text);
+        weitere.appendChild(kopfzeile);
+        b.unauffaellig.forEach(function (p) { weitere.appendChild(befundZeile(p)); });
+        befundEl.appendChild(weitere); zeilen.push(weitere);
       }
-      befundEl.appendChild(sum);
+      var sum = null, balken = null;
+      if (b.anzahl > 0) {
+        var ersparnis = b.ersparnis.cent, nachforderung = b.nachforderung;
+        sum = document.createElement('div'); sum.className = 'befund__sum';
+        var kopf = document.createElement('div'); kopf.className = 'befund__sum-kopf';
+        var label = document.createElement('span'); label.textContent = 'Mögliche Ersparnis';
+        var wert = document.createElement('strong');
+        wert.textContent = ersparnis > 0 ? 'bis zu ' + euro(ersparnis) : 'noch nicht bezifferbar';
+        kopf.appendChild(label); kopf.appendChild(wert); sum.appendChild(kopf);
+        if (ersparnis > 0 && nachforderung) {
+          balken = document.createElement('div'); balken.className = 'befund__bar';
+          var fuell = document.createElement('i'); balken.appendChild(fuell); sum.appendChild(balken);
+          var legende = document.createElement('div'); legende.className = 'befund__bar-legende';
+          var l1 = document.createElement('span'); l1.textContent = ersparnis >= nachforderung ? 'bis zur gesamten Nachforderung' : 'Anteil an der Nachforderung';
+          var l2 = document.createElement('span'); l2.textContent = 'Nachforderung ' + euro(nachforderung);
+          legende.appendChild(l1); legende.appendChild(l2); sum.appendChild(legende);
+          balken.setAttribute('data-anteil', String(Math.min(100, Math.round(ersparnis / nachforderung * 100))));
+        }
+        var hinweis = { positionen: 'Obergrenze: Summe der markierten Positionen.',
+                        nachforderung: 'Obergrenze: die gesamte Nachforderung.',
+                        keine: 'Die markierten Positionen brauchen die anwaltliche Prüfung, bevor sich ein Betrag nennen lässt.' }[b.ersparnis.quelle];
+        if (hinweis) {
+          var h = document.createElement('div'); h.className = 'befund__sum-hinweis'; h.textContent = hinweis; sum.appendChild(h);
+        }
+        befundEl.appendChild(sum);
+      }
       befundEl.hidden = false;
       vorbehaltEl.hidden = true;
       /* nacheinander einblenden */
       zeilen.forEach(function (row, i) { window.setTimeout(function () { row.classList.add('is-in'); }, SCHRITT * i); });
       var ende = SCHRITT * zeilen.length;
       window.setTimeout(function () {
-        sum.classList.add('is-in');
+        if (sum) sum.classList.add('is-in');
         vorbehaltEl.hidden = false;
         if (balken) window.setTimeout(function () { balken.firstChild.style.width = balken.getAttribute('data-anteil') + '%'; }, ruhig ? 0 : 150);
       }, ende);
@@ -750,27 +804,46 @@
       li.appendChild(box);
       punkteEl.appendChild(li);
     }
+    function heuteIso() {
+      var d = new Date();
+      return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+    }
     function zeigeErgebnis(erg, lauf) {
       fertig = true;
       if (typeof lauf === 'number') gezeigterLauf = lauf;
       erg = erg || {};
-      var n = (typeof erg.anhaltspunkte === 'number') ? erg.anhaltspunkte : 0;
       var liste = Array.isArray(erg.punkte) ? erg.punkte : [];
-      var positionen = Array.isArray(erg.positionen) ? erg.positionen : [];
-      /* Punkte zu einzelnen Positionen stehen schon in der Karte; darunter nur die übrigen (Frist, Form, Vertrag). */
-      var titel = positionen.map(function (p) { return p && p.titel ? String(p.titel) + ':' : null; }).filter(Boolean);
+      var alle = Array.isArray(erg.positionen) ? erg.positionen.filter(function (p) { return p && p.titel; }) : [];
+      var positionen = alle.filter(istKostenposition);
+      var markiert = positionen.filter(function (p) { return p.status === 'auffaellig'; })
+        .concat(positionen.filter(function (p) { return p.status === 'pruefen'; }));
+      var unauffaellig = positionen.filter(function (p) { return p.status !== 'auffaellig' && p.status !== 'pruefen'; });
+      /* Punkte zu einzelnen Positionen stehen schon in der Karte (Saldozeilen fallen ganz weg);
+         darunter nur die übrigen (Frist, Form, Vertrag). */
+      var titel = alle.map(function (p) { return String(p.titel) + ':'; });
       punkteEl.innerHTML = '';
+      var andere = 0;
       liste.forEach(function (x) {
         if (!x || !x.titel) return;
         var t = String(x.titel);
         var zuPosition = titel.some(function (pt) { return t.indexOf(pt) === 0; });
-        if (!zuPosition) punkt(t, '');
+        if (!zuPosition) { punkt(t, ''); andere++; }
       });
-      var dauer = baueBefund(erg);
+      var n = markiert.length + andere;
+      var nachforderung = (typeof erg.nachforderung_cent === 'number' && erg.nachforderung_cent > 0) ? erg.nachforderung_cent : null;
+      var dienst = (typeof erg.moegliche_ersparnis_cent === 'number') ? erg.moegliche_ersparnis_cent : 0;
+      var dauer = baueBefund({
+        markiert: markiert, unauffaellig: unauffaellig, anzahl: n, nachforderung: nachforderung,
+        ersparnis: ersparnisObergrenze(markiert, andere, nachforderung, dienst)
+      });
       var frist = erg.frist || {};
       if (frist.einwendung_bis && datumDe(frist.einwendung_bis)) {
-        fristEl.textContent = 'Einwendungen gegen diese Abrechnung sind bis zum ' + datumDe(frist.einwendung_bis) +
-          ' möglich (zwölf Monate ab Zugang). Fristen werden durch die Vorprüfung nicht gewahrt.';
+        fristEl.textContent = String(frist.einwendung_bis).slice(0, 10) < heuteIso()
+          ? 'Die Frist für Einwendungen gegen diese Abrechnung ist am ' + datumDe(frist.einwendung_bis) +
+            ' abgelaufen (zwölf Monate ab Zugang). Danach sind Einwendungen in der Regel ausgeschlossen, ' +
+            'außer Sie hatten die Verspätung nicht zu vertreten.'
+          : 'Einwendungen gegen diese Abrechnung sind bis zum ' + datumDe(frist.einwendung_bis) +
+            ' möglich (zwölf Monate ab Zugang). Fristen werden durch die Vorprüfung nicht gewahrt.';
         fristEl.hidden = false;
       } else { fristEl.hidden = true; }
       status('Die Vorprüfung ist fertig.', false);
