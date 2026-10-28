@@ -22,9 +22,9 @@
   'use strict';
 
   var KONFIG = {
-    googleAdsId: '',          /* z. B. 'AW-123456789'; leer = alles aus */
-    labelVorpruefung: '',     /* Conversion-Label "Vorprüfung abgeschickt" */
-    labelKauf: '',            /* Conversion-Label "Kauf" */
+    googleAdsId: 'AW-18542620852',          /* z. B. 'AW-123456789'; leer = alles aus */
+    labelVorpruefung: '0pteCM7e-awdELTh54lF',     /* Conversion-Label "Vorprüfung abgeschickt" */
+    labelKauf: 'T2XHCNWP-qwdELTh54lF',            /* Conversion-Label "Kauf" */
     wertKauf: 79.90,
     waehrung: 'EUR'
   };
