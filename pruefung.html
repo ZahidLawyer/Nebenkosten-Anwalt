@@ -859,6 +859,8 @@
       if (p.formId && p.formId === bestellId) { nachBestellformular(p); return; }
       /* Werbemessung „Vorprüfung abgeschickt“: nur mit Einwilligung, Kennung nur als Hashwert (assets/einwilligung.js) */
       if (typeof window.nkaMessung === 'function') { try { window.nkaMessung('vorpruefung', vorgang); } catch (err) {} }
+      /* Reichweitenmessung (Umami, cookielos): nur die Tatsache des Absendens, keine Vorgangskennung */
+      if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track('vorpruefung_abgeschickt'); } catch (err) {} }
       starten(true); /* Formular 1: neues Absenden startet die Abfrage neu (z. B. nach 'fehler') */
     });
     /* Adresse mit Vorgangskennung (Lesezeichen, erneuter Aufruf): pruefung.html?vorgang=<id>[#bestellen] */

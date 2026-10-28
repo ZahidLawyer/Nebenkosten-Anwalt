@@ -17,7 +17,10 @@
      erscheint. Widerruf jederzeit über den Link "Einwilligungen" in der Fußzeile.
    - Muss im <head> synchron geladen werden: Es liest die Adresse, bevor pruefung.html sie umschreibt.
    - Schnittstelle für die Seiten: window.nkaMessung('vorpruefung', vorgang) und window.nkaMessung('kauf').
-     Ohne Einwilligung tun beide nichts. */
+     Ohne Einwilligung tun beide nichts.
+   - Unabhängig von Google und ohne Einwilligung (Umami, cookielos, eigener Server): Bei Ankunft über eine
+     Anzeige geht an Umami nur das Ereignis "anzeige_google", nie die Klick-ID selbst (Ziffer 9 der
+     Datenschutzerklärung). */
 (function () {
   'use strict';
 
@@ -128,6 +131,19 @@
       melde(KONFIG.labelKauf, KONFIG.wertKauf, stripeSitzung ? 'nka-kauf:' + stripeSitzung : null);
     }
   };
+
+  /* ---------- Reichweitenmessung (Umami): Ankunft über eine Google-Anzeige ----------
+     Nur die Tatsache, keine Klick-ID. Nicht bei Neuladen oder Vor/Zurück, damit jede Ankunft einmal zählt.
+     Läuft auch ohne Einwilligung in die Google-Messung und auch, wenn googleAdsId leer ist. */
+  if (hatKlick) {
+    var navTyp = '';
+    try { var nav = performance.getEntriesByType('navigation')[0]; navTyp = nav ? nav.type : ''; } catch (e) {}
+    if (navTyp !== 'reload' && navTyp !== 'back_forward') {
+      var anzeigeMelden = function () { umami('anzeige_google'); };
+      if (document.readyState === 'complete') anzeigeMelden();
+      else window.addEventListener('load', anzeigeMelden);
+    }
+  }
 
   if (!aktiv) return;
   if (lesen() === 'ja') ladeGoogle();
