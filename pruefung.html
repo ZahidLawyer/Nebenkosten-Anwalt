@@ -328,6 +328,9 @@
   <!-- Reichweitenmessung: Umami, selbst gehostet auf dem Kanzlei-Server (stats.nebenkosten-anwalt.de), cookielos;
        data-exclude-search verhindert, dass die Vorgangskennung (?vorgang=) in der Statistik landet. -->
   <script defer src="https://stats.nebenkosten-anwalt.de/script.js" data-website-id="d1858dae-dd51-4e26-ad65-438c7778cad7" data-domains="nebenkosten-anwalt.de" data-exclude-search="true"></script>
+<!-- Einwilligung für die Messung des Werbeerfolgs (Google Ads). Ohne Konto-ID in der Datei inaktiv;
+     ohne Einwilligung wird nichts von Google geladen. Muss synchron im <head> stehen. -->
+<script src="/assets/einwilligung.js"></script>
 </head>
 <body>
 
@@ -593,8 +596,16 @@
     }
     /* Tally füllt versteckte Felder aus der URL der EINBETTENDEN Seite (dokumentierter Weg für
        das Standard-Embed mit embed.js). Deshalb steht die Kennung auch in der eigenen Adresse. */
+    /* Klick-ID einer Google-Anzeige (gclid, gbraid, wbraid) beim Umschreiben der Adresse erhalten, damit die
+       Werbemessung sie nach einer Einwilligung zuordnen kann (assets/einwilligung.js). Ohne Einwilligung bleibt
+       sie nur in der Adresse stehen und geht nirgendwohin. */
+    var klickParam = '';
+    ['gclid', 'gbraid', 'wbraid'].forEach(function (k) {
+      var v = q.get(k);
+      if (v && /^[A-Za-z0-9_\-]{10,300}$/.test(v)) klickParam += '&' + k + '=' + v;
+    });
     if (q.get('vorgang') !== vorgang || q.get('quelle') !== quelle) {
-      try { history.replaceState(null, '', location.pathname + '?vorgang=' + vorgang + quelleParam + location.hash); } catch (e) {}
+      try { history.replaceState(null, '', location.pathname + '?vorgang=' + vorgang + quelleParam + klickParam + location.hash); } catch (e) {}
     }
 
     /* ---------- Formular 1 laden (Tally füllt das versteckte Feld „vorgang" aus der URL) ---------- */
@@ -846,6 +857,8 @@
       var p = d.payload || {};
       var bestellId = document.getElementById('bestell-frame').getAttribute('data-bestell-form');
       if (p.formId && p.formId === bestellId) { nachBestellformular(p); return; }
+      /* Werbemessung „Vorprüfung abgeschickt“: nur mit Einwilligung, Kennung nur als Hashwert (assets/einwilligung.js) */
+      if (typeof window.nkaMessung === 'function') { try { window.nkaMessung('vorpruefung', vorgang); } catch (err) {} }
       starten(true); /* Formular 1: neues Absenden startet die Abfrage neu (z. B. nach 'fehler') */
     });
     /* Adresse mit Vorgangskennung (Lesezeichen, erneuter Aufruf): pruefung.html?vorgang=<id>[#bestellen] */
@@ -895,6 +908,8 @@
       try { bbox.scrollIntoView({ block: 'start' }); } catch (e) {}
       try { history.replaceState(null, '', location.pathname + '?vorgang=' + vorgang + quelleParam); } catch (e) {}
       if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track('zahlung_zurueck'); } catch (e) {} }
+      /* Werbemessung „Kauf“: nur mit Einwilligung (assets/einwilligung.js) */
+      if (typeof window.nkaMessung === 'function') { try { window.nkaMessung('kauf'); } catch (e) {} }
       var spaet = 'Ihre Zahlung ist eingegangen. Die Bestellbestätigung mit den Mandatsbedingungen und der ' +
         'Vergütungsvereinbarung kommt in den nächsten Minuten per E-Mail. Bleibt sie aus, schreiben Sie mir bitte an ' +
         'info@nebenkosten-anwalt.de.';
