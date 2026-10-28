@@ -310,6 +310,7 @@
     .befund__bar i { transition: none; }
   }
   .bestellen { max-width: 40rem; margin: 1.75rem auto 0; scroll-margin-top: 5rem; }
+  #vorpruefung { scroll-margin-top: 5rem; }
   .bestellen .prep-box { margin-bottom: 1rem; }
   .bestellen .form-card { margin-top: 0.5rem; }
   /* Sichtbare Platzhalter — Bauwerkzeug, kein Gestaltungselement. */
@@ -857,6 +858,14 @@
       }
       ergebnisEl.hidden = false;
       manuell.hidden = true;
+      /* Zum Ergebnis springen (Wunsch Zahid 28.10.2026: nach dem Hochladen musste man erst nach unten scrollen),
+         außer die Karte steht schon oben im Blick oder die Adresse zielt auf #bestellen. */
+      if (location.hash !== '#bestellen') {
+        var oben = panel.getBoundingClientRect().top;
+        if (oben < 0 || oben > window.innerHeight * 0.3) {
+          try { panel.scrollIntoView({ behavior: ruhig ? 'auto' : 'smooth', block: 'start' }); } catch (e) {}
+        }
+      }
       /* Button „kostenpflichtig prüfen lassen" nach der letzten Zeile; der Bestellabschnitt öffnet erst
          auf Klick — außer die Adresse zielt mit #bestellen direkt darauf. */
       if (location.hash === '#bestellen') { zeigeCta(); zeigeBestellen(true); }
