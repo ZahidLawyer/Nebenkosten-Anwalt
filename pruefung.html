@@ -278,9 +278,6 @@
   .befund__sum-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
   .befund__sum-kopf strong { font-family: "Source Serif 4", Georgia, serif; font-size: 1.3rem; color: #24493C; }
   .befund__sum-kopf span { font-size: 0.95rem; color: #24312B; }
-  .befund__bar { height: 8px; border-radius: 999px; background: #E4DCCB; margin-top: 0.6rem; overflow: hidden; }
-  .befund__bar i { display: block; height: 100%; width: 0; background: #2F5D4C; border-radius: 999px; transition: width 0.9s ease; }
-  .befund__bar-legende { display: flex; justify-content: space-between; gap: 0.6rem; font-size: 0.82rem; color: #55655D; margin-top: 0.3rem; }
   .befund__row.is-in, .befund__sum.is-in { opacity: 1; transform: none; transition: opacity 0.45s ease, transform 0.45s ease; }
   .ergebnis-vorbehalt { font-size: 0.88rem; color: #55655D; margin: 0.35rem 0 0.9rem; }
   .vp-cta { margin: 1.1rem 0 0.4rem; display: flex; flex-direction: column; gap: 0.55rem; align-items: flex-start; }
@@ -304,10 +301,9 @@
   .befund__weitere > summary:focus-visible { outline: 3px solid #B97C3B; outline-offset: -3px; }
   .befund__weitere .befund__row { opacity: 1; transform: none; }
   .befund__weitere.is-in { opacity: 1; transform: none; transition: opacity 0.45s ease, transform 0.45s ease; }
-  .befund__sum-hinweis { font-size: 0.82rem; color: #55655D; margin-top: 0.3rem; }
+  .befund__sum-text { font-size: 0.93rem; color: #24312B; line-height: 1.5; margin: 0.35rem 0 0; }
   @media (prefers-reduced-motion: reduce) {
     .befund__row, .befund__sum, .befund__weitere { opacity: 1; transform: none; transition: none; }
-    .befund__bar i { transition: none; }
   }
   .bestellen { max-width: 40rem; margin: 1.75rem auto 0; scroll-margin-top: 5rem; }
   #vorpruefung { scroll-margin-top: 5rem; }
@@ -697,11 +693,11 @@
       return (p.status === 'pruefen' && /^\s*saldo/i.test(String(p.titel))) ? { titel: p.titel, betrag_cent: p.betrag_cent, status: 'ok' } : p;
     }
 
-    /* Betrag für „Mögliche Ersparnis“ (Inhaberentscheidungen 28.10.2026: Gibt es Anhaltspunkte, steht dort immer
-       ein Betrag; er stützt sich auf die AUFFÄLLIGEN Positionen, „prüfen“ zählt nur, wenn es keine auffälligen mit
-       Betrag gibt; eine „bis zu“-Zahl, die selten erreicht wird, wäre irreführend). Obergrenze, keine Zusage,
-       höchstens die Nachforderung; gibt es Punkte ohne Positionsbezug (Frist, Mindestangaben, Vertrag,
-       Verteilerschlüssel insgesamt), die ganze Nachforderung. Ein höherer Wert des Dienstes geht vor. */
+    /* Interne Obergrenze der möglichen Ersparnis; wird NICHT angezeigt, sondern entscheidet über die Empfehlung
+       (Inhaberentscheidungen 28.10.2026). Sie stützt sich auf die AUFFÄLLIGEN Positionen, „prüfen“ zählt nur, wenn
+       es keine auffälligen mit Betrag gibt; höchstens die Nachforderung; gibt es Punkte ohne Positionsbezug (Frist,
+       Mindestangaben, Vertrag, Verteilerschlüssel insgesamt), die ganze Nachforderung. Ein höherer Wert des Dienstes geht vor. */
+    var SCHWELLE_EMPFEHLUNG_CENT = 6000; /* Empfehlung ab 60 € möglicher Ersparnis (Entscheidung Zahid 28.10.2026) */
     function mitBetrag(p) { return typeof p.betrag_cent === 'number' && p.betrag_cent > 0; }
     function ersparnisObergrenze(markiert, andere, nachforderung, dienst) {
       var basis = markiert.filter(function (p) { return p.status === 'auffaellig' && mitBetrag(p); });
@@ -734,7 +730,7 @@
     }
 
     /* Befundkarte: oben nur die markierten Positionen (das sind die Anhaltspunkte aus dem Satz darüber),
-       nacheinander eingeblendet; die unauffälligen eingeklappt darunter; zuletzt „Mögliche Ersparnis“. */
+       nacheinander eingeblendet; die unauffälligen eingeklappt darunter; zuletzt die Empfehlung (ab 60 €). */
     function baueBefund(b) {
       befundEl.innerHTML = '';
       if (!b.markiert.length && !b.unauffaellig.length && b.ersparnis.cent <= 0) {
@@ -757,32 +753,31 @@
         b.unauffaellig.forEach(function (p) { weitere.appendChild(befundZeile(p, b.unsicher)); });
         befundEl.appendChild(weitere); zeilen.push(weitere);
       }
-      var sum = null, balken = null;
-      if (b.anzahl > 0) {
-        var ersparnis = b.ersparnis.cent, nachforderung = b.nachforderung;
+      /* Kein Ersparnisbetrag auf der Seite (Entscheidung Zahid 28.10.2026). Stattdessen die Empfehlung, sobald die
+         intern errechnete Obergrenze mindestens SCHWELLE_EMPFEHLUNG_CENT erreicht; nicht bei abgelaufener
+         Einwendungsfrist und nicht, wenn die Beträge unsicher gelesen sind. */
+      var sum = null;
+      var empfehlen = b.anzahl > 0 && !b.unsicher && !b.fristAbgelaufen && b.ersparnis.cent >= SCHWELLE_EMPFEHLUNG_CENT;
+      if (empfehlen || (b.anzahl > 0 && b.unsicher)) {
         sum = document.createElement('div'); sum.className = 'befund__sum';
         var kopf = document.createElement('div'); kopf.className = 'befund__sum-kopf';
-        var label = document.createElement('span'); label.textContent = 'Mögliche Ersparnis';
-        var wert = document.createElement('strong');
-        wert.textContent = ersparnis > 0 ? 'bis zu ' + euro(ersparnis) : 'noch nicht bezifferbar';
-        kopf.appendChild(label); kopf.appendChild(wert); sum.appendChild(kopf);
-        if (ersparnis > 0 && nachforderung) {
-          balken = document.createElement('div'); balken.className = 'befund__bar';
-          var fuell = document.createElement('i'); balken.appendChild(fuell); sum.appendChild(balken);
-          var legende = document.createElement('div'); legende.className = 'befund__bar-legende';
-          var l1 = document.createElement('span'); l1.textContent = ersparnis >= nachforderung ? 'bis zur gesamten Nachforderung' : 'Anteil an der Nachforderung';
-          var l2 = document.createElement('span'); l2.textContent = 'Nachforderung ' + euro(nachforderung);
-          legende.appendChild(l1); legende.appendChild(l2); sum.appendChild(legende);
-          balken.setAttribute('data-anteil', String(Math.min(100, Math.round(ersparnis / nachforderung * 100))));
+        var titel = document.createElement('strong');
+        var text = document.createElement('p'); text.className = 'befund__sum-text';
+        if (empfehlen) {
+          titel.textContent = 'Anwaltliche Prüfung empfohlen';
+          var grund;
+          if (b.ersparnis.quelle === 'nachforderung') grund = 'Die Vorprüfung hat einen Hinweis gefunden, der Ihre Abrechnung insgesamt betreffen kann.';
+          else if (b.markiert.some(function (p) { return p.status === 'auffaellig'; })) {
+            grund = b.markiert.filter(function (p) { return p.status === 'auffaellig'; }).length === 1
+              ? 'Die Vorprüfung hat eine auffällige Position gefunden, die sich auf Ihr Ergebnis auswirken kann.'
+              : 'Die Vorprüfung hat auffällige Positionen gefunden, die sich auf Ihr Ergebnis auswirken können.';
+          } else grund = 'Die Vorprüfung hat Positionen gefunden, die genauer geprüft werden sollten.';
+          text.textContent = grund + ' Ich prüfe jeden markierten Punkt am Original und sage Ihnen, ob und in welcher Höhe Sie weniger zahlen müssen.';
+        } else {
+          titel.textContent = 'Beträge nicht sicher lesbar';
+          text.textContent = 'Die Beträge ließen sich aus Ihren Unterlagen nicht sicher lesen, etwa wegen eines unscharfen Fotos. In der anwaltlichen Prüfung lese ich das Original.';
         }
-        var hinweis = { auffaellig: 'Obergrenze: Summe der auffälligen Positionen.',
-                        pruefen: 'Obergrenze: Summe der markierten Positionen.',
-                        nachforderung: 'Obergrenze: die gesamte Nachforderung.',
-                        unsicher: 'Die Beträge ließen sich nicht sicher lesen, etwa wegen eines unscharfen Fotos. Ich prüfe sie in der anwaltlichen Prüfung am Original.',
-                        keine: 'Die markierten Positionen brauchen die anwaltliche Prüfung, bevor sich ein Betrag nennen lässt.' }[b.ersparnis.quelle];
-        if (hinweis) {
-          var h = document.createElement('div'); h.className = 'befund__sum-hinweis'; h.textContent = hinweis; sum.appendChild(h);
-        }
+        kopf.appendChild(titel); sum.appendChild(kopf); sum.appendChild(text);
         befundEl.appendChild(sum);
       }
       befundEl.hidden = false;
@@ -793,7 +788,6 @@
       window.setTimeout(function () {
         if (sum) sum.classList.add('is-in');
         vorbehaltEl.hidden = false;
-        if (balken) window.setTimeout(function () { balken.firstChild.style.width = balken.getAttribute('data-anteil') + '%'; }, ruhig ? 0 : 150);
       }, ende);
       return ende + (ruhig ? 0 : 500);
     }
@@ -844,14 +838,16 @@
       var dienst = (typeof erg.moegliche_ersparnis_cent === 'number') ? erg.moegliche_ersparnis_cent : 0;
       /* Summenprobe des Prüfdienstes (seit 28.10.2026): gelesene Anteile passen nicht zur Summe der Abrechnung */
       var unsicher = !!(erg.summenprobe && erg.summenprobe.stimmig === false);
+      var frist = erg.frist || {};
+      var fristAbgelaufen = !!(frist.einwendung_bis && datumDe(frist.einwendung_bis) && String(frist.einwendung_bis).slice(0, 10) < heuteIso());
       var dauer = baueBefund({
         markiert: markiert, unauffaellig: unauffaellig, anzahl: n, nachforderung: nachforderung, unsicher: unsicher,
+        fristAbgelaufen: fristAbgelaufen,
         ersparnis: unsicher ? { cent: dienst, quelle: dienst > 0 ? 'dienst' : 'unsicher' }
                             : ersparnisObergrenze(markiert, andere, nachforderung, dienst)
       });
-      var frist = erg.frist || {};
       if (frist.einwendung_bis && datumDe(frist.einwendung_bis)) {
-        fristEl.textContent = String(frist.einwendung_bis).slice(0, 10) < heuteIso()
+        fristEl.textContent = fristAbgelaufen
           ? 'Die Frist für Einwendungen gegen diese Abrechnung ist am ' + datumDe(frist.einwendung_bis) +
             ' abgelaufen (zwölf Monate ab Zugang). Danach sind Einwendungen in der Regel ausgeschlossen, ' +
             'außer Sie hatten die Verspätung nicht zu vertreten.'
