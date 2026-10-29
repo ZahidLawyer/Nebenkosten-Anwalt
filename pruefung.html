@@ -620,6 +620,24 @@
     if (!QUELLE_OK.test(quelle || '')) quelle = null;
     if (quelle) { try { sessionStorage.setItem('quelle', quelle); } catch (e) {} }
     var quelleParam = quelle ? '&quelle=' + quelle : '';
+    /* Herkunft für die Reichweitenmessung (Paket 0, Freigabe Zahid 29.10.2026): nur aus der Adresse, mit der die
+       Seite aufgerufen wurde (?quelle=… von Flyer oder Startseite, Klick-ID einer Google-Anzeige), nie aus dem
+       Speicher des Browsers. Werte: Standortcode, „anzeige“ oder „ohne“. */
+    var herkunft = QUELLE_OK.test(q.get('quelle') || '') ? q.get('quelle')
+      : (['gclid', 'gbraid', 'wbraid'].some(function (k) { return !!q.get(k); }) ? 'anzeige' : 'ohne');
+    /* Umami-Ereignis mit Herkunft; nie mit Vorgangskennung, Beträgen oder Positionsnamen. Umami lädt mit „defer“:
+       Ist es beim Aufruf noch nicht da (Rückkehr von Stripe gleich beim Seitenaufbau), wird nach „load“ gemeldet. */
+    function zaehle(name, daten) {
+      var d = daten || {};
+      d.herkunft = herkunft;
+      function senden() {
+        if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track(name, d); } catch (e) {} return true; }
+        return false;
+      }
+      if (!senden() && document.readyState !== 'complete') window.addEventListener('load', senden);
+    }
+    function stufe(n) { return n <= 0 ? '0' : n === 1 ? '1' : n <= 3 ? '2-3' : '4+'; }
+    var letzteEmpfehlung = null, gemeldeterLauf = null, aufrufNeu = false;
     /* Reichweitenmessung: Flyer-Standort einmal je Ankunft als Ereignis melden (nur Standortcode, keine Vorgangskennung). */
     if (quelle && q.get('quelle')) {
       window.addEventListener('load', function () {
@@ -858,12 +876,27 @@
       var unsicher = !!(erg.summenprobe && erg.summenprobe.stimmig === false);
       var frist = erg.frist || {};
       var fristAbgelaufen = !!(frist.einwendung_bis && datumDe(frist.einwendung_bis) && String(frist.einwendung_bis).slice(0, 10) < heuteIso());
+      var ersparnis = unsicher ? { cent: dienst, quelle: dienst > 0 ? 'dienst' : 'unsicher' }
+                               : ersparnisObergrenze(markiert, andere, nachforderung, dienst);
       var dauer = baueBefund({
         markiert: markiert, unauffaellig: unauffaellig, anzahl: n, nachforderung: nachforderung, unsicher: unsicher,
-        fristAbgelaufen: fristAbgelaufen,
-        ersparnis: unsicher ? { cent: dienst, quelle: dienst > 0 ? 'dienst' : 'unsicher' }
-                            : ersparnisObergrenze(markiert, andere, nachforderung, dienst)
+        fristAbgelaufen: fristAbgelaufen, ersparnis: ersparnis
       });
+      /* Messung (Paket 0): dieselbe Bedingung wie in baueBefund, nur grobe Stufen, keine Beträge, keine Namen. */
+      letzteEmpfehlung = (n > 0 && !unsicher && !fristAbgelaufen && ersparnis.cent >= SCHWELLE_EMPFEHLUNG_CENT) ? 'ja'
+        : (n > 0 && unsicher) ? 'unsicher' : (n > 0 && fristAbgelaufen) ? 'frist_abgelaufen' : 'nein';
+      var laufKey = typeof lauf === 'number' ? lauf : 'ohne';
+      if (gemeldeterLauf !== laufKey) {
+        gemeldeterLauf = laufKey;
+        zaehle('vorpruefung_ergebnis', {
+          empfehlung: letzteEmpfehlung,
+          auffaellig: stufe(markiert.filter(function (p) { return p.status === 'auffaellig'; }).length),
+          pruefen: stufe(markiert.filter(function (p) { return p.status === 'pruefen'; }).length),
+          hinweise: andere > 0 ? '1+' : '0',
+          frist: (frist.einwendung_bis && datumDe(frist.einwendung_bis)) ? (fristAbgelaufen ? 'abgelaufen' : 'offen') : 'unbekannt',
+          aufruf: aufrufNeu ? 'neu' : 'erneut'
+        });
+      }
       if (frist.einwendung_bis && datumDe(frist.einwendung_bis)) {
         fristEl.textContent = fristAbgelaufen
           ? 'Die Frist für Einwendungen gegen diese Abrechnung ist am ' + datumDe(frist.einwendung_bis) +
@@ -919,6 +952,7 @@
           if (d.status === 'fertig') { erwarteNeuenLauf = false; zeigeErgebnis(d.ergebnis, d.lauf); return; }
           if (d.status === 'fehler' || d.status === 'ausgelastet') {
             fertig = true;
+            zaehle('vorpruefung_fehler', { grund: d.status });
             status(d.status === 'ausgelastet'
               ? 'Die kostenlose Vorprüfung ist heute ausgelastet. Versuchen Sie es morgen noch einmal — oder lassen Sie Ihre Abrechnung direkt anwaltlich prüfen.'
               : 'Die automatische Vorprüfung konnte Ihre Unterlagen nicht auswerten — etwa, weil Fotos unscharf oder unvollständig sind. Sie können es mit neuen Aufnahmen noch einmal versuchen oder Ihre Abrechnung direkt anwaltlich prüfen lassen.', false);
@@ -968,13 +1002,15 @@
       /* Werbemessung „Vorprüfung abgeschickt“: nur mit Einwilligung, Kennung nur als Hashwert (assets/einwilligung.js) */
       if (typeof window.nkaMessung === 'function') { try { window.nkaMessung('vorpruefung', vorgang); } catch (err) {} }
       /* Reichweitenmessung (Umami, cookielos): nur die Tatsache des Absendens, keine Vorgangskennung */
-      if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track('vorpruefung_abgeschickt'); } catch (err) {} }
+      zaehle('vorpruefung_abgeschickt');
+      aufrufNeu = true;
       starten(true); /* Formular 1: neues Absenden startet die Abfrage neu (z. B. nach 'fehler') */
     });
     /* Adresse mit Vorgangskennung (Lesezeichen, erneuter Aufruf): pruefung.html?vorgang=<id>[#bestellen] */
     if (GUELTIG.test(q.get('vorgang') || '')) starten();
     document.getElementById('vp-bestellen').addEventListener('click', function (e) {
       e.preventDefault();
+      zaehle('bestellen_geoeffnet', { empfehlung: letzteEmpfehlung || 'ohne_ergebnis' });
       zeigeBestellen(true);
     });
 
@@ -1004,7 +1040,7 @@
       document.getElementById('bezahl-link').href = ziel;
       box.hidden = false;
       try { box.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
-      if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track('weiter_zur_zahlung'); } catch (e) {} }
+      zaehle('weiter_zur_zahlung');
       window.setTimeout(function () { window.location.href = ziel; }, 1200);
     }
 
@@ -1017,7 +1053,7 @@
       bbox.hidden = false;
       try { bbox.scrollIntoView({ block: 'start' }); } catch (e) {}
       try { history.replaceState(null, '', location.pathname + '?vorgang=' + vorgang + quelleParam); } catch (e) {}
-      if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track('zahlung_zurueck'); } catch (e) {} }
+      zaehle('zahlung_zurueck');
       /* Werbemessung „Kauf“: nur mit Einwilligung (assets/einwilligung.js) */
       if (typeof window.nkaMessung === 'function') { try { window.nkaMessung('kauf'); } catch (e) {} }
       var spaet = 'Ihre Zahlung ist eingegangen. Die Bestellbestätigung mit den Mandatsbedingungen und der ' +

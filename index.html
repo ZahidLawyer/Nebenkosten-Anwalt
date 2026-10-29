@@ -842,7 +842,7 @@
           <line x1="2.5" y1="14.5" x2="17.5" y2="14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
       </button>
-      <a class="btn topbar__cta" href="pruefung.html">Abrechnung prüfen lassen</a>
+      <a class="btn topbar__cta" href="pruefung.html" data-start="kopfleiste">Abrechnung prüfen lassen</a>
     </div>
   </div>
   <nav class="mobile-nav" id="mobile-nav" aria-label="Hauptnavigation (mobil)" hidden>
@@ -871,7 +871,7 @@
           Vorprüfung in wenigen Minuten, ob es Anhaltspunkte für Fehler gibt.
         </p>
         <div class="hero__actions">
-          <a class="btn" href="pruefung.html">Kostenlose Vorprüfung starten</a>
+          <a class="btn" href="pruefung.html" data-start="hero">Kostenlose Vorprüfung starten</a>
           <a class="btn btn--ghost" href="#ablauf">So funktioniert&rsquo;s</a>
         </div>
         <p class="hero__note">Ein Handyfoto von Abrechnung und Mietvertrag genügt. Die Vorprüfung kostet
@@ -1097,7 +1097,7 @@
           Rechtsanwalt — es kommt per E-Mail zu Ihnen.</span>
         </li>
       </ul>
-      <a class="btn" href="pruefung.html">Abrechnung prüfen lassen</a>
+      <a class="btn" href="pruefung.html" data-start="mitte">Abrechnung prüfen lassen</a>
 
       <aside class="danach reveal" aria-labelledby="danach-title">
         <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
@@ -1516,7 +1516,7 @@
         <h2 id="closing-title">Lassen Sie mich einen Blick auf Ihre Abrechnung werfen.</h2>
         <p>Handyfotos genügen. Die Vorprüfung kostet nichts — und Sie entscheiden danach, ob
         ich prüfe.</p>
-        <a class="btn" href="pruefung.html">Abrechnung prüfen lassen</a>
+        <a class="btn" href="pruefung.html" data-start="ende">Abrechnung prüfen lassen</a>
       </div>
     </div>
   </section>
@@ -1685,5 +1685,27 @@
   })();
 </script>
 
+<script>
+  /* Reichweitenmessung (Paket 0, Freigabe Zahid 29.10.2026): Klick auf einen Startknopf als Umami-Ereignis
+     „start_klick“ mit Stelle und Herkunft. Herkunft nur aus der Adresse dieser Seite: Klick-ID einer Google-Anzeige
+     (gclid, gbraid, wbraid) ergibt „anzeige“, ?quelle=… den Standortcode, sonst „ohne“. Bei „anzeige“ oder Standortcode
+     tragen die Startknöpfe ?quelle=… zur Prüfseite weiter; die Klick-ID selbst wird weder weitergegeben noch gezählt.
+     Nichts wird im Browser gespeichert. */
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var OK = /^[a-z0-9-]{1,32}$/;
+    var herkunft = OK.test(q.get('quelle') || '') ? q.get('quelle')
+      : (['gclid', 'gbraid', 'wbraid'].some(function (k) { return !!q.get(k); }) ? 'anzeige' : 'ohne');
+    var knoepfe = document.querySelectorAll('a[data-start]');
+    Array.prototype.forEach.call(knoepfe, function (a) {
+      if (herkunft !== 'ohne') a.setAttribute('href', 'pruefung.html?quelle=' + herkunft);
+      a.addEventListener('click', function () {
+        if (window.umami && typeof window.umami.track === 'function') {
+          try { window.umami.track('start_klick', { stelle: a.getAttribute('data-start'), herkunft: herkunft }); } catch (e) {}
+        }
+      });
+    });
+  })();
+</script>
 </body>
 </html>
