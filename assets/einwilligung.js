@@ -152,14 +152,15 @@
   var CSS =
     '.nka-einw{position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:9999;max-width:34rem;margin:0 auto;' +
     'background:#F7F4EE;color:#24312B;border:1px solid #C2B8A3;border-radius:8px;' +
-    'box-shadow:0 10px 30px rgba(36,49,43,.18);padding:1.1rem 1.2rem 1rem;' +
-    'font-family:"Inter","Avenir Next","Segoe UI",system-ui,sans-serif;font-size:.95rem;line-height:1.5}' +
-    '.nka-einw h2{font-family:"Source Serif 4",Georgia,serif;font-size:1.15rem;line-height:1.3;margin:0 2rem .4rem 0;color:#24312B}' +
-    '.nka-einw p{margin:0 0 .6rem}' +
+    'box-shadow:0 10px 30px rgba(36,49,43,.18);padding:.85rem 1rem .8rem;' +
+    'font-family:"Inter","Avenir Next","Segoe UI",system-ui,sans-serif;font-size:.875rem;line-height:1.45}' +
+    '.nka-einw h2{font-family:"Source Serif 4",Georgia,serif;font-size:1.02rem;line-height:1.3;margin:0 0 .3rem;color:#24312B}' +
+    '.nka-einw--fuss h2{margin-right:2rem}' +
+    '.nka-einw p{margin:0 0 .4rem}' +
     '.nka-einw a{color:#2F5D4C;text-decoration:underline}' +
     '.nka-einw__stand{font-weight:600}' +
-    '.nka-einw__knoepfe{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem}' +
-    '.nka-einw__knoepfe button{flex:1 1 9rem;min-height:44px;padding:.55rem 1rem;border-radius:6px;' +
+    '.nka-einw__knoepfe{display:flex;gap:.6rem;margin-top:.6rem}' +
+    '.nka-einw__knoepfe button{flex:1 1 0;min-height:44px;padding:.5rem .8rem;border-radius:6px;' +
     'border:1px solid #2F5D4C;background:#2F5D4C;color:#fff;font:inherit;font-weight:600;cursor:pointer}' +
     '.nka-einw__knoepfe button:hover{background:#24493C;border-color:#24493C}' +
     '.nka-einw__knoepfe button:focus-visible,.nka-einw__zu:focus-visible,.nka-einw-link:focus-visible{outline:3px solid #B97C3B;outline-offset:2px}' +
@@ -181,18 +182,17 @@
     }
     var stand = lesen();
     box = document.createElement('section');
-    box.className = 'nka-einw';
+    box.className = ausFusszeile ? 'nka-einw nka-einw--fuss' : 'nka-einw';
     box.setAttribute('role', 'dialog');
     box.setAttribute('aria-modal', 'false');
     box.setAttribute('aria-labelledby', 'nka-einw-titel');
     box.innerHTML =
-      '<h2 id="nka-einw-titel">Darf ich messen, ob meine Anzeige wirkt?</h2>' +
-      '<p>' + (ausFusszeile ? '' : 'Sie kommen über eine Google-Anzeige. ') +
-      'Mit Ihrer Zustimmung meldet diese Seite an Google, ob danach eine Vorprüfung abgeschickt oder ' +
-      'eine Prüfung bestellt wird. Dafür setzt Google ein Cookie (Google Ireland Limited, Übermittlung ' +
-      'in die USA möglich). Ihre Unterlagen und Ihr Ergebnis erfährt Google nicht.</p>' +
-      '<p>Lehnen Sie ab, geht nichts an Google. Ändern können Sie das jederzeit unter „Einwilligungen“ ' +
-      'unten auf jeder Seite. <a href="/datenschutz.html#werbemessung">Datenschutzerklärung</a></p>' +
+      '<h2 id="nka-einw-titel">Darf ich meine Anzeige messen?</h2>' +
+      /* Kurzfassung 29.10.2026 (Freigabe Zahid): am Handy verdeckte die lange Fassung 45 bis 58 % des
+         Bildschirms samt Start-Button. Einzelheiten stehen in der Datenschutzerklärung, Ziffer 10. */
+      '<p>Mit Ihrer Zustimmung setzt Google ein Cookie und erfährt, ob nach dem Anzeigenklick eine ' +
+      'Vorprüfung oder Bestellung folgt (Übermittlung in die USA möglich). Ihre Unterlagen erfährt Google ' +
+      'nicht. Widerruf jederzeit unten unter „Einwilligungen“. <a href="/datenschutz.html#werbemessung">Mehr dazu</a></p>' +
       (ausFusszeile
         ? '<p class="nka-einw__stand">Ihre Einwilligung ist derzeit ' + (stand === 'ja' ? 'erteilt.' : 'nicht erteilt.') + '</p>' +
           '<button type="button" class="nka-einw__zu" aria-label="Schließen">×</button>'
