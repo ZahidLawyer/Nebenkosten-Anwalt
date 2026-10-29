@@ -148,6 +148,7 @@
     font-size: 0.93rem; color: var(--ink);
   }
   .assure li svg { flex: none; margin-top: 0.18rem; }
+  .assure__kurz, .nur-handy { display: none; }
 
   /* ============ Formular-Bereich ============ */
   .form-area { padding: 0 0 clamp(3rem, 6vw, 4.5rem); }
@@ -329,6 +330,24 @@
     .brand { font-size: 1rem; gap: 0.4rem; }
     .brand svg { width: 24px; height: 24px; }
     .topbar__back span.topbar__back-text { display: none; }
+
+    /* 29.10.2026 (Handy-Durchlauf): Das Formular begann erst nach 1,1 bis 1,5 Bildschirmen. Am Handy steht das
+       Wichtigste aus „Bereithalten“ im Einleitungssatz (die Upload-Felder fragen genau diese Unterlagen ab),
+       die Vertrauenssignale stehen als kurze Plaketten über dem Formular, ausführlich darunter (form-trust). */
+    .page-head { padding: 0.9rem 0 0.6rem; }
+    .page-badge { font-size: 0.74rem; padding: 0.12rem 0.65rem; margin-bottom: 0.5rem; }
+    .section-title { margin-bottom: 0.35rem; }
+    .section-lead { font-size: 0.95rem; line-height: 1.45; }
+    .nur-gross, .prep-box--bereit, .assure__lang, .assure li.nur-gross-li { display: none; }
+    .nur-handy { display: inline; }
+    .assure { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.7rem; }
+    .assure li {
+      align-items: center; gap: 0.3rem; font-size: 0.78rem; line-height: 1.3;
+      border: 1px solid var(--line-strong); border-radius: 999px; padding: 0.2rem 0.6rem 0.2rem 0.45rem;
+      background: var(--paper);
+    }
+    .assure li svg { width: 14px; height: 14px; margin-top: 0; }
+    .assure__kurz { display: inline; }
   }
 
   /* ============ Größere Bildschirme ============ */
@@ -371,12 +390,14 @@
   <section class="page-head">
     <div class="wrap">
       <div class="page-head__inner">
-        <span class="page-badge">Rechtsanwalt Zahid Akcay, Kanzlei Akcay, Frankfurt am Main</span>
+        <span class="page-badge">Rechtsanwalt Zahid Akcay<span class="nur-gross">, Kanzlei Akcay</span>, Frankfurt am Main</span>
         <h1 class="section-title">Ihre Unterlagen hochladen</h1>
         <p class="section-lead">
-          Zwei Unterlagen, wenige Angaben. Die Vorprüfung ist kostenlos und zeigt Ihnen in wenigen
+          <span class="nur-gross">Zwei Unterlagen, wenige Angaben. Die Vorprüfung ist kostenlos und zeigt Ihnen in wenigen
           Minuten, ob es Anhaltspunkte für Fehler gibt. Danach entscheiden Sie, ob ich als
-          Rechtsanwalt prüfe.
+          Rechtsanwalt prüfe.</span>
+          <span class="nur-handy">Nebenkostenabrechnung und Mietvertrag, jeweils alle Seiten. Handyfotos genügen.
+          In wenigen Minuten sehen Sie, ob es Anhaltspunkte für Fehler gibt.</span>
         </p>
       </div>
     </div>
@@ -384,15 +405,15 @@
 
   <!-- ============ Bereithalten ============ -->
   <div class="wrap">
-    <div class="prep-box">
+    <div class="prep-box prep-box--bereit">
       <h2>Das sollten Sie bereithalten</h2>
       <ul>
         <li><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="#2F5D4C" stroke-width="1.4"/><path d="M5.5 9.2l2.3 2.3 4.7-5" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> Ihre Nebenkostenabrechnung (alle Seiten)</li>
         <li><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="#2F5D4C" stroke-width="1.4"/><path d="M5.5 9.2l2.3 2.3 4.7-5" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> Ihren Mietvertrag (alle Seiten)</li>
       </ul>
-      <p>Handyfotos genügen — Sie brauchen keinen Scanner. Der Mietvertrag ist nötig, weil nur
+      <p>Handyfotos genügen — Sie brauchen keinen Scanner.<span class="prep-warum"> Der Mietvertrag ist nötig, weil nur
       er zeigt, welche Kosten überhaupt auf Sie umgelegt werden dürfen und welcher
-      Verteilerschlüssel vereinbart ist.</p>
+      Verteilerschlüssel vereinbart ist.</span></p>
     </div>
   </div>
 
@@ -400,11 +421,11 @@
   <div class="wrap">
     <ul class="assure">
       <li><svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2l7 3v5c0 4-3 7-7 8-4-1-7-4-7-8V5l7-3z" stroke="#2F5D4C" stroke-width="1.6" stroke-linejoin="round" fill="none"/><path d="M7 9.5l2 2 4-4.5" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-        Die Vorprüfung ist kostenlos, automatisch und unverbindlich — ohne anwaltliche Prüfung.</li>
+        <span class="assure__lang">Die Vorprüfung ist kostenlos, automatisch und unverbindlich — ohne anwaltliche Prüfung.</span><span class="assure__kurz">Kostenlos und unverbindlich</span></li>
       <li><svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="2" stroke="#2F5D4C" stroke-width="1.6" fill="none"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9" stroke="#2F5D4C" stroke-width="1.6" fill="none"/><circle cx="10" cy="13" r="1.4" fill="#B97C3B"/></svg>
-        Ihre Unterlagen unterliegen der anwaltlichen Verschwiegenheit und dienen nur Ihrer Prüfung.</li>
-      <li><svg width="17" height="17" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="#2F5D4C" stroke-width="1.4"/><path d="M5.5 9.2l2.3 2.3 4.7-5" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Beim Hochladen zahlen Sie nichts — ob Sie danach die anwaltliche Prüfung bestellen, entscheiden Sie.</li>
+        <span class="assure__lang">Ihre Unterlagen unterliegen der anwaltlichen Verschwiegenheit und dienen nur Ihrer Prüfung.</span><span class="assure__kurz">Anwaltliche Verschwiegenheit</span></li>
+      <li class="nur-gross-li"><svg width="17" height="17" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="#2F5D4C" stroke-width="1.4"/><path d="M5.5 9.2l2.3 2.3 4.7-5" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="assure__lang">Beim Hochladen zahlen Sie nichts — ob Sie danach die anwaltliche Prüfung bestellen, entscheiden Sie.</span></li>
     </ul>
   </div>
 
