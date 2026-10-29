@@ -59,4 +59,5 @@
 .befund__erkl p { color: #24312B; font-size: 0.88rem; line-height: 1.5; margin: 0.35rem 0 0; }
 .befund__erkl strong { font-weight: 600; }
 .befund__row { flex-wrap: wrap; }
-.befund__row > .befund__erkl { flex: 1 0 100%; margin: 0 0 0 calc(16px + 0.6rem); }
+/* Breite = Zeile minus Einzug, sonst ragt der Text um den Einzug über die Karte hinaus (Befund 29.10.2026) */
+.befund__row > .befund__erkl { flex: 0 0 calc(100% - 16px - 0.6rem); max-width: calc(100% - 16px - 0.6rem); min-width: 0; margin: 0 0 0 calc(16px + 0.6rem); }

@@ -158,6 +158,11 @@
     border-bottom: 1px solid var(--line);
   }
   .mobile-nav a:hover { color: var(--moss-deep); }
+  .mobile-nav a.mobile-nav__cta {
+    margin: 0.75rem 1.25rem 1rem; padding: 0.85rem 1.1rem; text-align: center;
+    background: var(--moss); color: #fff; border-radius: 6px; border-bottom: 0;
+  }
+  .mobile-nav a.mobile-nav__cta:hover { background: var(--moss-deep); color: #fff; }
   #ablauf, #ergebnis, #leistungsumfang, #transparenz, #faq { scroll-margin-top: 5rem; }
 
   /* ============ Hero ============ */
@@ -687,7 +692,7 @@
       "name": "Was kostet die Prüfung — und wann zahle ich?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Die Vorprüfung kostet nichts. Sie ist automatisch, ohne anwaltliche Prüfung, und verpflichtet Sie zu nichts. Die anwaltliche Prüfung kostet 79,90 Euro — ein Endpreis einschließlich Umsatzsteuer, ein Abo gibt es nicht. Bezahlt wird erst, wenn Sie die Prüfung nach der Vorprüfung bestellen: bei der Bestellung, per Karte über den Zahlungsdienst Stripe. Beim Hochladen zahlen Sie nichts. Ihr Vermieter erstattet Ihnen diese Kosten in der Regel nicht — auch dann nicht, wenn er nachgibt. Alle Einzelheiten stehen in den Mandatsbedingungen."
+        "text": "Die Vorprüfung kostet nichts. Sie ist automatisch, ohne anwaltliche Prüfung, und verpflichtet Sie zu nichts. Die anwaltliche Prüfung kostet 79,90 Euro — ein Endpreis einschließlich Umsatzsteuer, ein Abo gibt es nicht. Bezahlt wird erst, wenn Sie die Prüfung nach der Vorprüfung bestellen: bei der Bestellung, auf der sicheren Bezahlseite von Stripe — mit Karte, PayPal, Apple Pay oder Google Pay. Beim Hochladen zahlen Sie nichts. Ihr Vermieter erstattet Ihnen diese Kosten in der Regel nicht — auch dann nicht, wenn er nachgibt. Alle Einzelheiten stehen in den Mandatsbedingungen."
       }
     },
     {
@@ -751,7 +756,7 @@
       "name": "Was passiert mit meinen Daten?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Ihre Unterlagen unterliegen der anwaltlichen Verschwiegenheit und werden nur für Ihre Prüfung verwendet — schon bei der Vorprüfung. Für Formular, Server und technische Auswertung setze ich Dienstleister ein, die in der Datenschutzerklärung genannt sind — dem stimmen Sie im Formular gesondert zu und können die Zustimmung jederzeit widerrufen. Ihre Kartendaten geben Sie direkt beim Zahlungsdienst Stripe ein; ich sehe sie nicht. Bestellen Sie nicht, lösche ich die Unterlagen der Vorprüfung nach 30 Tagen. Nach einer anwaltlichen Prüfung lösche ich sie auf dem Prüfsystem nach 90 Tagen; danach gelten die berufs- und steuerrechtlichen Aufbewahrungsfristen. Details stehen in der Datenschutzerklärung."
+        "text": "Ihre Unterlagen unterliegen der anwaltlichen Verschwiegenheit und werden nur für Ihre Prüfung verwendet — schon bei der Vorprüfung. Für Formular, Server und technische Auswertung setze ich Dienstleister ein, die in der Datenschutzerklärung genannt sind — dem stimmen Sie im Formular gesondert zu und können die Zustimmung jederzeit widerrufen. Ihre Zahlungsdaten geben Sie direkt beim Zahlungsdienst Stripe ein; ich sehe sie nicht. Bestellen Sie nicht, lösche ich die Unterlagen der Vorprüfung nach 30 Tagen. Nach einer anwaltlichen Prüfung lösche ich sie auf dem Prüfsystem nach 90 Tagen; danach gelten die berufs- und steuerrechtlichen Aufbewahrungsfristen. Details stehen in der Datenschutzerklärung."
       }
     },
     {
@@ -853,6 +858,7 @@
     <a href="#transparenz">Transparenz</a>
     <a href="#faq">FAQ</a>
     <a href="ueber-mich.html">Über mich</a>
+    <a class="mobile-nav__cta" href="pruefung.html" data-start="menue">Abrechnung prüfen lassen</a>
   </nav>
 </header>
 
@@ -1425,7 +1431,7 @@
           </summary>
           <div>
             <p>Die Vorprüfung kostet nichts. Sie ist automatisch, ohne anwaltliche Prüfung, und verpflichtet Sie zu nichts.</p>
-            <p>Die anwaltliche Prüfung kostet 79,90 Euro — ein Endpreis einschließlich Umsatzsteuer, ein Abo gibt es nicht. Bezahlt wird erst, wenn Sie die Prüfung nach der Vorprüfung bestellen: bei der Bestellung, per Karte über den Zahlungsdienst Stripe. Beim Hochladen zahlen Sie nichts.</p>
+            <p>Die anwaltliche Prüfung kostet 79,90 Euro — ein Endpreis einschließlich Umsatzsteuer, ein Abo gibt es nicht. Bezahlt wird erst, wenn Sie die Prüfung nach der Vorprüfung bestellen: bei der Bestellung, auf der sicheren Bezahlseite von Stripe — mit Karte, PayPal, Apple Pay oder Google Pay. Beim Hochladen zahlen Sie nichts.</p>
             <p>Ihr Vermieter erstattet Ihnen diese Kosten in der Regel nicht — auch dann nicht, wenn er nachgibt. Alle Einzelheiten stehen unter <a href="mandatsbedingungen.html#preis">Mandatsbedingungen</a>.</p>
           </div>
         </details>
@@ -1496,7 +1502,7 @@
           </summary>
           <div>
             <p>Ihre Unterlagen unterliegen der anwaltlichen Verschwiegenheit und werden nur für Ihre Prüfung verwendet — schon bei der Vorprüfung. Für Formular, Server und technische Auswertung setze ich Dienstleister ein, die in der Datenschutzerklärung genannt sind — dem stimmen Sie im Formular gesondert zu und können die Zustimmung jederzeit widerrufen.</p>
-            <p>Ihre Kartendaten geben Sie direkt beim Zahlungsdienst Stripe ein; ich sehe sie nicht. Bestellen Sie nicht, lösche ich die Unterlagen der Vorprüfung nach 30 Tagen. Nach einer anwaltlichen Prüfung lösche ich sie auf dem Prüfsystem nach 90 Tagen; danach gelten die berufs- und steuerrechtlichen Aufbewahrungsfristen. Details stehen in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
+            <p>Ihre Zahlungsdaten geben Sie direkt beim Zahlungsdienst Stripe ein; ich sehe sie nicht. Bestellen Sie nicht, lösche ich die Unterlagen der Vorprüfung nach 30 Tagen. Nach einer anwaltlichen Prüfung lösche ich sie auf dem Prüfsystem nach 90 Tagen; danach gelten die berufs- und steuerrechtlichen Aufbewahrungsfristen. Details stehen in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
           </div>
         </details>
         <details>
