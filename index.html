@@ -181,6 +181,22 @@
     max-width: 23ch; margin-bottom: 1.1rem; text-wrap: balance;
   }
   .hero__sub { max-width: 34rem; margin-bottom: 1.75rem; color: rgba(255,255,255,0.88); }
+  .hero__anwalt {
+    display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.1rem;
+    font-size: 0.88rem; line-height: 1.3; color: rgba(255,255,255,0.86);
+  }
+  .hero__anwalt img {
+    width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex: none;
+    border: 2px solid rgba(255,255,255,0.75);
+  }
+  .hero__anwalt strong { display: block; color: #fff; font-size: 0.95rem; }
+  /* Am Handy: Start-Button auch mit Einwilligungsbanner (kleines Android 360x740) im ersten Bildschirm */
+  @media (max-width: 45.99rem) {
+    .hero__inner { padding-top: 1.4rem; }
+    .hero__anwalt { margin-bottom: 0.8rem; }
+    .hero__title { margin-bottom: 0.7rem; }
+    .hero__sub { margin-bottom: 1.25rem; }
+  }
   .hero__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
   .hero .btn { background: var(--paper); color: var(--moss-deep); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
   .hero .btn:hover { background: #fff; }
@@ -845,18 +861,21 @@
   <section class="hero">
     <div class="wrap hero__inner">
       <div>
-        <h1 class="hero__title">Nebenkosten nachzahlen? Oder sparen?</h1>
+        <p class="hero__anwalt">
+          <img src="assets/portrait-zahid.jpg" alt="" width="44" height="44">
+          <span><strong>Rechtsanwalt Zahid Akcay</strong>Kanzlei Akcay, Frankfurt am Main</span>
+        </p>
+        <h1 class="hero__title">Nebenkosten&shy;abrechnung prüfen lassen</h1>
         <p class="hero__sub">
-          Laden Sie Abrechnung und Mietvertrag hoch — ein Handyfoto genügt. Eine automatische
-          Vorprüfung zeigt Ihnen in wenigen Minuten, ob es Anhaltspunkte für Fehler gibt. Danach
-          entscheiden Sie, ob ich als Rechtsanwalt prüfe.
+          Ich prüfe Ihre Abrechnung als Rechtsanwalt. Vorher zeigt Ihnen eine kostenlose, automatische
+          Vorprüfung in wenigen Minuten, ob es Anhaltspunkte für Fehler gibt.
         </p>
         <div class="hero__actions">
           <a class="btn" href="pruefung.html">Kostenlose Vorprüfung starten</a>
           <a class="btn btn--ghost" href="#ablauf">So funktioniert&rsquo;s</a>
         </div>
-        <p class="hero__note">Die Vorprüfung kostet nichts und verpflichtet zu nichts — sie ist
-        automatisch, ohne anwaltliche Prüfung.</p>
+        <p class="hero__note">Ein Handyfoto von Abrechnung und Mietvertrag genügt. Die Vorprüfung kostet
+        nichts und verpflichtet zu nichts — sie ist automatisch, ohne anwaltliche Prüfung.</p>
 
       </div>
 
