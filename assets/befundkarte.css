@@ -51,3 +51,12 @@
 .beispiel-start .wrap { max-width: 40rem; }
 .beispiel-start__titel { font-family: "Source Serif 4", Georgia, serif; font-size: 1.4rem; color: #24312B; margin: 0 0 0.9rem; }
 .beispiel-start__aktion { margin: 1rem 0 0; }
+
+/* Paket 1b: Erklärung je Befundart (fester Textbaustein), aufklappbar */
+.befund__erkl { margin-top: 0.3rem; }
+.befund__erkl > summary { cursor: pointer; color: #2F5D4C; font-size: 0.86rem; font-weight: 600; display: inline-block; padding: 0.15rem 0; }
+.befund__erkl > summary:focus-visible { outline: 3px solid #B97C3B; outline-offset: 2px; }
+.befund__erkl p { color: #24312B; font-size: 0.88rem; line-height: 1.5; margin: 0.35rem 0 0; }
+.befund__erkl strong { font-weight: 600; }
+.befund__row { flex-wrap: wrap; }
+.befund__row > .befund__erkl { flex: 1 0 100%; margin: 0 0 0 calc(16px + 0.6rem); }

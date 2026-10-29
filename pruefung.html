@@ -271,6 +271,27 @@
     padding: 0.85rem 1.3rem; border-radius: 8px; font-size: 1.02rem; line-height: 1.3; }
   .vp-button:hover, .vp-button:focus-visible { background: #24493C; color: #FFFFFF; }
   .vp-cta span { font-size: 0.86rem; color: #55655D; line-height: 1.45; }
+  /* Paket 1b */
+  .vp-anwalt { display: flex; gap: 0.75rem; align-items: center; }
+  .vp-anwalt img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex: none; }
+  .vp-anwalt p { margin: 0; font-size: 0.93rem; line-height: 1.45; color: #24312B; }
+  .vp-anwalt strong { display: block; font-size: 0.95rem; }
+  .vp-zusaetzlich p { margin: 0 0 0.25rem; font-weight: 600; font-size: 0.93rem; color: #24312B; }
+  .vp-zusaetzlich ul { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; color: #24312B; line-height: 1.5; }
+  .vp-beispielseiten { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .vp-beispielseiten figure { margin: 0; flex: 1 1 9rem; max-width: 12rem; }
+  .vp-beispielseiten img { width: 100%; height: auto; border: 1px solid #D9D2C4; border-radius: 6px; display: block; }
+  .vp-beispielseiten figcaption { font-size: 0.8rem; color: #55655D; margin-top: 0.25rem; }
+  .vp-beispielseiten__hinweis { margin: -0.2rem 0 0; font-size: 0.8rem; color: #55655D; }
+  .vp-geprueft { font-size: 0.93rem; color: #24312B; margin: 0.6rem 0 0.4rem; }
+  .vp-geprueft[hidden], .vp-teilen[hidden] { display: none; }
+  .vp-geprueft ul { margin: 0.25rem 0 0.5rem; padding-left: 1.1rem; line-height: 1.5; }
+  .vp-geprueft p { margin: 0; }
+  .vp-teilen { margin: 0.8rem 0 0.2rem; display: flex; flex-direction: column; gap: 0.35rem; align-items: flex-start; }
+  .vp-teilen__knopf { font: inherit; font-size: 0.95rem; font-weight: 600; color: #2F5D4C; background: #FFFFFF;
+    border: 1.5px solid #2F5D4C; border-radius: 8px; padding: 0.6rem 1rem; min-height: 44px; cursor: pointer; }
+  .vp-teilen__knopf:hover, .vp-teilen__knopf:focus-visible { background: rgba(47, 93, 76, 0.08); }
+  .vp-teilen span { font-size: 0.84rem; color: #55655D; line-height: 1.45; }
   .ergebnis-vorbehalt[hidden] { display: none; }
   .ergebnis-frist { font-size: 0.9rem; color: #24312B; margin: 0.2rem 0 0.8rem; }
   .ergebnis-frist[hidden] { display: none; }
@@ -476,15 +497,49 @@
           <!-- 29.10.2026 (Freigabe Zahid): der kurze Vorbehalt „Automatisch ermittelt, ohne anwaltliche Prüfung …“
                entfällt, er wiederholte den Hinweis unten (vp-hinweis). -->
           <p class="ergebnis-frist" id="vp-frist" hidden></p>
+          <div class="vp-geprueft" id="vp-geprueft" hidden></div>
+          <!-- Paket 1b (29.10.2026): Ergebnis speichern oder teilen (Link mit Vorgangskennung, ohne Namen) -->
+          <div class="vp-teilen" id="vp-teilen" hidden>
+            <button type="button" class="vp-teilen__knopf" id="vp-teilen-knopf">Ergebnis speichern oder teilen</button>
+            <span>Der Link zeigt Ihr Ergebnis ohne Namen. Er funktioniert, bis die Unterlagen gelöscht werden, spätestens
+            30 Tage nach der Vorprüfung, wenn Sie nicht bestellen.</span>
+          </div>
           <p class="ergebnis-hinweis" id="vp-hinweis">Dieses Ergebnis ist automatisch erstellt — ohne
           anwaltliche Prüfung. Es ist unverbindlich, kann Fehler übersehen oder falsch einordnen und ist keine
           Rechtsberatung. Ob ein Punkt trägt, sage ich Ihnen in der anwaltlichen Prüfung.</p>
         </div>
-        <p class="vp-cta" id="vp-cta" hidden>
+        <div class="vp-cta" id="vp-cta" hidden>
+          <!-- Paket 1b (29.10.2026): wer prüft, was zusätzlich geprüft wird, Beispielseiten mit erfundenen Daten -->
+          <div class="vp-anwalt">
+            <img src="assets/portrait-zahid.jpg" alt="" width="56" height="56">
+            <p><strong>Rechtsanwalt Zahid Akcay</strong>Ich prüfe Ihre Abrechnung selbst und bereite das Schreiben an Ihren Vermieter vor.</p>
+          </div>
+          <div class="vp-zusaetzlich">
+            <p>Was ich zusätzlich prüfe:</p>
+            <ul>
+              <li>die Belege hinter den Positionen</li>
+              <li>die Heizkostenabrechnung im Einzelnen</li>
+              <li>die Rechenwege</li>
+              <li>ob die Kosten wirtschaftlich sind</li>
+            </ul>
+          </div>
+          <div class="vp-beispielseiten">
+            <figure>
+              <a href="assets/beispiel-pruefbericht.jpg" target="_blank" rel="noopener"><img src="assets/beispiel-pruefbericht.jpg"
+                alt="Beispiel einer Rechtseinschätzung, erste Seite, mit erfundenen Daten und geschwärzten Beträgen" width="720" height="479" loading="lazy"></a>
+              <figcaption>Ihre Rechtseinschätzung</figcaption>
+            </figure>
+            <figure>
+              <a href="assets/beispiel-vermieterschreiben.jpg" target="_blank" rel="noopener"><img src="assets/beispiel-vermieterschreiben.jpg"
+                alt="Beispiel eines Schreibens an den Vermieter, erste Seite, mit erfundenen Daten und geschwärzten Beträgen" width="720" height="510" loading="lazy"></a>
+              <figcaption>Ihr Schreiben an den Vermieter</figcaption>
+            </figure>
+          </div>
+          <p class="vp-beispielseiten__hinweis">Beispiel mit erfundenen Daten, Beträge geschwärzt.</p>
           <a class="vp-button" href="#bestellen" id="vp-bestellen">Jetzt kostenpflichtig prüfen lassen — 79,90 Euro</a>
           <span>Endpreis einschließlich Umsatzsteuer. Bezahlt wird erst auf der sicheren Bezahlseite von Stripe, mit
           Karte, PayPal, Apple Pay oder Google Pay — nicht durch diesen Klick.</span>
-        </p>
+        </div>
       </section>
 
       <!-- ============ C: Anwaltliche Prüfung bestellen (§ 312d, § 312j BGB) ============ -->
@@ -670,6 +725,8 @@
     var befundEl = document.getElementById('vp-befund');
     var fristEl = document.getElementById('vp-frist');
     var kopfEl = document.getElementById('vp-kopf');
+    var geprueftEl = document.getElementById('vp-geprueft');
+    var teilenEl = document.getElementById('vp-teilen');
     var manuell = document.getElementById('vp-manuell');
     var laeuft = false, begonnen = 0, timer = null, fertig = false;
     var gezeigterLauf = null, erwarteNeuenLauf = false; /* Laufnummer des angezeigten Befunds (API-Feld 'lauf') */
@@ -685,7 +742,7 @@
       statusEl.textContent = text;
       spinner.hidden = !mitSpinner;
     }
-    function punkt(titel, kurz) {
+    function punkt(titel, kurz, bs, art) {
       var li = document.createElement('li');
       li.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">' +
         '<circle cx="8" cy="8" r="6.5" fill="#F6E9D6" stroke="#B97C3B" stroke-width="1.2"/>' +
@@ -694,6 +751,7 @@
       var box = document.createElement('div');
       var s = document.createElement('strong'); s.textContent = titel; box.appendChild(s);
       if (kurz) { var k = document.createElement('span'); k.textContent = kurz; box.appendChild(k); }
+      if (bs) box.appendChild(NB.erklaerung(bs, art, function (a) { zaehle('baustein_geoeffnet', { art: a || 'ohne' }); }));
       li.appendChild(box);
       punkteEl.appendChild(li);
     }
@@ -703,8 +761,23 @@
       /* Aufbereitung, Empfehlung und Karte aus assets/befundkarte.js (dasselbe wie das Beispiel). */
       var b = NB.auswerten(erg || {}, NB.heuteIso());
       punkteEl.innerHTML = '';
-      b.andereTitel.forEach(function (t) { punkt(t, ''); });
-      var dauer = NB.baueBefund(befundEl, b, { schritt: SCHRITT });
+      b.andere.forEach(function (x) { punkt(x.titel, '', x.baustein, x.art); });
+      var dauer = NB.baueBefund(befundEl, b, { schritt: SCHRITT,
+        beiOeffnen: function (a) { zaehle('baustein_geoeffnet', { art: a || 'ohne' }); } });
+      /* Paket 1b: ehrliche Aussage ohne Anhaltspunkte, mit dem, was tatsächlich geprüft wurde. */
+      var gepr = NB.geprueftTexte(b.geprueft);
+      geprueftEl.innerHTML = '';
+      if (b.anzahl === 0 && gepr.length) {
+        var gk = document.createElement('p'); gk.textContent = 'Geprüft wurde:'; geprueftEl.appendChild(gk);
+        var ul = document.createElement('ul');
+        gepr.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+        geprueftEl.appendChild(ul);
+        var gs = document.createElement('p');
+        gs.textContent = 'Belege, Rechenwege und die Heizkostenabrechnung im Einzelnen prüft nur die anwaltliche Prüfung.';
+        geprueftEl.appendChild(gs);
+        geprueftEl.hidden = false;
+      } else geprueftEl.hidden = true;
+      teilenEl.hidden = false;
       /* Kopfzeile (Paket 1a): Nachforderung und Einwendungsfrist ganz oben; der Fristsatz unten entfällt. */
       var kopf = NB.kopfzeile(b);
       kopfEl.textContent = kopf || '';
@@ -778,7 +851,7 @@
             manuell.hidden = false;
             return;
           }
-          if (d.status === 'laeuft') status('Die Vorprüfung läuft — das dauert wenige Minuten.', true);
+          if (d.status === 'laeuft') status('Ihre Unterlagen werden gelesen, dann geprüft …', true);
           else if (d.status === 'wartet') status('Ihre Unterlagen sind angekommen, die Vorprüfung startet gleich.', true);
           else if (d.status === 'unbekannt') status(vergangen < 90 ? 'Ihre Unterlagen sind unterwegs …' : 'Noch nichts angekommen. Haben Sie das Formular abgeschickt? Sonst warten Sie bitte einen Moment.', true);
           else if (d.status === 'pause') status('Das Prüfsystem ist gerade stark ausgelastet. Die Seite fragt in einer halben Minute automatisch wieder nach.', true);
@@ -820,6 +893,22 @@
     });
     /* Adresse mit Vorgangskennung (Lesezeichen, erneuter Aufruf): pruefung.html?vorgang=<id>[#bestellen] */
     if (GUELTIG.test(q.get('vorgang') || '')) starten();
+    /* Paket 1b: Ergebnis speichern oder teilen. Teilen-Funktion des Handys, sonst Link kopieren; der Link trägt
+       nur die Vorgangskennung (kein Name, keine Herkunft, keine Klick-ID). */
+    document.getElementById('vp-teilen-knopf').addEventListener('click', function () {
+      var knopf = this;
+      var url = location.origin + location.pathname + '?vorgang=' + vorgang;
+      zaehle('ergebnis_geteilt');
+      if (navigator.share) {
+        navigator.share({ title: 'Meine Vorprüfung', text: 'Ergebnis der Vorprüfung meiner Nebenkostenabrechnung', url: url })
+          .catch(function () {});
+        return;
+      }
+      function gezeigt(t) { knopf.textContent = t; window.setTimeout(function () { knopf.textContent = 'Ergebnis speichern oder teilen'; }, 4000); }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function () { gezeigt('Link kopiert'); }, function () { window.prompt('Link zu Ihrem Ergebnis:', url); });
+      } else { window.prompt('Link zu Ihrem Ergebnis:', url); }
+    });
     document.getElementById('vp-bestellen').addEventListener('click', function (e) {
       e.preventDefault();
       zaehle('bestellen_geoeffnet', { empfehlung: letzteEmpfehlung || 'ohne_ergebnis' });

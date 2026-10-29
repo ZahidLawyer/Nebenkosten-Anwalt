@@ -52,14 +52,24 @@
      es keine auffälligen mit Betrag gibt; höchstens die Nachforderung; gibt es Punkte ohne Positionsbezug (Frist,
      Mindestangaben, Vertrag, Verteilerschlüssel insgesamt), die ganze Nachforderung. Ein höherer Wert des Dienstes geht vor. */
   function mitBetrag(p) { return typeof p.betrag_cent === 'number' && p.betrag_cent > 0; }
+  /* Paket 1b (29.10.2026): Massgeblich ist der Betrag, den der Dienst je Position nennt (betrag_relevant_cent,
+     bei Kabel 2024 anteilig); fehlt er, der Abrechnungsbetrag wie bisher. Die ganze Nachforderung tragen nur
+     Hinweise, die die Abrechnung insgesamt betreffen (GANZE_NACHFORDERUNG); andere Hinweise ohne Positionsbezug
+     zählen mit ihrem eigenen Betrag, ohne Betrag gar nicht. Antworten ohne 'art' (vor dem 29.10.2026) wie bisher. */
+  var GANZE_NACHFORDERUNG = { frist: 1, mindestangaben: 1, keine_umlage: 1, schluessel_gesamt: 1 };
+  function massgeblich(p) { return typeof p.betrag_relevant_cent === 'number' ? p.betrag_relevant_cent : p.betrag_cent; }
   function ersparnisObergrenze(markiert, andere, nachforderung, dienst) {
     var basis = markiert.filter(function (p) { return p.status === 'auffaellig' && mitBetrag(p); });
     var quelle = 'auffaellig';
     if (!basis.length) { basis = markiert.filter(function (p) { return p.status === 'pruefen' && mitBetrag(p); }); quelle = 'pruefen'; }
-    var summe = basis.reduce(function (s, p) { return s + p.betrag_cent; }, 0);
+    var summe = basis.reduce(function (s, p) { var b = massgeblich(p); return s + (typeof b === 'number' && b > 0 ? b : 0); }, 0);
+    var ganz = andere.filter(function (x) { return !x.art || GANZE_NACHFORDERUNG[x.art]; }).length;
+    summe += andere.reduce(function (s, x) {
+      return s + ((x.art && !GANZE_NACHFORDERUNG[x.art] && typeof x.betrag_cent === 'number' && x.betrag_cent > 0) ? x.betrag_cent : 0);
+    }, 0);
     var wert = summe;
     if (nachforderung) {
-      if (andere > 0) { wert = nachforderung; quelle = 'nachforderung'; }
+      if (ganz > 0) { wert = nachforderung; quelle = 'nachforderung'; }
       else wert = Math.min(summe, nachforderung);
     }
     if (dienst > 0 && dienst >= wert) return { cent: dienst, quelle: 'dienst' };
@@ -78,14 +88,16 @@
     /* Punkte zu einzelnen Positionen stehen schon in der Karte (Saldozeilen fallen ganz weg); übrig bleiben
        Frist, Form, Vertrag. */
     var titel = alle.map(function (p) { return String(p.titel) + ':'; });
-    var andereTitel = [];
+    var andere = [];
     liste.forEach(function (x) {
       if (!x || !x.titel) return;
       var t = String(x.titel);
-      if (!titel.some(function (pt) { return t.indexOf(pt) === 0; })) andereTitel.push(t);
+      if (!titel.some(function (pt) { return t.indexOf(pt) === 0; })) andere.push({ titel: t, art: x.art, betrag_cent: x.betrag_cent, baustein: x.baustein });
     });
-    var n = markiert.length + andereTitel.length;
+    var andereTitel = andere.map(function (x) { return x.titel; });
+    var n = markiert.length + andere.length;
     var nachforderung = (typeof erg.nachforderung_cent === 'number' && erg.nachforderung_cent > 0) ? erg.nachforderung_cent : null;
+    var guthaben = (!nachforderung && typeof erg.guthaben_cent === 'number' && erg.guthaben_cent > 0) ? erg.guthaben_cent : null;
     var dienst = (typeof erg.moegliche_ersparnis_cent === 'number') ? erg.moegliche_ersparnis_cent : 0;
     /* Summenprobe des Prüfdienstes (seit 28.10.2026): gelesene Anteile passen nicht zur Summe der Abrechnung */
     var unsicher = !!(erg.summenprobe && erg.summenprobe.stimmig === false);
@@ -93,11 +105,11 @@
     var fristDatum = (frist.einwendung_bis && datumDe(frist.einwendung_bis)) ? String(frist.einwendung_bis).slice(0, 10) : null;
     var fristAbgelaufen = !!(fristDatum && fristDatum < (heute || heuteIso()));
     var ersparnis = unsicher ? { cent: dienst, quelle: dienst > 0 ? 'dienst' : 'unsicher' }
-                             : ersparnisObergrenze(markiert, andereTitel.length, nachforderung, dienst);
+                             : ersparnisObergrenze(markiert, andere, nachforderung, dienst);
     var empfehlen = n > 0 && !unsicher && !fristAbgelaufen && ersparnis.cent >= SCHWELLE_EMPFEHLUNG_CENT;
     return {
-      markiert: markiert, unauffaellig: unauffaellig, andereTitel: andereTitel, anzahl: n,
-      nachforderung: nachforderung, unsicher: unsicher, fristDatum: fristDatum, fristAbgelaufen: fristAbgelaufen,
+      markiert: markiert, unauffaellig: unauffaellig, andere: andere, andereTitel: andereTitel, anzahl: n,
+      nachforderung: nachforderung, guthaben: guthaben, geprueft: Array.isArray(erg.geprueft) ? erg.geprueft : null, unsicher: unsicher, fristDatum: fristDatum, fristAbgelaufen: fristAbgelaufen,
       ersparnis: ersparnis, empfehlen: empfehlen
     };
   }
@@ -107,6 +119,7 @@
   function kopfzeile(b) {
     var teile = [];
     if (b.nachforderung && !b.unsicher) teile.push('Ihr Vermieter fordert ' + euroText(b.nachforderung) + ' nach.');
+    else if (b.guthaben && !b.unsicher) teile.push('Ihre Abrechnung weist ein Guthaben von ' + euroText(b.guthaben) + ' aus.');
     if (b.fristDatum) {
       teile.push(b.fristAbgelaufen
         ? 'Die Frist für Einwendungen gegen diese Abrechnung ist am ' + datumDe(b.fristDatum) +
@@ -128,6 +141,26 @@
       'Das heißt nicht, dass die Abrechnung fehlerfrei ist — nur, dass das Programm nichts Auffälliges erkannt hat.';
   }
 
+  /* Paket 1b: fester Textbaustein je Befundart (app/vorpruefung_texte.py, freigegeben 29.10.2026), aufklappbar. */
+  function erklaerung(bs, art, beiOeffnen) {
+    var d = document.createElement('details'); d.className = 'befund__erkl';
+    var s = document.createElement('summary'); s.textContent = 'Was heißt das?';
+    d.appendChild(s);
+    [['Was das heißt: ', bs.was_das_heisst], ['Was ich in der Prüfung mache: ', bs.was_ich_mache]].forEach(function (z) {
+      if (!z[1]) return;
+      var para = document.createElement('p');
+      var st = document.createElement('strong'); st.textContent = z[0];
+      para.appendChild(st); para.appendChild(document.createTextNode(String(z[1])));
+      d.appendChild(para);
+    });
+    var gemeldet = false;
+    d.addEventListener('toggle', function () {
+      if (d.open && !gemeldet && typeof beiOeffnen === 'function') { gemeldet = true; beiOeffnen(art); }
+    });
+    return d;
+  }
+  var beiOeffnen = null;
+
   function befundZeile(p, ohneBetrag) {
     var st = (p.status === 'auffaellig' || p.status === 'pruefen') ? p.status : 'ok';
     var row = document.createElement('div');
@@ -141,6 +174,8 @@
     var betrag = document.createElement('div'); betrag.className = 'befund__betrag';
     betrag.textContent = (!ohneBetrag && typeof p.betrag_cent === 'number') ? euro(p.betrag_cent) : '—';
     row.appendChild(name); row.appendChild(betrag);
+    /* Erklärung unter der Zeile über die volle Breite, nicht in der schmalen Namensspalte neben dem Betrag. */
+    if (st !== 'ok' && p.baustein) row.appendChild(erklaerung(p.baustein, p.art, beiOeffnen));
     return row;
   }
 
@@ -150,6 +185,7 @@
   function baueBefund(el, b, opt) {
     opt = opt || {};
     var schritt = opt.schritt || 0;
+    beiOeffnen = opt.beiOeffnen || null;
     el.innerHTML = '';
     if (!b.markiert.length && !b.unauffaellig.length && b.ersparnis.cent <= 0) {
       el.hidden = true; return 0;
@@ -213,23 +249,44 @@
      Erfundene, typische Werte einer Mietwohnung; zwei markierte Positionen. Nur Befundarten, die die Vorprüfung
      heute tatsächlich liefert (Kabel-TV erst nach Paket 2). Die Frist liegt immer rund fünf Monate in der Zukunft,
      damit das Beispiel nicht veraltet. */
+  /* Wortgleich mit app/vorpruefung_texte.py (agent-service); der Playwright-Test vergleicht beide. */
+  var BEISPIEL_BAUSTEINE = {
+    nicht_umlagefaehig: {
+      was_das_heisst: 'Kosten dieser Art gehören in der Regel nicht zu den Betriebskosten, die auf Mieter umgelegt werden dürfen.',
+      was_ich_mache: 'Ich prüfe am Original, was hinter der Position steckt, und nehme den Betrag in das Schreiben an Ihren ' +
+        'Vermieter auf, soweit er nicht umgelegt werden darf.'
+    },
+    kabel_nach_2024: {
+      was_das_heisst: 'Seit Juli 2024 dürfen Gebühren für Kabelfernsehen und Breitbandanschluss in der Regel nicht mehr über die ' +
+        'Nebenkosten abgerechnet werden. Betriebsstrom und Wartung einer Antennenanlage sind davon nicht erfasst.',
+      was_ich_mache: 'Ich prüfe, für welchen Zeitraum die Gebühren angesetzt sind und ob es dafür eine eigene Vereinbarung gibt, ' +
+        'und nehme den Betrag in das Schreiben an Ihren Vermieter auf.'
+    },
+    pruefen: {
+      was_das_heisst: 'Die Position ist unklar bezeichnet oder fällt auf, etwa durch ihre Höhe. Das allein ist noch kein Fehler.',
+      was_ich_mache: 'Ich prüfe, was dahinter steckt, und verlange bei Bedarf Einsicht in die Belege.'
+    }
+  };
   function beispielErgebnis() {
     var d = new Date(); d.setDate(d.getDate() + 150);
     var frist = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
     return {
-      punkte: [{ titel: 'Verwaltungskosten: auffällig' }, { titel: 'Hauswart: prüfen' }],
+      punkte: [{ titel: 'Verwaltungskosten: auffällig' }, { titel: 'Kabelgebühren: auffällig' }, { titel: 'Hauswart: prüfen' }],
       positionen: [
         { titel: 'Grundsteuer', betrag_cent: 21840, status: 'ok' },
         { titel: 'Wasser und Abwasser', betrag_cent: 41275, status: 'ok' },
         { titel: 'Müllabfuhr', betrag_cent: 19620, status: 'ok' },
-        { titel: 'Hauswart', betrag_cent: 34160, status: 'pruefen' },
+        { titel: 'Hauswart', betrag_cent: 34160, status: 'pruefen', art: 'pruefen', baustein: BEISPIEL_BAUSTEINE.pruefen },
         { titel: 'Gartenpflege', betrag_cent: 8830, status: 'ok' },
         { titel: 'Gebäudeversicherung', betrag_cent: 15290, status: 'ok' },
         { titel: 'Allgemeinstrom', betrag_cent: 4615, status: 'ok' },
-        { titel: 'Verwaltungskosten', betrag_cent: 21480, status: 'auffaellig' },
+        { titel: 'Verwaltungskosten', betrag_cent: 21480, status: 'auffaellig', art: 'nicht_umlagefaehig',
+          betrag_relevant_cent: 21480, baustein: BEISPIEL_BAUSTEINE.nicht_umlagefaehig },
+        { titel: 'Kabelgebühren', betrag_cent: 15600, status: 'auffaellig', art: 'kabel_nach_2024',
+          betrag_relevant_cent: 15600, baustein: BEISPIEL_BAUSTEINE.kabel_nach_2024 },
         { titel: 'Heizung und Warmwasser', betrag_cent: 103450, status: 'ok' }
       ],
-      nachforderung_cent: 41230, moegliche_ersparnis_cent: 21480,
+      nachforderung_cent: 41230, moegliche_ersparnis_cent: 37080,
       summenprobe: { stimmig: true }, frist: { einwendung_bis: frist }
     };
   }
@@ -250,7 +307,23 @@
     baueBefund(karte, b, { schritt: 0 });
   }
 
+  /* Paket 1b: Was die Vorprüfung tatsächlich geprüft hat (Feld 'geprueft' des Dienstes). */
+  var GEPRUEFT = {
+    umlagefaehigkeit: 'ob Kostenarten abgerechnet sind, die nicht auf Mieter umgelegt werden dürfen',
+    vertrag: 'ob Ihr Mietvertrag die abgerechneten Kostenarten vorsieht',
+    schluessel: 'ob die Verteilerschlüssel zum Mietvertrag passen',
+    frist: 'ob die Abrechnung rechtzeitig bei Ihnen ankam',
+    kabel: 'ob Kabel- oder Fernsehgebühren nach Juni 2024 abgerechnet sind',
+    rauchmelder: 'ob Miete für Rauchwarnmelder abgerechnet ist',
+    mindestangaben: 'ob die Abrechnung die vorgeschriebenen Mindestangaben enthält',
+    zeitraum: 'ob der Abrechnungszeitraum zwölf Monate umfasst'
+  };
+  function geprueftTexte(liste) {
+    return (liste || []).map(function (k) { return GEPRUEFT[k]; }).filter(Boolean);
+  }
+
   window.NkaBefund = {
+    erklaerung: erklaerung, geprueftTexte: geprueftTexte, BEISPIEL_BAUSTEINE: BEISPIEL_BAUSTEINE,
     SCHWELLE_EMPFEHLUNG_CENT: SCHWELLE_EMPFEHLUNG_CENT,
     euro: euro, datumDe: datumDe, heuteIso: heuteIso, auswerten: auswerten, kopfzeile: kopfzeile,
     zusammenfassung: zusammenfassung, baueBefund: baueBefund, zeigeBeispiel: zeigeBeispiel,
