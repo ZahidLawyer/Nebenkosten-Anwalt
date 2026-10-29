@@ -1,0 +1,53 @@
+/* Befundkarte der Vorprüfung: echtes Ergebnis (pruefung.html) und gekennzeichnetes Beispiel (index.html,
+   pruefung.html). Ausgelagert aus pruefung.html (Paket 1a, 29.10.2026), damit beide Seiten dasselbe zeigen. */
+.befund { margin: 0.9rem 0 0.5rem; border: 1px solid #D9D2C4; border-radius: 10px; background: #FFFFFF; overflow: hidden; }
+.befund[hidden] { display: none; }
+.befund__row { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.6rem 0.9rem; border-top: 1px solid #EDE7DA; font-size: 0.95rem; opacity: 0; transform: translateY(6px); }
+.befund__row:first-child { border-top: 0; }
+.befund__row svg { flex: none; margin-top: 0.15rem; }
+.befund__name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.befund__name span { display: block; color: #55655D; font-size: 0.86rem; line-height: 1.4; margin-top: 0.1rem; }
+.befund__betrag { flex: none; font-variant-numeric: tabular-nums; white-space: nowrap; color: #24312B; }
+.befund__row--auffaellig .befund__betrag { color: #8F5A22; font-weight: 600; }
+.befund__row--ok, .befund__row--ok .befund__betrag { color: #55655D; }
+.befund__sum { padding: 0.9rem 0.9rem 0.95rem; border-top: 2px solid #2F5D4C; background: #F7F4EE; opacity: 0; transform: translateY(6px); }
+.befund__sum-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+.befund__sum-kopf strong { font-family: "Source Serif 4", Georgia, serif; font-size: 1.3rem; color: #24493C; }
+.befund__sum-kopf span { font-size: 0.95rem; color: #24312B; }
+.befund__row.is-in, .befund__sum.is-in { opacity: 1; transform: none; transition: opacity 0.45s ease, transform 0.45s ease; }
+.befund__weitere { border-top: 1px solid #EDE7DA; opacity: 0; transform: translateY(6px); }
+.befund__weitere:first-child { border-top: 0; }
+.befund__weitere > summary { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.9rem; min-height: 44px;
+  box-sizing: border-box; cursor: pointer; list-style: none; font-size: 0.95rem; color: #2F5D4C; font-weight: 600; }
+.befund__weitere > summary::-webkit-details-marker { display: none; }
+.befund__weitere > summary svg { flex: none; }
+.befund__weitere > summary::after { content: ""; flex: none; width: 0.45rem; height: 0.45rem; margin: 0 0.2rem 0.2rem auto;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform 0.2s ease; }
+.befund__weitere[open] > summary::after { transform: rotate(-135deg); margin-bottom: -0.2rem; }
+.befund__weitere > summary:focus-visible { outline: 3px solid #B97C3B; outline-offset: -3px; }
+.befund__weitere .befund__row { opacity: 1; transform: none; }
+.befund__weitere.is-in { opacity: 1; transform: none; transition: opacity 0.45s ease, transform 0.45s ease; }
+.befund__sum-text { font-size: 0.93rem; color: #24312B; line-height: 1.5; margin: 0.35rem 0 0; }
+@media (prefers-reduced-motion: reduce) {
+  .befund__row, .befund__sum, .befund__weitere { opacity: 1; transform: none; transition: none; }
+}
+
+/* Kopfzeile über der Karte: Nachforderung und Einwendungsfrist (Paket 1a) */
+.vp-kopf { font-size: 1rem; line-height: 1.5; color: #24312B; background: #F7F4EE; border-left: 3px solid #B97C3B;
+  border-radius: 6px; padding: 0.65rem 0.85rem; margin: 0.6rem 0 0.9rem; }
+.vp-kopf[hidden] { display: none; }
+
+/* Gekennzeichnetes Beispiel */
+.beispiel { border: 2px dashed #B97C3B; border-radius: 12px; background: #FFFFFF; padding: 1rem 1rem 0.9rem; }
+.beispiel__marke { display: inline-block; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: #8F5A22; background: #F6E9D6; border-radius: 999px; padding: 0.2rem 0.65rem; margin: 0 0 0.4rem; }
+.beispiel__satz { font-size: 0.95rem; color: #24312B; margin: 0 0 0.2rem; }
+.beispiel .befund { margin-bottom: 0; }
+.beispiel-unter { font-size: 0.9rem; color: #55655D; margin: 0.6rem 0 0; }
+.beispiel-klapp { max-width: 40rem; margin: 0 auto 1.25rem; }
+.beispiel-klapp > summary { cursor: pointer; font-weight: 600; color: #2F5D4C; padding: 0.55rem 0; min-height: 44px; box-sizing: border-box; }
+.beispiel-klapp[open] > summary { margin-bottom: 0.4rem; }
+.beispiel-start { padding: 2rem 0 2.25rem; }
+.beispiel-start .wrap { max-width: 40rem; }
+.beispiel-start__titel { font-family: "Source Serif 4", Georgia, serif; font-size: 1.4rem; color: #24312B; margin: 0 0 0.9rem; }
+.beispiel-start__aktion { margin: 1rem 0 0; }

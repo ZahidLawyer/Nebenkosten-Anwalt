@@ -676,6 +676,7 @@
     .doc-mock__row .tick { stroke-dashoffset: 0 !important; transition: none !important; }
   }
 </style>
+<link rel="stylesheet" href="assets/befundkarte.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -919,6 +920,17 @@
           Ergebnis wird damit nicht zugesagt.
         </p>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ Beispiel-Ergebnis der Vorprüfung (Paket 1a, 29.10.2026) ============
+       Dieselbe Karte wie das echte Ergebnis (assets/befundkarte.js), gekennzeichnet, erfundene Daten. -->
+  <section class="beispiel-start" aria-labelledby="beispiel-titel">
+    <div class="wrap">
+      <h2 id="beispiel-titel" class="beispiel-start__titel">Das zeigt Ihnen die kostenlose Vorprüfung</h2>
+      <div class="beispiel" id="beispiel-start"></div>
+      <p class="beispiel-unter">So sieht Ihr Ergebnis aus. Die Vorprüfung dauert meist unter einer Minute.</p>
+      <p class="beispiel-start__aktion"><a class="btn" href="pruefung.html" data-start="beispiel">Kostenlose Vorprüfung starten</a></p>
     </div>
   </section>
 
@@ -1685,6 +1697,10 @@
   })();
 </script>
 
+<script src="assets/befundkarte.js"></script>
+<script>
+  if (window.NkaBefund) window.NkaBefund.zeigeBeispiel(document.getElementById('beispiel-start'));
+</script>
 <script>
   /* Reichweitenmessung (Paket 0, Freigabe Zahid 29.10.2026): Klick auf einen Startknopf als Umami-Ereignis
      „start_klick“ mit Stelle und Herkunft. Herkunft nur aus der Adresse dieser Seite: Klick-ID einer Google-Anzeige
