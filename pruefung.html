@@ -493,8 +493,8 @@
           <p id="vp-zusammenfassung"></p>
           <ul class="punkte" id="vp-punkte"></ul>
           <div class="befund" id="vp-befund" hidden role="group" aria-label="Positionen der Vorprüfung"></div>
-          <p class="ergebnis-vorbehalt" id="vp-vorbehalt" hidden>Automatisch ermittelt, ohne anwaltliche Prüfung.
-          Ob und wie viel Sie weniger zahlen, zeigt erst die anwaltliche Prüfung.</p>
+          <!-- 29.10.2026 (Freigabe Zahid): der kurze Vorbehalt „Automatisch ermittelt, ohne anwaltliche Prüfung …“
+               entfällt, er wiederholte den Hinweis unten (vp-hinweis). -->
           <p class="ergebnis-frist" id="vp-frist" hidden></p>
           <p class="ergebnis-hinweis" id="vp-hinweis">Dieses Ergebnis ist automatisch erstellt — ohne
           anwaltliche Prüfung. Es ist unverbindlich, kann Fehler übersehen oder falsch einordnen und ist keine
@@ -503,7 +503,7 @@
         <p class="vp-cta" id="vp-cta" hidden>
           <a class="vp-button" href="#bestellen" id="vp-bestellen">Jetzt kostenpflichtig prüfen lassen — 79,90 Euro</a>
           <span>Endpreis einschließlich Umsatzsteuer. Bezahlt wird erst auf der sicheren Bezahlseite von Stripe, mit
-          Karte, PayPal, Apple Pay oder Google Pay — nicht durch diesen Klick. Vor einer Bestellung versende ich keine E-Mails.</span>
+          Karte, PayPal, Apple Pay oder Google Pay — nicht durch diesen Klick.</span>
         </p>
       </section>
 
@@ -669,7 +669,6 @@
     var zusammenfassung = document.getElementById('vp-zusammenfassung');
     var punkteEl = document.getElementById('vp-punkte');
     var befundEl = document.getElementById('vp-befund');
-    var vorbehaltEl = document.getElementById('vp-vorbehalt');
     var fristEl = document.getElementById('vp-frist');
     var manuell = document.getElementById('vp-manuell');
     var laeuft = false, begonnen = 0, timer = null, fertig = false;
@@ -755,7 +754,7 @@
     function baueBefund(b) {
       befundEl.innerHTML = '';
       if (!b.markiert.length && !b.unauffaellig.length && b.ersparnis.cent <= 0) {
-        befundEl.hidden = true; vorbehaltEl.hidden = true; return 0;
+        befundEl.hidden = true; return 0;
       }
       var zeilen = [];
       b.markiert.forEach(function (p) {
@@ -802,13 +801,11 @@
         befundEl.appendChild(sum);
       }
       befundEl.hidden = false;
-      vorbehaltEl.hidden = true;
       /* nacheinander einblenden */
       zeilen.forEach(function (row, i) { window.setTimeout(function () { row.classList.add('is-in'); }, SCHRITT * i); });
       var ende = SCHRITT * zeilen.length;
       window.setTimeout(function () {
         if (sum) sum.classList.add('is-in');
-        vorbehaltEl.hidden = false;
       }, ende);
       return ende + (ruhig ? 0 : 500);
     }
