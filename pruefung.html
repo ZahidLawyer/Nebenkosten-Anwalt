@@ -122,6 +122,14 @@
   }
   .section-title { font-size: clamp(1.5rem, 3.5vw, 2.1rem); margin-bottom: 0.75rem; }
   .section-lead { color: var(--ink-soft); }
+  /* „Link für später“ (Vorschau 30.10.2026): Textknopf, nur mit JavaScript sichtbar (assets/spaeter.js) */
+  .spaeter-zeile { font-size: 0.92rem; color: var(--ink-soft); margin-top: 0.35rem; }
+  .spaeter-zeile[hidden] { display: none; }
+  .spaeter-knopf {
+    font: inherit; font-weight: 600; color: var(--moss); background: none; border: 0; padding: 0.3rem 0; margin: 0;
+    text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; cursor: pointer;
+  }
+  .spaeter-knopf:hover { color: var(--moss-deep); text-decoration-thickness: 2px; }
 
   /* ============ Bereithalten ============ */
   .prep-box {
@@ -389,6 +397,8 @@
           <span class="nur-handy">Nebenkostenabrechnung und Mietvertrag, jeweils alle Seiten. Handyfotos genügen.
           In wenigen Minuten sehen Sie, ob es Anhaltspunkte für Fehler gibt.</span>
         </p>
+        <p class="spaeter-zeile" data-spaeter-zeile hidden>Nicht zur Hand?
+          <button type="button" class="spaeter-knopf" data-spaeter="pruefseite">Link für später speichern</button></p>
       </div>
     </div>
   </section>
@@ -661,6 +671,7 @@
        Speicher des Browsers. Werte: Standortcode, „anzeige“ oder „ohne“. */
     var herkunft = QUELLE_OK.test(q.get('quelle') || '') ? q.get('quelle')
       : (['gclid', 'gbraid', 'wbraid'].some(function (k) { return !!q.get(k); }) ? 'anzeige' : 'ohne');
+    window.NKA_HERKUNFT = herkunft;   /* für assets/spaeter.js („Link für später“) */
     /* Umami-Ereignis mit Herkunft; nie mit Vorgangskennung, Beträgen oder Positionsnamen. Umami lädt mit „defer“:
        Ist es beim Aufruf noch nicht da (Rückkehr von Stripe gleich beim Seitenaufbau), wird nach „load“ gemeldet. */
     function zaehle(name, daten) {
@@ -999,6 +1010,8 @@
     }
   })();
 </script>
+
+<script src="assets/spaeter.js"></script>
 
 <!-- Offizielles Tally-Skript: löst data-tally-src ein und passt die iframe-Höhe dynamisch an den Formularinhalt an. -->
 <script async src="https://tally.so/widgets/embed.js"></script>

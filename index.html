@@ -208,6 +208,14 @@
   .hero .btn--ghost { background: transparent; color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.7); }
   .hero .btn--ghost:hover { background: rgba(255,255,255,0.1); }
   .hero__note { font-size: 0.9rem; margin-top: 1rem; color: rgba(255,255,255,0.84); max-width: 34rem; }
+  /* „Link für später“ (Vorschau 30.10.2026): Textknopf, nur mit JavaScript sichtbar (assets/spaeter.js) */
+  .hero__spaeter { font-size: 0.9rem; margin-top: 0.55rem; color: rgba(255,255,255,0.84); max-width: 34rem; }
+  .hero__spaeter[hidden] { display: none; }
+  .spaeter-knopf {
+    font: inherit; font-weight: 600; color: #fff; background: none; border: 0; padding: 0.3rem 0; margin: 0;
+    text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; cursor: pointer;
+  }
+  .spaeter-knopf:hover { text-decoration-thickness: 2px; }
 
 
   /* ============ Einwand-Leiste ============ */
@@ -883,6 +891,8 @@
         </div>
         <p class="hero__note">Ein Handyfoto von Abrechnung und Mietvertrag genügt. Die Vorprüfung kostet
         nichts und verpflichtet zu nichts — sie ist automatisch, ohne anwaltliche Prüfung.</p>
+        <p class="hero__spaeter" data-spaeter-zeile hidden>Nicht zur Hand?
+          <button type="button" class="spaeter-knopf" data-spaeter="hero">Link für später speichern</button></p>
 
       </div>
 
@@ -1718,6 +1728,7 @@
     var OK = /^[a-z0-9-]{1,32}$/;
     var herkunft = OK.test(q.get('quelle') || '') ? q.get('quelle')
       : (['gclid', 'gbraid', 'wbraid'].some(function (k) { return !!q.get(k); }) ? 'anzeige' : 'ohne');
+    window.NKA_HERKUNFT = herkunft;   /* für assets/spaeter.js und die Lesemessung */
     var knoepfe = document.querySelectorAll('a[data-start]');
     Array.prototype.forEach.call(knoepfe, function (a) {
       if (herkunft !== 'ohne') a.setAttribute('href', 'pruefung.html?quelle=' + herkunft);
@@ -1729,5 +1740,63 @@
     });
   })();
 </script>
+<script>
+  /* Lesemessung (Vorschau 30.10.2026, Freigabe Zahid ausstehend): Wie weit wird die Startseite gelesen?
+     - „abschnitt_gesehen“ {abschnitt, herkunft}: einmal je Seitenaufruf, sobald der Anfang eines Abschnitts
+       das obere 60 % des Bildschirms erreicht.
+     - „verweildauer“ {stufe: 10s | 30s | 90s, herkunft}: einmal je Stufe; gezählt wird nur die Zeit, in der die
+       Seite sichtbar ist (nicht im Hintergrund-Tab).
+     Nichts wird im Browser gespeichert; keine Inhalte, keine Kennungen. Herkunft wie bei „start_klick“. */
+  (function () {
+    var herkunft = window.NKA_HERKUNFT || 'ohne';
+    function zaehle(name, d) {
+      d.herkunft = herkunft;
+      function senden() {
+        if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track(name, d); } catch (e) {} return true; }
+        return false;
+      }
+      if (!senden() && document.readyState !== 'complete') window.addEventListener('load', senden);
+    }
+
+    var ABSCHNITTE = [
+      ['beispiel', '.beispiel-start'],
+      ['ablauf', '#ablauf'],
+      ['ergebnis', '#ergebnis'],
+      ['stimmen', '#stimmen'],
+      ['faq', '#faq'],
+      ['ende', '.closing']
+    ];
+    if ('IntersectionObserver' in window) {
+      var gesehen = {};
+      var beobachter = new IntersectionObserver(function (eintraege) {
+        eintraege.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          var name = e.target.getAttribute('data-messung');
+          if (gesehen[name]) return;
+          gesehen[name] = true;
+          beobachter.unobserve(e.target);
+          zaehle('abschnitt_gesehen', { abschnitt: name });
+        });
+      }, { rootMargin: '0px 0px -40% 0px', threshold: 0 });
+      ABSCHNITTE.forEach(function (a) {
+        var el = document.querySelector(a[1]);
+        if (el) { el.setAttribute('data-messung', a[0]); beobachter.observe(el); }
+      });
+    }
+
+    var STUFEN = [[10, '10s'], [30, '30s'], [90, '90s']];
+    var sekunden = 0, naechste = 0;
+    var uhr = window.setInterval(function () {
+      if (document.visibilityState !== 'visible') return;
+      sekunden += 1;
+      if (sekunden >= STUFEN[naechste][0]) {
+        zaehle('verweildauer', { stufe: STUFEN[naechste][1] });
+        naechste += 1;
+        if (naechste >= STUFEN.length) window.clearInterval(uhr);
+      }
+    }, 1000);
+  })();
+</script>
+<script src="assets/spaeter.js"></script>
 </body>
 </html>
