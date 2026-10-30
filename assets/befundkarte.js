@@ -48,9 +48,11 @@
   }
 
   /* Interne Obergrenze der möglichen Ersparnis; wird NICHT angezeigt, sondern entscheidet über die Empfehlung
-     (Inhaberentscheidungen 28.10.2026). Sie stützt sich auf die AUFFÄLLIGEN Positionen, „prüfen“ zählt nur, wenn
-     es keine auffälligen mit Betrag gibt; höchstens die Nachforderung; gibt es Punkte ohne Positionsbezug (Frist,
-     Mindestangaben, Vertrag, Verteilerschlüssel insgesamt), die ganze Nachforderung. Ein höherer Wert des Dienstes geht vor. */
+     (Inhaberentscheidungen 28.10.2026). Sie stützt sich auf die auffälligen UND die „prüfen“-Positionen mit Betrag
+     (Entscheidung Zahid 30.10.2026; vorher zählte „prüfen“ nur ohne auffällige Position, sodass ein kleiner
+     auffälliger Betrag die Empfehlung verhindern konnte); höchstens die Nachforderung; gibt es Punkte ohne
+     Positionsbezug (Frist, Mindestangaben, Vertrag, Verteilerschlüssel insgesamt), die ganze Nachforderung.
+     Ein höherer Wert des Dienstes geht vor. */
   function mitBetrag(p) { return typeof p.betrag_cent === 'number' && p.betrag_cent > 0; }
   /* Paket 1b (29.10.2026): Massgeblich ist der Betrag, den der Dienst je Position nennt (betrag_relevant_cent,
      bei Kabel 2024 anteilig); fehlt er, der Abrechnungsbetrag wie bisher. Die ganze Nachforderung tragen nur
@@ -59,9 +61,8 @@
   var GANZE_NACHFORDERUNG = { frist: 1, mindestangaben: 1, keine_umlage: 1, schluessel_gesamt: 1 };
   function massgeblich(p) { return typeof p.betrag_relevant_cent === 'number' ? p.betrag_relevant_cent : p.betrag_cent; }
   function ersparnisObergrenze(markiert, andere, nachforderung, dienst) {
-    var basis = markiert.filter(function (p) { return p.status === 'auffaellig' && mitBetrag(p); });
-    var quelle = 'auffaellig';
-    if (!basis.length) { basis = markiert.filter(function (p) { return p.status === 'pruefen' && mitBetrag(p); }); quelle = 'pruefen'; }
+    var basis = markiert.filter(function (p) { return (p.status === 'auffaellig' || p.status === 'pruefen') && mitBetrag(p); });
+    var quelle = basis.some(function (p) { return p.status === 'auffaellig'; }) ? 'auffaellig' : 'pruefen';
     var summe = basis.reduce(function (s, p) { var b = massgeblich(p); return s + (typeof b === 'number' && b > 0 ? b : 0); }, 0);
     var ganz = andere.filter(function (x) { return !x.art || GANZE_NACHFORDERUNG[x.art]; }).length;
     summe += andere.reduce(function (s, x) {
@@ -220,11 +221,20 @@
         titel.textContent = 'Anwaltliche Prüfung empfohlen';
         var grund;
         if (b.ersparnis.quelle === 'nachforderung') grund = 'Die Vorprüfung hat einen Hinweis gefunden, der Ihre Abrechnung insgesamt betreffen kann.';
-        else if (b.markiert.some(function (p) { return p.status === 'auffaellig'; })) {
-          grund = b.markiert.filter(function (p) { return p.status === 'auffaellig'; }).length === 1
-            ? 'Die Vorprüfung hat eine auffällige Position gefunden, die sich auf Ihr Ergebnis auswirken kann.'
-            : 'Die Vorprüfung hat auffällige Positionen gefunden, die sich auf Ihr Ergebnis auswirken können.';
-        } else grund = 'Die Vorprüfung hat Positionen gefunden, die genauer geprüft werden sollten.';
+        else {
+          var nAuff = b.markiert.filter(function (p) { return p.status === 'auffaellig'; }).length;
+          var nPruef = b.markiert.filter(function (p) { return p.status === 'pruefen'; }).length;
+          if (nAuff && nPruef) {
+            /* seit 30.10.2026 zählen beide Arten; die Begründung nennt beide */
+            grund = 'Die Vorprüfung hat ' + (nAuff === 1 ? 'eine auffällige Position' : 'auffällige Positionen')
+              + ' gefunden und ' + (nPruef === 1 ? 'eine weitere, die genauer geprüft werden sollte.'
+                                                 : 'weitere, die genauer geprüft werden sollten.');
+          } else if (nAuff) {
+            grund = nAuff === 1
+              ? 'Die Vorprüfung hat eine auffällige Position gefunden, die sich auf Ihr Ergebnis auswirken kann.'
+              : 'Die Vorprüfung hat auffällige Positionen gefunden, die sich auf Ihr Ergebnis auswirken können.';
+          } else grund = 'Die Vorprüfung hat Positionen gefunden, die genauer geprüft werden sollten.';
+        }
         text.textContent = grund + ' Ich prüfe jeden markierten Punkt am Original und sage Ihnen, ob und in welcher Höhe Sie weniger zahlen müssen.';
       } else {
         titel.textContent = 'Beträge nicht sicher lesbar';
