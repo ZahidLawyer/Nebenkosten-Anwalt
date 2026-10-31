@@ -902,6 +902,34 @@
       aufrufNeu = true;
       starten(true); /* Formular 1: neues Absenden startet die Abfrage neu (z. B. nach 'fehler') */
     });
+    /* Formular-Messung (Freigabe Zahid 31.10.2026): Laden des Tally-Formulars und Aufruf seiner Seiten als Umami-Ereignis,
+       damit sichtbar wird, auf welcher Seite Besucher aussteigen (Formular 1: 1 Unterlagen, 2 Eckdaten, 3 Kontakt,
+       4 Einwilligungen). Übertragen werden nur Formularart und Seitennummer, je Seite einmal pro Aufruf, mit Herkunft;
+       nie Eingaben, Dateinamen, Formular- oder Vorgangskennung. Tally sendet die Ereignisse als String per postMessage
+       ({"event":"Tally.FormLoaded"|"Tally.FormPageView","payload":{formId, page}}; Tally-Doku, geprüft 31.10.2026). */
+    var formularGezaehlt = {};
+    window.addEventListener('message', function (e) {
+      if (typeof e.origin !== 'string' || e.origin.indexOf('tally.so') === -1) return;
+      var d = e.data;
+      if (typeof d === 'string') {
+        if (d.indexOf('Tally.Form') === -1) return;
+        try { d = JSON.parse(d); } catch (err) { return; }
+      }
+      if (!d || (d.event !== 'Tally.FormLoaded' && d.event !== 'Tally.FormPageView')) return;
+      var p = d.payload || {};
+      var bestellId = document.getElementById('bestell-frame').getAttribute('data-bestell-form');
+      var formular = (p.formId && bestellId && p.formId === bestellId) ? 'bestellung' : 'vorpruefung';
+      if (d.event === 'Tally.FormLoaded') {
+        if (formularGezaehlt[formular + ':geladen']) return;
+        formularGezaehlt[formular + ':geladen'] = true;
+        zaehle('formular_geladen', { formular: formular });
+        return;
+      }
+      var seite = parseInt(p.page, 10);
+      if (!(seite >= 1 && seite <= 20) || formularGezaehlt[formular + ':' + seite]) return;
+      formularGezaehlt[formular + ':' + seite] = true;
+      zaehle('formular_seite', { formular: formular, seite: String(seite) });
+    });
     /* Adresse mit Vorgangskennung (Lesezeichen, erneuter Aufruf): pruefung.html?vorgang=<id>[#bestellen] */
     if (GUELTIG.test(q.get('vorgang') || '')) starten();
     /* Paket 1b: Ergebnis speichern oder teilen. Teilen-Funktion des Handys, sonst Link kopieren; der Link trägt
