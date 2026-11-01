@@ -714,17 +714,32 @@
     if (direkt) direkt.href = 'https://tally.so/r/kdgJDM?vorgang=' + vorgang + quelleParam;
 
     var loaded = false;
+    function formularDa() { card.classList.remove('is-stalled'); card.classList.add('is-loaded'); }
     frame.addEventListener('load', function () {
       loaded = true;
-      card.classList.remove('is-stalled');
-      card.classList.add('is-loaded');
+      formularDa();
     });
     /* Kommt das Tally-Skript nicht durch, bleibt das iframe bei height=1 stehen.
-       Nach 4,5 s zeigt die Seite statt des endlosen Skeletons einen echten Ausweg. */
+       Nach 4,5 s zeigt die Seite statt des endlosen Skeletons einen echten Ausweg.
+       01.11.2026 (Testlauf): Meldet Tally die Höhe erst später (langsames Netz), lag der Ausweg über dem inzwischen
+       geladenen Formular. Deshalb verschwindet er, sobald das Formular Höhe bekommt oder Tally sich meldet
+       (Nachricht Tally.FormLoaded, siehe Formular-Messung unten). */
     window.setTimeout(function () {
       if (loaded && frame.clientHeight > 40) return;
       card.classList.add('is-stalled');
+      var versuche = 0;
+      var wache = window.setInterval(function () {
+        versuche += 1;
+        if (frame.clientHeight > 40 || !card.classList.contains('is-stalled')) { formularDa(); window.clearInterval(wache); }
+        else if (versuche >= 120) window.clearInterval(wache);
+      }, 1000);
     }, 4500);
+    window.addEventListener('message', function (e) {
+      if (typeof e.origin !== 'string' || e.origin.indexOf('tally.so') === -1) return;
+      var d = e.data;
+      if (typeof d === 'string') { if (d.indexOf('Tally.Form') === -1) return; try { d = JSON.parse(d); } catch (err) { return; } }
+      if (d && (d.event === 'Tally.FormLoaded' || d.event === 'Tally.FormPageView')) formularDa();
+    });
 
     /* ---------- Ergebnis der Vorprüfung ---------- */
     var panel = document.getElementById('vorpruefung');
