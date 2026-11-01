@@ -309,6 +309,11 @@
     font-size: 0.95rem; color: var(--ink-soft);
   }
   .steps-prep strong { color: var(--ink); }
+  /* „Link für später“ direkt am Hinweis auf die Unterlagen (Vorschau 31.10.2026): Dort steigen Leser laut Messung aus */
+  .steps-prep__spaeter { display: block; margin-top: 0.35rem; }
+  .steps-prep__spaeter[hidden] { display: none; }
+  .steps-prep .spaeter-knopf { color: var(--moss); }
+  .steps-prep .spaeter-knopf:hover { color: var(--moss-deep); }
 
   /* ============ Erklärvideo ============ */
   .video { max-width: 46rem; margin: 0 0 2.25rem; }
@@ -993,7 +998,8 @@
 
       <p class="steps-prep reveal"><strong>Das sollten Sie bereithalten:</strong> Ihre
       Nebenkostenabrechnung und Ihren Mietvertrag — jeweils alle Seiten, Handyfotos
-      genügen.</p>
+      genügen.<span class="steps-prep__spaeter" data-spaeter-zeile hidden>Nicht zur Hand?
+      <button type="button" class="spaeter-knopf" data-spaeter="ablauf">Link für später speichern</button></span></p>
       <ol class="steps">
         <li class="step reveal" style="--i:0">
           <span class="step__icon" aria-hidden="true">
