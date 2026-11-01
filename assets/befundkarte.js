@@ -22,6 +22,13 @@
     var d = new Date();
     return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
   }
+  /* Einwendungsfrist ab Briefdatum (seit 01.11.2026): erst so viele Tage danach "abgelaufen" (wie scripts/auswertung_vorpruefung.py) */
+  var FRIST_KULANZ_TAGE = 28;
+  function plusTage(iso, tage) {
+    var t = String(iso).slice(0, 10).split('-');
+    var d = new Date(Date.UTC(+t[0], +t[1] - 1, +t[2] + tage));
+    return d.getUTCFullYear() + '-' + ('0' + (d.getUTCMonth() + 1)).slice(-2) + '-' + ('0' + d.getUTCDate()).slice(-2);
+  }
 
   var ICON = {
     auffaellig: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">' +
@@ -58,7 +65,8 @@
      bei Kabel 2024 anteilig); fehlt er, der Abrechnungsbetrag wie bisher. Die ganze Nachforderung tragen nur
      Hinweise, die die Abrechnung insgesamt betreffen (GANZE_NACHFORDERUNG); andere Hinweise ohne Positionsbezug
      zählen mit ihrem eigenen Betrag, ohne Betrag gar nicht. Antworten ohne 'art' (vor dem 29.10.2026) wie bisher. */
-  var GANZE_NACHFORDERUNG = { frist: 1, mindestangaben: 1, keine_umlage: 1, schluessel_gesamt: 1 };
+  /* frist_knapp (01.11.2026): Briefdatum kurz vor Fristende, Zugang offen; den rechtzeitigen Zugang muss der Vermieter beweisen. */
+  var GANZE_NACHFORDERUNG = { frist: 1, frist_knapp: 1, mindestangaben: 1, keine_umlage: 1, schluessel_gesamt: 1 };
   function massgeblich(p) { return typeof p.betrag_relevant_cent === 'number' ? p.betrag_relevant_cent : p.betrag_cent; }
   function ersparnisObergrenze(markiert, andere, nachforderung, dienst) {
     var basis = markiert.filter(function (p) { return (p.status === 'auffaellig' || p.status === 'pruefen') && mitBetrag(p); });
@@ -104,13 +112,20 @@
     var unsicher = !!(erg.summenprobe && erg.summenprobe.stimmig === false);
     var frist = erg.frist || {};
     var fristDatum = (frist.einwendung_bis && datumDe(frist.einwendung_bis)) ? String(frist.einwendung_bis).slice(0, 10) : null;
-    var fristAbgelaufen = !!(fristDatum && fristDatum < (heute || heuteIso()));
+    /* Seit 01.11.2026 (schlankes Formular): Ohne Zugangsdatum rechnet der Dienst ab dem Datum der Abrechnung
+       (zugang_quelle 'briefdatum'). Das ist die früheste mögliche Frist; sie gilt erst FRIST_KULANZ_TAGE danach als
+       abgelaufen, dazwischen kommt es auf den Tag an, an dem die Abrechnung ankam ('fristUnklar'). */
+    var abBriefdatum = !!(fristDatum && frist.zugang_quelle === 'briefdatum');
+    var stichtag = heute || heuteIso();
+    var fristAbgelaufen = !!(fristDatum && (abBriefdatum ? plusTage(fristDatum, FRIST_KULANZ_TAGE) < stichtag : fristDatum < stichtag));
+    var fristUnklar = !!(abBriefdatum && !fristAbgelaufen && fristDatum < stichtag);
     var ersparnis = unsicher ? { cent: dienst, quelle: dienst > 0 ? 'dienst' : 'unsicher' }
                              : ersparnisObergrenze(markiert, andere, nachforderung, dienst);
     var empfehlen = n > 0 && !unsicher && !fristAbgelaufen && ersparnis.cent >= SCHWELLE_EMPFEHLUNG_CENT;
     return {
       markiert: markiert, unauffaellig: unauffaellig, andere: andere, andereTitel: andereTitel, anzahl: n,
       nachforderung: nachforderung, guthaben: guthaben, geprueft: Array.isArray(erg.geprueft) ? erg.geprueft : null, unsicher: unsicher, fristDatum: fristDatum, fristAbgelaufen: fristAbgelaufen,
+      fristAbBriefdatum: abBriefdatum, fristUnklar: fristUnklar,
       ersparnis: ersparnis, empfehlen: empfehlen
     };
   }
@@ -121,7 +136,18 @@
     var teile = [];
     if (b.nachforderung && !b.unsicher) teile.push('Ihr Vermieter fordert ' + euroText(b.nachforderung) + ' nach.');
     else if (b.guthaben && !b.unsicher) teile.push('Ihre Abrechnung weist ein Guthaben von ' + euroText(b.guthaben) + ' aus.');
-    if (b.fristDatum) {
+    if (b.fristDatum && b.fristAbBriefdatum) {
+      teile.push(b.fristAbgelaufen
+        ? 'Die Frist für Einwendungen gegen diese Abrechnung ist wahrscheinlich abgelaufen: Sie beträgt zwölf Monate ab ' +
+          'Zugang, und Ihre Abrechnung ist über ein Jahr alt. Danach sind Einwendungen in der Regel ausgeschlossen, ' +
+          'außer Sie hatten die Verspätung nicht zu vertreten.'
+        : b.fristUnklar
+        ? 'Einwendungen sind zwölf Monate ab Zugang möglich. Ab dem Datum der Abrechnung gerechnet endete die Frist am ' +
+          datumDe(b.fristDatum) + '. Kam die Abrechnung später bei Ihnen an, läuft sie noch; es kommt auf wenige Tage an. ' +
+          'Fristen werden durch die Vorprüfung nicht gewahrt.'
+        : 'Einwendungen sind mindestens bis zum ' + datumDe(b.fristDatum) + ' möglich (zwölf Monate ab Zugang, hier ' +
+          'vorsichtshalber ab dem Datum der Abrechnung gerechnet). Fristen werden durch die Vorprüfung nicht gewahrt.');
+    } else if (b.fristDatum) {
       teile.push(b.fristAbgelaufen
         ? 'Die Frist für Einwendungen gegen diese Abrechnung ist am ' + datumDe(b.fristDatum) +
           ' abgelaufen (zwölf Monate ab Zugang). Danach sind Einwendungen in der Regel ausgeschlossen, ' +

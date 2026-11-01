@@ -391,7 +391,7 @@
         <span class="page-badge">Rechtsanwalt Zahid Akcay<span class="nur-gross">, Kanzlei Akcay</span>, Frankfurt am Main</span>
         <h1 class="section-title">Ihre Unterlagen hochladen</h1>
         <p class="section-lead">
-          <span class="nur-gross">Zwei Unterlagen, wenige Angaben. Die Vorprüfung ist kostenlos und zeigt Ihnen in wenigen
+          <span class="nur-gross">Zwei Unterlagen und Ihre E-Mail-Adresse, mehr braucht es nicht. Die Vorprüfung ist kostenlos und zeigt Ihnen in wenigen
           Minuten, ob es Anhaltspunkte für Fehler gibt. Danach entscheiden Sie, ob ich als
           Rechtsanwalt prüfe.</span>
           <span class="nur-handy">Nebenkostenabrechnung und Mietvertrag, jeweils alle Seiten. Handyfotos genügen.
@@ -805,7 +805,7 @@
           auffaellig: stufe(b.markiert.filter(function (p) { return p.status === 'auffaellig'; }).length),
           pruefen: stufe(b.markiert.filter(function (p) { return p.status === 'pruefen'; }).length),
           hinweise: b.andereTitel.length > 0 ? '1+' : '0',
-          frist: b.fristDatum ? (b.fristAbgelaufen ? 'abgelaufen' : 'offen') : 'unbekannt',
+          frist: b.fristDatum ? (b.fristAbgelaufen ? 'abgelaufen' : b.fristUnklar ? 'unklar' : 'offen') : 'unbekannt',
           aufruf: aufrufNeu ? 'neu' : 'erneut'
         });
       }
@@ -903,8 +903,9 @@
       starten(true); /* Formular 1: neues Absenden startet die Abfrage neu (z. B. nach 'fehler') */
     });
     /* Formular-Messung (Freigabe Zahid 31.10.2026): Laden des Tally-Formulars und Aufruf seiner Seiten als Umami-Ereignis,
-       damit sichtbar wird, auf welcher Seite Besucher aussteigen (Formular 1: 1 Unterlagen, 2 Eckdaten, 3 Kontakt,
-       4 Einwilligungen). Übertragen werden nur Formularart und Seitennummer, je Seite einmal pro Aufruf, mit Herkunft;
+       damit sichtbar wird, auf welcher Seite Besucher aussteigen (Formular 1 bis zur Umstellung: 1 Unterlagen, 2 Eckdaten
+       und E-Mail, 3 Einwilligungen; schlankes Formular ab der Umstellung in Tally: 1 Unterlagen, 2 E-Mail und
+       Einwilligungen). Übertragen werden nur Formularart und Seitennummer, je Seite einmal pro Aufruf, mit Herkunft;
        nie Eingaben, Dateinamen, Formular- oder Vorgangskennung. Tally sendet die Ereignisse als String per postMessage
        ({"event":"Tally.FormLoaded"|"Tally.FormPageView","payload":{formId, page}}; Tally-Doku, geprüft 31.10.2026). */
     var formularGezaehlt = {};
