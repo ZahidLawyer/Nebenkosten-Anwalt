@@ -32,6 +32,34 @@
     waehrung: 'EUR'
   };
 
+  /* ---------- Umami: Adresse ohne Parameter melden, nur die Kampagnenkennzeichnung (utm_*) bleibt ----------
+     Ersetzt data-exclude-search (seit 01.11.2026): Das Umami-Script ruft diese Funktion vor jedem Senden auf
+     (data-before-send). Vorgangskennung, Stripe-Sitzung, Klick-IDs und Flyer-Code bleiben wie bisher draußen;
+     utm_source/medium/campaign/content/term aus Anzeigen-Links kommen durch, damit Umami die Kampagne auswerten
+     kann (Ziffer 9 der Datenschutzerklärung). Verweisende Adresse immer ohne Parameter. */
+  var UTM_ERLAUBT = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+  var UTM_OK = /^[\p{L}\p{N} _.+\-]{1,100}$/u;
+  function ohneParameter(adresse, utmBehalten) {
+    try {
+      var u = new URL(adresse, location.href);
+      var q = new URLSearchParams();
+      if (utmBehalten) {
+        UTM_ERLAUBT.forEach(function (k) {
+          var v = u.searchParams.get(k);
+          if (v && UTM_OK.test(v)) q.set(k, v);
+        });
+      }
+      var rest = q.toString();
+      return u.origin + u.pathname + (rest ? '?' + rest : '');
+    } catch (e) { return adresse; }
+  }
+  window.nkaUmamiVorSenden = function (typ, daten) {
+    if (!daten || typeof daten !== 'object') return daten;
+    if (typeof daten.url === 'string') daten.url = ohneParameter(daten.url, true);
+    if (typeof daten.referrer === 'string' && daten.referrer) daten.referrer = ohneParameter(daten.referrer, false);
+    return daten;
+  };
+
   var SCHLUESSEL = 'nka_einwilligung';
   var KLICK_IDS = ['gclid', 'gbraid', 'wbraid'];
   var KLICK_OK = /^[A-Za-z0-9_\-]{10,300}$/;

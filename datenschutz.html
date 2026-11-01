@@ -64,7 +64,7 @@
 </style>
   <!-- Reichweitenmessung: Umami, selbst gehostet auf dem Kanzlei-Server (stats.nebenkosten-anwalt.de), cookielos;
        data-exclude-search verhindert, dass die Vorgangskennung (?vorgang=) in der Statistik landet. -->
-  <script defer src="https://stats.nebenkosten-anwalt.de/script.js" data-website-id="d1858dae-dd51-4e26-ad65-438c7778cad7" data-domains="nebenkosten-anwalt.de" data-exclude-search="true"></script>
+  <script defer src="https://stats.nebenkosten-anwalt.de/script.js" data-website-id="d1858dae-dd51-4e26-ad65-438c7778cad7" data-domains="nebenkosten-anwalt.de" data-before-send="nkaUmamiVorSenden"></script>
 <!-- Einwilligung für die Messung des Werbeerfolgs (Google Ads). Ohne Konto-ID in der Datei inaktiv;
      ohne Einwilligung wird nichts von Google geladen. Muss synchron im <head> stehen. -->
 <script src="/assets/einwilligung.js"></script>
@@ -230,7 +230,8 @@
   gebildet, der sich täglich ändert und nicht auf Sie zurückgeführt werden kann. Erfasst werden aufgerufene Seite,
   Zeitpunkt, verweisende Website, Browsertyp, Gerätetyp, Bildschirmgröße, Sprache und das Herkunftsland, bei
   Aufruf über einen Flyer-QR-Code der Standortcode des Flyers und bei Aufruf über eine Google-Anzeige allein diese
-  Tatsache (nicht die Klick-Kennung der Anzeige). Außerdem zählt Umami, ob bestimmte Schritte ausgeführt werden:
+  Tatsache (nicht die Klick-Kennung der Anzeige) sowie die Kampagnenkennzeichnung des Links (Kampagne, Anzeigengruppe,
+  gebuchtes Suchwort), über den Sie gekommen sind. Außerdem zählt Umami, ob bestimmte Schritte ausgeführt werden:
   Klick auf einen Startknopf, Laden des Formulars und Aufruf seiner einzelnen Seiten (nur die Seitennummer, keine
   Eingaben), Absenden einer Vorprüfung, Anzeige ihres Ergebnisses, Öffnen einer Erläuterung zu einem
   markierten Punkt (nur deren Art), Teilen des Ergebnisses, Öffnen des Bestellbereichs, Wechsel zur Zahlung, Rückkehr von der Zahlung und die Entscheidung im Hinweisfenster zur Werbemessung (Ziffer 10).
@@ -297,7 +298,7 @@
   <a href="https://datenschutz.hessen.de" target="_blank" rel="noopener">datenschutz.hessen.de</a>.</p>
 
   <h2>12. Änderungen</h2>
-  <p>Diese Erklärung hat den Stand 31.10.2026. Ändert sich
+  <p>Diese Erklärung hat den Stand 01.11.2026. Ändert sich
   die Verarbeitung, ändert sich diese Erklärung.</p>
 </article>
 </main>
