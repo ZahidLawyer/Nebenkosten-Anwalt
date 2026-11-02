@@ -211,6 +211,64 @@
   /* „Link für später“ (Vorschau 30.10.2026): Textknopf, nur mit JavaScript sichtbar (assets/spaeter.js) */
   .hero__spaeter { font-size: 0.9rem; margin-top: 0.55rem; color: rgba(255,255,255,0.84); max-width: 34rem; }
   .hero__spaeter[hidden] { display: none; }
+  /* Vorprüfung im ersten Bildschirm (Vorschau 01.11.2026): dasselbe Tally-Formular wie auf pruefung.html,
+     als helle Karte im Hero. Skeleton und Ausweichkasten wie dort (pruefung.html .form-card). */
+  .hero__form {
+    background: var(--paper); color: var(--ink); border-radius: 12px; padding: 1.1rem 1.1rem 0.9rem;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.28); scroll-margin-top: 5rem;
+  }
+  .hero__form-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.35rem; }
+  .hero__form-kopf h2 { font-family: var(--serif); font-size: 1.3rem; margin: 0; color: var(--ink); }
+  .hero__form-kopf span { font-size: 0.85rem; color: var(--ink-soft); }
+  .hero__form-satz { font-size: 0.92rem; color: var(--ink-soft); margin: 0 0 0.6rem; }
+  .hero__form .form-card { background: transparent; border: 0; padding: 0; margin: 0; max-width: none; position: relative; }
+  .hero__form .form-card__iframe-wrap { position: relative; min-height: 20rem; }
+  .hero__form iframe { width: 100%; border: none; display: block; background: transparent; }
+  .hero__form .form-skeleton {
+    position: absolute; inset: 0; display: flex; flex-direction: column; gap: 0.9rem; padding: 1.25rem 0.5rem;
+  }
+  .hero__form .form-skeleton__bar {
+    height: 0.9rem; border-radius: 4px;
+    background: linear-gradient(90deg, var(--paper-deep) 25%, var(--line) 37%, var(--paper-deep) 63%);
+    background-size: 400% 100%; animation: skeleton-shimmer 1.4s ease infinite;
+  }
+  .hero__form .form-skeleton__bar--wide { width: 70%; }
+  .hero__form .form-skeleton__bar--full { width: 100%; }
+  .hero__form .form-skeleton__bar--short { width: 40%; }
+  .hero__form .form-skeleton__bar--btn { width: 40%; height: 2.5rem; margin-top: 0.5rem; }
+  @keyframes skeleton-shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+  .hero__form .form-card.is-loaded .form-skeleton { display: none; }
+  .hero__form .form-rescue {
+    position: absolute; inset: 0; display: none; flex-direction: column; align-items: flex-start; justify-content: center;
+    gap: 0.85rem; padding: 1rem 0.5rem; background: var(--paper);
+  }
+  .hero__form .form-card.is-stalled .form-skeleton { display: none; }
+  .hero__form .form-card.is-stalled .form-rescue { display: flex; }
+  .hero__form .form-rescue h3 { font-family: var(--serif); font-size: 1.1rem; margin: 0; }
+  .hero__form .form-rescue p { font-size: 0.95rem; color: var(--ink-soft); margin: 0; }
+  .hero__form .btn { background: var(--moss); color: #fff; box-shadow: none; }
+  .hero__form .btn:hover { background: var(--moss-deep); }
+  .hero__form-fuss { font-size: 0.85rem; color: var(--ink-soft); margin: 0.75rem 0 0; text-align: center; }
+  .hero__form-fuss a { color: var(--moss); font-weight: 600; }
+  .hero__punkte { list-style: none; margin: 1.1rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.95rem; color: rgba(255,255,255,0.92); }
+  .hero__punkte li { display: flex; gap: 0.6rem; align-items: flex-start; }
+  .hero__punkte svg { flex: none; margin-top: 0.15rem; }
+  .hero__punkte strong { color: #fff; }
+  .hero__preis { font-size: 0.9rem; margin-top: 1rem; color: rgba(255,255,255,0.84); max-width: 34rem; }
+  @media (max-width: 45.99rem) {
+    /* Handy: das Formular soll im ersten Bildschirm beginnen. Deshalb kürzerer Text, die drei Punkte als
+       Schlagworte in einer Reihe, Festpreis und „Link für später“ erst weiter unten auf der Seite. */
+    .hero__sub { font-size: 1rem; margin-bottom: 0.9rem; }
+    .hero__sub-mehr { display: none; }
+    .hero__punkte { flex-direction: row; flex-wrap: wrap; margin-top: 0; gap: 0.4rem; }
+    .hero__punkte li { align-items: center; gap: 0.35rem; background: rgba(255,255,255,0.12); border-radius: 999px; padding: 0.3rem 0.7rem 0.3rem 0.55rem; font-size: 0.84rem; }
+    .hero__punkte svg { width: 15px; height: 15px; margin-top: 0; }
+    .hero__punkte strong { font-weight: 600; }
+    .hero__punkt-mehr { display: none; }
+    .hero__form { margin-top: 1.1rem; padding: 0.9rem 0.85rem 0.75rem; }
+    .hero__preis, .hero__spaeter { display: none; }
+    .hero__inner { padding-bottom: 1.5rem; }
+  }
   .spaeter-knopf {
     font: inherit; font-weight: 600; color: #fff; background: none; border: 0; padding: 0.3rem 0; margin: 0;
     text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; cursor: pointer;
@@ -678,10 +736,14 @@
   /* ============ Ab 62rem: Hero zweispaltig ============ */
   @media (min-width: 62rem) {
     .hero__inner {
-      display: grid; grid-template-columns: 1.12fr 0.88fr;
-      gap: 3.25rem; align-items: center;
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 3rem; align-items: center;
+      padding-top: 3.25rem; padding-bottom: 3.25rem;
     }
-    .hero .doc-mock { transform: rotate(-1.5deg); box-shadow: 0 24px 60px rgba(0,0,0,0.28); }
+    .hero__inner > div:first-child { padding-right: 0.5rem; }
+    .hero__form { margin-right: -2.5rem; padding: 1.1rem 1.4rem 0.6rem; }
+    .hero__form .form-card__iframe-wrap { min-height: 18rem; }
+    .hero__preis { margin-top: 1.25rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -694,6 +756,7 @@
     .doc-mock__row .tick { stroke-dashoffset: 0 !important; transition: none !important; }
   }
 </style>
+<link rel="preconnect" href="https://tally.so">
 <link rel="stylesheet" href="assets/befundkarte.css">
 <script type="application/ld+json">
 {
@@ -861,7 +924,7 @@
           <line x1="2.5" y1="14.5" x2="17.5" y2="14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
       </button>
-      <a class="btn topbar__cta" href="pruefung.html" data-start="kopfleiste">Abrechnung prüfen lassen</a>
+      <a class="btn topbar__cta" href="#vorpruefung-start" data-start="kopfleiste">Abrechnung prüfen lassen</a>
     </div>
   </div>
   <nav class="mobile-nav" id="mobile-nav" aria-label="Hauptnavigation (mobil)" hidden>
@@ -871,7 +934,7 @@
     <a href="#transparenz">Transparenz</a>
     <a href="#faq">FAQ</a>
     <a href="ueber-mich.html">Über mich</a>
-    <a class="mobile-nav__cta" href="pruefung.html" data-start="menue">Abrechnung prüfen lassen</a>
+    <a class="mobile-nav__cta" href="#vorpruefung-start" data-start="menue">Abrechnung prüfen lassen</a>
   </nav>
 </header>
 
@@ -887,59 +950,57 @@
         </p>
         <h1 class="hero__title">Nebenkosten&shy;abrechnung prüfen lassen</h1>
         <p class="hero__sub">
-          Ich prüfe Ihre Abrechnung als Rechtsanwalt. Vorher zeigt Ihnen eine kostenlose, automatische
-          Vorprüfung in wenigen Minuten, ob es Anhaltspunkte für Fehler gibt.
+          Laden Sie Abrechnung und Mietvertrag hoch. In wenigen Minuten sehen Sie, ob es Anhaltspunkte
+          für Fehler gibt. <span class="hero__sub-mehr">Danach entscheiden Sie, ob ich als Rechtsanwalt prüfe.</span>
         </p>
-        <div class="hero__actions">
-          <a class="btn" href="pruefung.html" data-start="hero">Kostenlose Vorprüfung starten</a>
-          <a class="btn btn--ghost" href="#ablauf">So funktioniert&rsquo;s</a>
-        </div>
-        <p class="hero__note">Ein Handyfoto von Abrechnung und Mietvertrag genügt. Die Vorprüfung kostet
-        nichts und verpflichtet zu nichts — sie ist automatisch, ohne anwaltliche Prüfung.</p>
+        <ul class="hero__punkte">
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F3E3CE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+            <span><strong>Handyfoto genügt.</strong> <span class="hero__punkt-mehr">Kein Scanner, kein Papierkram.</span></span></li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F3E3CE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+            <span><strong>Kostenlos und unverbindlich.</strong> <span class="hero__punkt-mehr">Die Vorprüfung ist automatisch, ohne anwaltliche Prüfung.</span></span></li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F3E3CE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg>
+            <span><strong>Anwaltliche Verschwiegenheit.</strong> <span class="hero__punkt-mehr">Ihre Unterlagen dienen nur Ihrer Prüfung.</span></span></li>
+        </ul>
+        <p class="hero__preis">Lohnt sich eine anwaltliche Prüfung, bestellen Sie sie zum Festpreis von 79,90 € inklusive
+        Umsatzsteuer. Sie erhalten ein Prüfergebnis und ein fertiges Schreiben an Ihren Vermieter.</p>
         <p class="hero__spaeter" data-spaeter-zeile hidden>Nicht zur Hand?
           <button type="button" class="spaeter-knopf" data-spaeter="hero">Link für später speichern</button></p>
-
       </div>
 
-      <div>
-        <div class="doc-mock" role="img" aria-label="Beispieldarstellung eines Prüfergebnisses: Abrechnungsfrist eingehalten, Verwaltungskosten nicht umlagefähig, Verteilerschlüssel weicht vom Mietvertrag ab, Einwendung schriftlich möglich; strittige Positionen im Muster 312,40 Euro; geprüft und freigegeben von Rechtsanwalt Zahid Akcay">
-          <div class="doc-mock__head">
-            <span class="doc-mock__brand">
-              <svg width="18" height="18" viewBox="0 0 30 30" fill="none" aria-hidden="true"><rect x="5" y="3" width="18" height="24" rx="2" fill="#F7F4EE" stroke="#2F5D4C" stroke-width="1.8"/><line x1="9" y1="9" x2="19" y2="9" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round"/><line x1="9" y1="13" x2="17" y2="13" stroke="#D9D2C4" stroke-width="1.6" stroke-linecap="round"/><line x1="9" y1="17" x2="18" y2="17" stroke="#D9D2C4" stroke-width="1.6" stroke-linecap="round"/><path d="M11 22.5l2.5 2.5 5-5.5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-              Prüfergebnis
-            </span>
-            <span class="doc-mock__badge">Muster</span>
-          </div>
-          <div class="doc-mock__row" style="--i:0">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="#E3EDE7" stroke="#2F5D4C" stroke-width="1.2"/><path class="tick" pathLength="1" d="M5 8.2l2 2 3.9-4.3" stroke="#2F5D4C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>Abrechnungsfrist: eingehalten</span>
-          </div>
-          <div class="doc-mock__row" style="--i:1">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="#F6E9D6" stroke="#B97C3B" stroke-width="1.2"/><line x1="8" y1="4.6" x2="8" y2="8.8" stroke="#B97C3B" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.2" r="0.9" fill="#B97C3B"/></svg>
-            <span>Position &bdquo;Verwaltungskosten&ldquo;: nicht umlagefähig — Einwendung möglich</span>
-          </div>
-          <div class="doc-mock__row" style="--i:2">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="#F6E9D6" stroke="#B97C3B" stroke-width="1.2"/><line x1="8" y1="4.6" x2="8" y2="8.8" stroke="#B97C3B" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.2" r="0.9" fill="#B97C3B"/></svg>
-            <span>Verteilerschlüssel: weicht vom Mietvertrag ab</span>
-          </div>
-          <div class="doc-mock__row" style="--i:3">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="#E3EDE7" stroke="#2F5D4C" stroke-width="1.2"/><path class="tick" pathLength="1" d="M5 8.2l2 2 3.9-4.3" stroke="#2F5D4C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>Empfehlung: Einwendung schriftlich bis TT.MM.JJJJ möglich</span>
-          </div>
-          <div class="doc-mock__sum">
-            <span>Strittige Positionen</span>
-            <strong>312,40&nbsp;€</strong>
-          </div>
-          <div class="doc-mock__foot">
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l2.7 2.7 6.3-7" stroke="#2F5D4C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Geprüft und freigegeben: Rechtsanwalt Zahid Akcay
+      <!-- Vorprüfung im ersten Bildschirm (Vorschau 01.11.2026): Formular 1 wie auf pruefung.html.
+           Nach dem Absenden geht es zu pruefung.html?vorgang=…, dort erscheint das Ergebnis wie bisher. -->
+      <div class="hero__form" id="vorpruefung-start">
+        <div class="hero__form-kopf">
+          <h2>Kostenlose Vorprüfung</h2>
+          <span>Dauer: etwa eine Minute</span>
+        </div>
+        <div class="form-card" id="form-card">
+          <div class="form-card__iframe-wrap">
+            <div class="form-skeleton" aria-hidden="true">
+              <div class="form-skeleton__bar form-skeleton__bar--short"></div>
+              <div class="form-skeleton__bar form-skeleton__bar--wide"></div>
+              <div class="form-skeleton__bar form-skeleton__bar--full"></div>
+              <div class="form-skeleton__bar form-skeleton__bar--full"></div>
+              <div class="form-skeleton__bar form-skeleton__bar--btn"></div>
+            </div>
+            <div class="form-rescue" id="form-rescue">
+              <h3>Das Formular lässt sich hier nicht laden</h3>
+              <p>Vermutlich blockiert ein Adblocker oder Ihr Netzwerk den Anbieter. Sie können das Formular direkt
+              öffnen, Ihre Angaben kommen genauso bei mir an.</p>
+              <a class="btn" id="tally-direkt" href="https://tally.so/r/kdgJDM" target="_blank" rel="noopener">Formular in neuem Tab öffnen</a>
+            </div>
+            <!-- data-tally-src setzt das Skript unten, weil die Vorgangskennung (vorgang) je Aufruf neu erzeugt wird. -->
+            <iframe
+              id="tally-frame"
+              data-tally-base="https://tally.so/embed/kdgJDM?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+              title="Kostenlose Vorprüfung — Formular"
+              width="100%"
+              height="1"
+            ></iframe>
           </div>
         </div>
-        <p class="doc-mock__note">
-          Muster — beispielhafte, vereinfachte Befunde und ein erfundener Betrag.
-          Ihr Prüfergebnis bezieht sich konkret auf Ihre Unterlagen; ein bestimmtes
-          Ergebnis wird damit nicht zugesagt.
-        </p>
+        <noscript><p class="hero__form-fuss">Ohne JavaScript lädt das Formular hier nicht:
+          <a href="pruefung.html">zur Prüfseite</a>.</p></noscript>
       </div>
     </div>
   </section>
@@ -951,7 +1012,7 @@
       <h2 id="beispiel-titel" class="beispiel-start__titel">Das zeigt Ihnen die kostenlose Vorprüfung</h2>
       <div class="beispiel" id="beispiel-start"></div>
       <p class="beispiel-unter">So sieht Ihr Ergebnis aus. Die Vorprüfung dauert meist unter einer Minute.</p>
-      <p class="beispiel-start__aktion"><a class="btn" href="pruefung.html" data-start="beispiel">Kostenlose Vorprüfung starten</a></p>
+      <p class="beispiel-start__aktion"><a class="btn" href="#vorpruefung-start" data-start="beispiel">Kostenlose Vorprüfung starten</a></p>
     </div>
   </section>
 
@@ -1131,7 +1192,7 @@
           Rechtsanwalt — es kommt per E-Mail zu Ihnen.</span>
         </li>
       </ul>
-      <a class="btn" href="pruefung.html" data-start="mitte">Abrechnung prüfen lassen</a>
+      <a class="btn" href="#vorpruefung-start" data-start="mitte">Abrechnung prüfen lassen</a>
 
       <aside class="danach reveal" aria-labelledby="danach-title">
         <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
@@ -1550,7 +1611,7 @@
         <h2 id="closing-title">Lassen Sie mich einen Blick auf Ihre Abrechnung werfen.</h2>
         <p>Handyfotos genügen. Die Vorprüfung kostet nichts — und Sie entscheiden danach, ob
         ich prüfe.</p>
-        <a class="btn" href="pruefung.html" data-start="ende">Abrechnung prüfen lassen</a>
+        <a class="btn" href="#vorpruefung-start" data-start="ende">Abrechnung prüfen lassen</a>
       </div>
     </div>
   </section>
@@ -1737,7 +1798,8 @@
     window.NKA_HERKUNFT = herkunft;   /* für assets/spaeter.js und die Lesemessung */
     var knoepfe = document.querySelectorAll('a[data-start]');
     Array.prototype.forEach.call(knoepfe, function (a) {
-      if (herkunft !== 'ohne') a.setAttribute('href', 'pruefung.html?quelle=' + herkunft);
+      /* Vorschau 01.11.2026: Die Knöpfe springen zum Formular im Hero; nur echte Verweise auf die Prüfseite tragen die Herkunft weiter. */
+      if (herkunft !== 'ohne' && a.getAttribute('href').indexOf('#') !== 0) a.setAttribute('href', 'pruefung.html?quelle=' + herkunft);
       a.addEventListener('click', function () {
         if (window.umami && typeof window.umami.track === 'function') {
           try { window.umami.track('start_klick', { stelle: a.getAttribute('data-start'), herkunft: herkunft }); } catch (e) {}
@@ -1803,6 +1865,115 @@
     }, 1000);
   })();
 </script>
+<script>
+  /* Vorprüfung im ersten Bildschirm (Vorschau 01.11.2026). Übernimmt von pruefung.html: Vorgangskennung (zufällig, nur in
+     dieser Sitzung), Herkunft (?quelle=…), Klick-ID in der Adresse erhalten, Tally-Einbettung, Ausweichkasten, Formular-Messung.
+     Nach dem Absenden wechselt die Seite zu pruefung.html?vorgang=…, die das Ergebnis wie bisher abruft und anzeigt. */
+  (function () {
+    var frame = document.getElementById('tally-frame');
+    var card = document.getElementById('form-card');
+    if (!frame || !card) return;
+    var q = new URLSearchParams(location.search);
+    var GUELTIG = /^[a-f0-9]{32}$/;
+    function neueId() {
+      var b = new Uint8Array(16); crypto.getRandomValues(b);
+      return Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+    }
+    var vorgang = q.get('vorgang');
+    if (!GUELTIG.test(vorgang || '')) { try { vorgang = sessionStorage.getItem('vorgang'); } catch (e) { vorgang = null; } }
+    if (!GUELTIG.test(vorgang || '')) vorgang = neueId();
+    try { sessionStorage.setItem('vorgang', vorgang); } catch (e) {}
+    var QUELLE_OK = /^[a-z0-9-]{1,32}$/;
+    var quelle = QUELLE_OK.test(q.get('quelle') || '') ? q.get('quelle') : null;
+    if (quelle) { try { sessionStorage.setItem('quelle', quelle); } catch (e) {} }
+    var quelleParam = quelle ? '&quelle=' + quelle : '';
+    var herkunft = window.NKA_HERKUNFT || 'ohne';
+    function zaehle(name, daten) {
+      var d = daten || {};
+      d.herkunft = herkunft;
+      function senden() {
+        if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track(name, d); } catch (e) {} return true; }
+        return false;
+      }
+      if (!senden() && document.readyState !== 'complete') window.addEventListener('load', senden);
+    }
+    /* Tally füllt das versteckte Feld „vorgang“ aus der Adresse der einbettenden Seite; Klick-IDs bleiben erhalten
+       (assets/einwilligung.js hat sie beim Laden schon gelesen). Die Reichweitenmessung meldet die Adresse ohne Parameter. */
+    var klickParam = '';
+    ['gclid', 'gbraid', 'wbraid'].forEach(function (k) {
+      var v = q.get(k);
+      if (v && /^[A-Za-z0-9_\-]{10,300}$/.test(v)) klickParam += '&' + k + '=' + v;
+    });
+    var utmParam = '';
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(function (k) {
+      var v = q.get(k);
+      if (v && /^[\p{L}\p{N} _.+\-]{1,100}$/u.test(v)) utmParam += '&' + k + '=' + encodeURIComponent(v);
+    });
+    if (q.get('vorgang') !== vorgang) {
+      try { history.replaceState(null, '', location.pathname + '?vorgang=' + vorgang + quelleParam + klickParam + utmParam + location.hash); } catch (e) {}
+    }
+    frame.setAttribute('data-tally-src', frame.getAttribute('data-tally-base') + '&vorgang=' + vorgang + quelleParam);
+    var direkt = document.getElementById('tally-direkt');
+    if (direkt) direkt.href = 'https://tally.so/r/kdgJDM?vorgang=' + vorgang + quelleParam;
+
+    var loaded = false;
+    function formularDa() { card.classList.remove('is-stalled'); card.classList.add('is-loaded'); }
+    frame.addEventListener('load', function () { loaded = true; formularDa(); });
+    window.setTimeout(function () {
+      if (loaded && frame.clientHeight > 40) return;
+      card.classList.add('is-stalled');
+      var versuche = 0;
+      var wache = window.setInterval(function () {
+        versuche += 1;
+        if (frame.clientHeight > 40 || !card.classList.contains('is-stalled')) { formularDa(); window.clearInterval(wache); }
+        else if (versuche >= 120) window.clearInterval(wache);
+      }, 1000);
+    }, 4500);
+
+    var formularGezaehlt = {};
+    window.addEventListener('message', function (e) {
+      if (typeof e.origin !== 'string' || e.origin.indexOf('tally.so') === -1) return;
+      var d = e.data;
+      if (typeof d === 'string') { if (d.indexOf('Tally.Form') === -1) return; try { d = JSON.parse(d); } catch (err) { return; } }
+      if (!d || !d.event) return;
+      var p = d.payload || {};
+      if (d.event === 'Tally.FormLoaded') {
+        formularDa();
+        if (formularGezaehlt.geladen) return;
+        formularGezaehlt.geladen = true;
+        zaehle('formular_geladen', { formular: 'vorpruefung' });
+        return;
+      }
+      if (d.event === 'Tally.FormPageView') {
+        var seite = parseInt(p.page, 10);
+        if (!(seite >= 1 && seite <= 20) || formularGezaehlt[seite]) return;
+        formularGezaehlt[seite] = true;
+        zaehle('formular_seite', { formular: 'vorpruefung', seite: String(seite) });
+        return;
+      }
+      if (d.event === 'Tally.FormSubmitted') {
+        /* Werbemessung nur mit Einwilligung, Kennung nur als Hashwert (assets/einwilligung.js); Umami nur die Tatsache. */
+        if (typeof window.nkaMessung === 'function') { try { window.nkaMessung('vorpruefung', vorgang); } catch (err) {} }
+        zaehle('vorpruefung_abgeschickt');
+        /* E-Mail für das Bestellformular merken (wie pruefung.html, merkeEmail): nur sessionStorage, nur für Tally. */
+        try {
+          var felder = Array.isArray(p.fields) ? p.fields : [];
+          for (var i = 0; i < felder.length; i++) {
+            var fe = felder[i] || {}, an = fe.answer || {};
+            if (String(fe.type || '') !== 'INPUT_EMAIL' && !/mail/i.test(String(fe.title || fe.label || ''))) continue;
+            var v = String(an.value || an.raw || fe.value || '').trim();
+            if (/^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,24}$/.test(v)) { sessionStorage.setItem('nka_email', v); break; }
+          }
+        } catch (err) {}
+        window.setTimeout(function () {
+          location.href = 'pruefung.html?vorgang=' + vorgang + quelleParam + klickParam + '#vorpruefung';
+        }, 400);
+      }
+    });
+  })();
+</script>
+<!-- Offizielles Tally-Skript: löst data-tally-src ein und passt die iframe-Höhe dynamisch an den Formularinhalt an. -->
+<script async src="https://tally.so/widgets/embed.js"></script>
 <script src="assets/spaeter.js"></script>
 </body>
 </html>

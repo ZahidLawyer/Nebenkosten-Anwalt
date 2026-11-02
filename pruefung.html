@@ -519,7 +519,7 @@
           Rechtsberatung. Ob ein Punkt trägt, sage ich Ihnen in der anwaltlichen Prüfung.</p>
         </div>
         <div class="vp-cta" id="vp-cta" hidden>
-          <!-- Paket 1b (29.10.2026): wer prüft, was zusätzlich geprüft wird, Beispielseiten mit erfundenen Daten -->
+          <!-- Paket 1b (29.10.2026): wer prüft, was zusätzlich geprüft wird. Beispielseiten entfernt (Zahid 02.11.2026). -->
           <div class="vp-anwalt">
             <img src="assets/portrait-zahid.jpg" alt="" width="56" height="56">
             <p><strong>Rechtsanwalt Zahid Akcay</strong>Ich prüfe Ihre Abrechnung selbst und bereite das Schreiben an Ihren Vermieter vor.</p>
@@ -533,19 +533,6 @@
               <li>ob die Kosten wirtschaftlich sind</li>
             </ul>
           </div>
-          <div class="vp-beispielseiten">
-            <figure>
-              <a href="assets/beispiel-pruefbericht.jpg" target="_blank" rel="noopener"><img src="assets/beispiel-pruefbericht.jpg"
-                alt="Beispiel einer Rechtseinschätzung, erste Seite, mit erfundenen Daten und geschwärzten Beträgen" width="720" height="479" loading="lazy"></a>
-              <figcaption>Ihre Rechtseinschätzung</figcaption>
-            </figure>
-            <figure>
-              <a href="assets/beispiel-vermieterschreiben.jpg" target="_blank" rel="noopener"><img src="assets/beispiel-vermieterschreiben.jpg"
-                alt="Beispiel eines Schreibens an den Vermieter, erste Seite, mit erfundenen Daten und geschwärzten Beträgen" width="720" height="510" loading="lazy"></a>
-              <figcaption>Ihr Schreiben an den Vermieter</figcaption>
-            </figure>
-          </div>
-          <p class="vp-beispielseiten__hinweis">Beispiel mit erfundenen Daten, Beträge geschwärzt.</p>
           <a class="vp-button" href="#bestellen" id="vp-bestellen">Jetzt kostenpflichtig prüfen lassen — 79,90 Euro</a>
           <span>Endpreis einschließlich Umsatzsteuer. Bezahlt wird erst auf der sicheren Bezahlseite von Stripe, mit
           Karte, PayPal, Apple Pay oder Google Pay — nicht durch diesen Klick.</span>
@@ -705,6 +692,22 @@
       try { history.replaceState(null, '', location.pathname + '?vorgang=' + vorgang + quelleParam + klickParam + location.hash); } catch (e) {}
     }
 
+    /* E-Mail aus der Vorprüfung (02.11.2026, Wunsch Zahid): Tally meldet beim Absenden die Antworten an die Seite.
+       Die Adresse bleibt nur im Sitzungsspeicher dieses Tabs (sessionStorage, endet mit dem Tab) und geht nur an Tally,
+       als Vorbelegung des Felds E-Mail im Bestellformular (verstecktes Feld „email“). Nie in die Seitenadresse, nie an Umami. */
+    function merkeEmail(p) {
+      try {
+        var felder = (p && Array.isArray(p.fields)) ? p.fields : [];
+        for (var i = 0; i < felder.length; i++) {
+          var f = felder[i] || {};
+          var typ = String(f.type || ''), titel = String(f.title || f.label || '');
+          if (typ !== 'INPUT_EMAIL' && !/mail/i.test(titel)) continue;
+          var a = f.answer || {};
+          var v = String(a.value || a.raw || f.value || '').trim();
+          if (/^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,24}$/.test(v)) { sessionStorage.setItem('nka_email', v); return; }
+        }
+      } catch (e) {}
+    }
     /* ---------- Formular 1 laden (Tally füllt das versteckte Feld „vorgang" aus der URL) ---------- */
     var frame = document.getElementById('tally-frame');
     var card = document.getElementById('form-card');
@@ -914,6 +917,7 @@
       if (typeof window.nkaMessung === 'function') { try { window.nkaMessung('vorpruefung', vorgang); } catch (err) {} }
       /* Reichweitenmessung (Umami, cookielos): nur die Tatsache des Absendens, keine Vorgangskennung */
       zaehle('vorpruefung_abgeschickt');
+      merkeEmail(p);
       aufrufNeu = true;
       starten(true); /* Formular 1: neues Absenden startet die Abfrage neu (z. B. nach 'fehler') */
     });
@@ -1044,7 +1048,9 @@
       b.hidden = false;
       if (id && /^[A-Za-z0-9]{4,}$/.test(id) && id !== 'TALLY_FORMULAR_2_ID') {
         document.getElementById('bestell-platzhalter').hidden = true;
-        f.setAttribute('data-tally-src', f.getAttribute('data-bestell-base').replace('{ID}', id) + '&vorgang=' + vorgang + quelleParam);
+        var emailParam = '';
+        try { var em = sessionStorage.getItem('nka_email'); if (em) emailParam = '&email=' + encodeURIComponent(em); } catch (e) {}
+        f.setAttribute('data-tally-src', f.getAttribute('data-bestell-base').replace('{ID}', id) + '&vorgang=' + vorgang + quelleParam + emailParam);
         var fb = document.getElementById('bestell-fallback');
         fb.hidden = false;
         document.getElementById('bestell-direkt').href = 'https://tally.so/r/' + id + '?vorgang=' + vorgang + quelleParam;
