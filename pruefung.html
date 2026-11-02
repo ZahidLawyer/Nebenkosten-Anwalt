@@ -527,7 +527,6 @@
           <div class="vp-zusaetzlich">
             <p>Was ich zusätzlich prüfe:</p>
             <ul>
-              <li>die Belege hinter den Positionen</li>
               <li>die Heizkostenabrechnung im Einzelnen</li>
               <li>die Rechenwege</li>
               <li>ob die Kosten wirtschaftlich sind</li>
@@ -802,7 +801,7 @@
         gepr.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
         geprueftEl.appendChild(ul);
         var gs = document.createElement('p');
-        gs.textContent = 'Belege, Rechenwege und die Heizkostenabrechnung im Einzelnen prüft nur die anwaltliche Prüfung.';
+        gs.textContent = 'Rechenwege und die Heizkostenabrechnung im Einzelnen prüft nur die anwaltliche Prüfung.';
         geprueftEl.appendChild(gs);
         geprueftEl.hidden = false;
       } else geprueftEl.hidden = true;
