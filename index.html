@@ -250,6 +250,14 @@
   .hero__form .btn:hover { background: var(--moss-deep); }
   .hero__form-fuss { font-size: 0.85rem; color: var(--ink-soft); margin: 0.75rem 0 0; text-align: center; }
   .hero__form-fuss a { color: var(--moss); font-weight: 600; }
+  /* Unverbindliche Nachricht (Vorschau 05.11.2026): zweiter, niedrigschwelliger Weg direkt unter der Vorprüfung */
+  .hero__kontakt { border-top: 1px solid rgba(0,0,0,0.08); margin-top: 0.5rem; padding-top: 0.7rem; }
+  .hero__kontakt-zeile { font-size: 0.95rem; line-height: 1.45; color: var(--ink-soft); margin: 0; text-align: center; }
+  .kontakt-knopf { color: var(--moss); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  .kontakt-knopf:hover { color: var(--moss-deep); text-decoration-thickness: 2px; }
+  .hero__kontakt-box { margin-top: 0.6rem; }
+  .hero__kontakt-box[hidden] { display: none; }
+  .hero__kontakt-box iframe { width: 100%; border: none; display: block; background: transparent; }
   .hero__punkte { list-style: none; margin: 1.1rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.95rem; color: rgba(255,255,255,0.92); }
   .hero__punkte li { display: flex; gap: 0.6rem; align-items: flex-start; }
   .hero__punkte svg { flex: none; margin-top: 0.15rem; }
@@ -994,6 +1002,21 @@
               id="tally-frame"
               data-tally-base="https://tally.so/embed/kdgJDM?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
               title="Kostenlose Vorprüfung — Formular"
+              width="100%"
+              height="1"
+            ></iframe>
+          </div>
+        </div>
+        <!-- Unverbindliche Nachricht (Vorschau 05.11.2026): Tally-Formular e5DR6Q, Zustellung per E-Mail an info@.
+             Ohne JavaScript öffnet der Link das Formular in einem neuen Tab. -->
+        <div class="hero__kontakt" id="kontakt">
+          <p class="hero__kontakt-zeile">Unterlagen gerade nicht zur Hand?
+            <a class="kontakt-knopf" id="kontakt-knopf" href="https://tally.so/r/e5DR6Q" target="_blank" rel="noopener">Schreiben Sie mir unverbindlich, worum es geht.</a></p>
+          <div class="hero__kontakt-box" id="kontakt-box" hidden>
+            <iframe
+              id="kontakt-frame"
+              data-tally-base="https://tally.so/embed/e5DR6Q?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+              title="Unverbindliche Nachricht — Formular"
               width="100%"
               height="1"
             ></iframe>
@@ -1933,6 +1956,8 @@
     var formularGezaehlt = {};
     window.addEventListener('message', function (e) {
       if (typeof e.origin !== 'string' || e.origin.indexOf('tally.so') === -1) return;
+      /* Nur Meldungen des Vorprüfungs-Formulars; das Nachrichtenformular (#kontakt-frame) hat eigene Messung. */
+      if (frame.contentWindow && e.source !== frame.contentWindow) return;
       var d = e.data;
       if (typeof d === 'string') { if (d.indexOf('Tally.Form') === -1) return; try { d = JSON.parse(d); } catch (err) { return; } }
       if (!d || !d.event) return;
@@ -1969,6 +1994,64 @@
           location.href = 'pruefung.html?vorgang=' + vorgang + quelleParam + klickParam + '#vorpruefung';
         }, 400);
       }
+    });
+  })();
+</script>
+<script>
+  /* Unverbindliche Nachricht (Vorschau 05.11.2026): Der Link öffnet Formular e5DR6Q direkt unter der Vorprüfung.
+     Vorgangskennung und Herkunft wie bei der Vorprüfung (sessionStorage). Umami zählt nur Öffnen, Laden und Absenden,
+     keine Inhalte. */
+  (function () {
+    var knopf = document.getElementById('kontakt-knopf');
+    var box = document.getElementById('kontakt-box');
+    var frame = document.getElementById('kontakt-frame');
+    if (!knopf || !box || !frame) return;
+    var herkunft = window.NKA_HERKUNFT || 'ohne';
+    function zaehle(name, daten) {
+      var d = daten || {};
+      d.herkunft = herkunft;
+      function senden() {
+        if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track(name, d); } catch (e) {} return true; }
+        return false;
+      }
+      if (!senden() && document.readyState !== 'complete') window.addEventListener('load', senden);
+    }
+    function param() {
+      var vorgang = null, quelle = null;
+      try { vorgang = sessionStorage.getItem('vorgang'); quelle = sessionStorage.getItem('quelle'); } catch (e) {}
+      var s = '';
+      if (/^[a-f0-9]{32}$/.test(vorgang || '')) s += '&vorgang=' + vorgang;
+      if (/^[a-z0-9-]{1,32}$/.test(quelle || '')) s += '&quelle=' + quelle;
+      return s;
+    }
+    var p0 = param();
+    knopf.href = 'https://tally.so/r/e5DR6Q' + (p0 ? '?' + p0.slice(1) : '');
+    var offen = false;
+    knopf.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      if (!offen) {
+        offen = true;
+        var src = frame.getAttribute('data-tally-base') + param();
+        frame.setAttribute('data-tally-src', src);
+        box.hidden = false;
+        var geladen = false;
+        if (window.Tally && typeof window.Tally.loadEmbeds === 'function') {
+          try { window.Tally.loadEmbeds(); geladen = true; } catch (e) {}
+        }
+        if (!geladen) { frame.style.height = '36rem'; frame.src = src; }
+        zaehle('kontakt_geoeffnet', { stelle: 'hero' });
+      }
+      try { box.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
+    });
+    var gezaehlt = {};
+    window.addEventListener('message', function (e) {
+      if (typeof e.origin !== 'string' || e.origin.indexOf('tally.so') === -1) return;
+      if (!frame.contentWindow || e.source !== frame.contentWindow) return;
+      var d = e.data;
+      if (typeof d === 'string') { if (d.indexOf('Tally.Form') === -1) return; try { d = JSON.parse(d); } catch (err) { return; } }
+      if (!d || !d.event) return;
+      if (d.event === 'Tally.FormLoaded' && !gezaehlt.geladen) { gezaehlt.geladen = true; zaehle('formular_geladen', { formular: 'kontakt' }); }
+      if (d.event === 'Tally.FormSubmitted' && !gezaehlt.gesendet) { gezaehlt.gesendet = true; zaehle('kontakt_gesendet'); }
     });
   })();
 </script>
