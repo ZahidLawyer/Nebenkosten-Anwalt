@@ -260,6 +260,8 @@
   .hero__kontakt-box iframe { width: 100%; border: none; display: block; background: transparent; }
   /* Aufgeklappt wird die Karte sehr hoch: linke Spalte oben halten statt mittig (sonst große Lücke oben links) */
   .hero__inner.kontakt-offen { align-items: start; }
+  /* Zweiter Einstieg oben in der Karte (Vorschau 06.11.2026): am Handy ohne Scrollen sichtbar */
+  .hero__kontakt-oben { font-size: 0.92rem; line-height: 1.4; color: var(--ink-soft); margin: 0.1rem 0 0.5rem; }
   .hero__punkte { list-style: none; margin: 1.1rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.95rem; color: rgba(255,255,255,0.92); }
   .hero__punkte li { display: flex; gap: 0.6rem; align-items: flex-start; }
   .hero__punkte svg { flex: none; margin-top: 0.15rem; }
@@ -984,6 +986,7 @@
           <h2>Kostenlose Vorprüfung</h2>
           <span>Dauer: etwa eine Minute</span>
         </div>
+        <p class="hero__kontakt-oben">Keine Unterlagen zur Hand? <a class="kontakt-knopf" id="kontakt-oben" href="#kontakt">Kurze Nachricht schreiben</a></p>
         <div class="form-card" id="form-card">
           <div class="form-card__iframe-wrap">
             <div class="form-skeleton" aria-hidden="true">
@@ -2029,6 +2032,7 @@
     var p0 = param();
     knopf.href = 'https://tally.so/r/e5DR6Q' + (p0 ? '?' + p0.slice(1) : '');
     var offen = false;
+    var stelle = 'unten';
     knopf.addEventListener('click', function (ev) {
       ev.preventDefault();
       if (!offen) {
@@ -2042,10 +2046,12 @@
           try { window.Tally.loadEmbeds(); geladen = true; } catch (e) {}
         }
         if (!geladen) { frame.style.height = '36rem'; frame.src = src; }
-        zaehle('kontakt_geoeffnet', { stelle: 'hero' });
+        zaehle('kontakt_geoeffnet', { stelle: stelle });
       }
       try { box.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
     });
+    var oben = document.getElementById('kontakt-oben');
+    if (oben) oben.addEventListener('click', function (ev) { ev.preventDefault(); if (!offen) stelle = 'oben'; knopf.click(); });
     var gezaehlt = {};
     window.addEventListener('message', function (e) {
       if (typeof e.origin !== 'string' || e.origin.indexOf('tally.so') === -1) return;
