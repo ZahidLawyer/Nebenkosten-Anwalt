@@ -258,6 +258,8 @@
   .hero__kontakt-box { margin-top: 0.6rem; }
   .hero__kontakt-box[hidden] { display: none; }
   .hero__kontakt-box iframe { width: 100%; border: none; display: block; background: transparent; }
+  /* Aufgeklappt wird die Karte sehr hoch: linke Spalte oben halten statt mittig (sonst große Lücke oben links) */
+  .hero__inner.kontakt-offen { align-items: start; }
   .hero__punkte { list-style: none; margin: 1.1rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.95rem; color: rgba(255,255,255,0.92); }
   .hero__punkte li { display: flex; gap: 0.6rem; align-items: flex-start; }
   .hero__punkte svg { flex: none; margin-top: 0.15rem; }
@@ -2034,6 +2036,7 @@
         var src = frame.getAttribute('data-tally-base') + param();
         frame.setAttribute('data-tally-src', src);
         box.hidden = false;
+        var inner = document.querySelector('.hero__inner'); if (inner) inner.classList.add('kontakt-offen');
         var geladen = false;
         if (window.Tally && typeof window.Tally.loadEmbeds === 'function') {
           try { window.Tally.loadEmbeds(); geladen = true; } catch (e) {}
