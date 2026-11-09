@@ -521,6 +521,17 @@
   .deliverable__bar--w70 { width: 70%; }
   .deliverable__bar--w45 { width: 45%; background: var(--paper-deep); }
   .deliverable__bar--accent { width: 35%; background: rgba(185,124,59,0.30); }
+  /* Echte Ausschnitte aus dem Beispielfall (Vorschau 09.11.2026): Papier mit Schatten, unten ausgeblendet */
+  .deliverable__probe { margin: 1rem 0 0; }
+  .deliverable__probe-bild { position: relative; display: block; overflow: hidden; max-height: 26rem; border-radius: 6px; background: #fff;
+    border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 26px -14px rgba(31,42,38,0.35); }
+  .deliverable__probe-bild img { display: block; width: 100%; height: auto; }
+  .deliverable__probe-bild::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2.5rem;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), #fff); pointer-events: none; }
+  .deliverable__probe figcaption { margin-top: 0.6rem; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+    gap: 0.35rem 0.5rem; font-size: 0.8rem; color: var(--ink-soft); }
+  .deliverable__stempel { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #8A5A24;
+    background: #F3E3CE; border: 1px solid rgba(185,124,59,0.45); border-radius: 999px; padding: 0.18rem 0.6rem; }
   .ergebnis__points { list-style: none; display: grid; gap: 1rem; margin-bottom: 1.6rem; max-width: 44rem; }
   .ergebnis__points li { display: flex; gap: 0.65rem; font-size: 0.98rem; color: var(--ink-soft); }
   .ergebnis__points li svg { flex: none; margin-top: 0.25rem; }
@@ -1176,24 +1187,24 @@
           <h3>Ihr Prüfergebnis</h3>
           <p>Punkt für Punkt: welche Positionen auffällig sind, warum sie es sind und
           welche Fristen für Sie laufen. In normalem Deutsch, nicht in Paragrafen.</p>
-          <div class="deliverable__sheet" aria-hidden="true">
-            <div class="deliverable__bar deliverable__bar--w90"></div>
-            <div class="deliverable__bar deliverable__bar--w70"></div>
-            <div class="deliverable__bar deliverable__bar--accent"></div>
-            <div class="deliverable__bar deliverable__bar--w45"></div>
-          </div>
+          <figure class="deliverable__probe">
+            <a class="deliverable__probe-bild" href="assets/probe-rechtseinschaetzung.jpg" target="_blank" rel="noopener" aria-label="Ausschnitt vergrößert öffnen">
+              <img src="assets/probe-rechtseinschaetzung.jpg?v=2" alt="Ausschnitt aus einer Beispiel-Rechtseinschätzung mit erfundenen Daten: Briefkopf, Überschrift „Ihre Nebenkostenprüfung“ und der Kasten „Das Wichtigste in Kürze“ mit Ampel, Nachforderung, voraussichtlicher Ersparnis, Handlungsempfehlung und Termin." width="1372" height="971" loading="lazy" decoding="async">
+            </a>
+            <figcaption><span class="deliverable__stempel">Beispiel mit erfundenen Daten</span> Ausschnitt aus Seite 1 von 6</figcaption>
+          </figure>
         </article>
         <article class="deliverable reveal" style="--i:1">
           <p class="deliverable__tag">Dokument 2</p>
           <h3>Ihr vorbereitetes Schreiben</h3>
           <p>Lohnt sich ein Widerspruch, lege ich ein auf Ihre Abrechnung abgestimmtes
           Schreiben an Ihren Vermieter bei — Sie prüfen es und schicken es ab.</p>
-          <div class="deliverable__sheet" aria-hidden="true">
-            <div class="deliverable__bar deliverable__bar--w70"></div>
-            <div class="deliverable__bar deliverable__bar--w90"></div>
-            <div class="deliverable__bar deliverable__bar--w45"></div>
-            <div class="deliverable__bar deliverable__bar--accent"></div>
-          </div>
+          <figure class="deliverable__probe">
+            <a class="deliverable__probe-bild" href="assets/probe-vermieterschreiben.jpg" target="_blank" rel="noopener" aria-label="Ausschnitt vergrößert öffnen">
+              <img src="assets/probe-vermieterschreiben.jpg" alt="Ausschnitt aus einem Beispiel-Schreiben an den Vermieter mit erfundenen Daten: Absender, Empfänger, Betreff mit Abrechnung und Einwendungen nach § 556 Abs. 3 Satz 5 BGB, Anrede und Einleitung." width="1338" height="851" loading="lazy" decoding="async">
+            </a>
+            <figcaption><span class="deliverable__stempel">Beispiel mit erfundenen Daten</span> Ausschnitt aus Seite 1 von 4</figcaption>
+          </figure>
         </article>
       </div>
 
