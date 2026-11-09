@@ -677,8 +677,7 @@
         if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track('quelle', { quelle: quelle }); } catch (e) {} }
       });
     }
-    /* Tally füllt versteckte Felder aus der URL der EINBETTENDEN Seite (dokumentierter Weg für
-       das Standard-Embed mit embed.js). Deshalb steht die Kennung auch in der eigenen Adresse. */
+    /* Tally erhält die versteckten Felder über die Adresse des eingebetteten Formulars (data-tally-src, unten). */
     /* Klick-ID einer Google-Anzeige (gclid, gbraid, wbraid) beim Umschreiben der Adresse erhalten, damit die
        Werbemessung sie nach einer Einwilligung zuordnen kann (assets/einwilligung.js). Ohne Einwilligung bleibt
        sie nur in der Adresse stehen und geht nirgendwohin. */
@@ -687,9 +686,9 @@
       var v = q.get(k);
       if (v && /^[A-Za-z0-9_\-]{10,300}$/.test(v)) klickParam += '&' + k + '=' + v;
     });
-    if (q.get('vorgang') !== vorgang || q.get('quelle') !== quelle) {
-      try { history.replaceState(null, '', location.pathname + '?vorgang=' + vorgang + quelleParam + klickParam + location.hash); } catch (e) {}
-    }
+    /* Sicherheitsfix 09.11.2026: Beim bloßen Aufruf schreibt die Seite keine Kennung mehr in die Adresse. Sie kommt erst
+       nach dem Absenden der Vorprüfung hinein (siehe Tally.FormSubmitted), damit Neuladen und Lesezeichen das Ergebnis zeigen.
+       Tally erhält die Kennung über die Adresse des eingebetteten Formulars (data-tally-src). */
 
     /* E-Mail aus der Vorprüfung (02.11.2026, Wunsch Zahid): Tally meldet beim Absenden die Antworten an die Seite.
        Die Adresse bleibt nur im Sitzungsspeicher dieses Tabs (sessionStorage, endet mit dem Tab) und geht nur an Tally,
@@ -917,6 +916,7 @@
       /* Reichweitenmessung (Umami, cookielos): nur die Tatsache des Absendens, keine Vorgangskennung */
       zaehle('vorpruefung_abgeschickt');
       merkeEmail(p);
+      try { history.replaceState(null, '', location.pathname + '?vorgang=' + vorgang + quelleParam + klickParam + location.hash); } catch (err) {}
       aufrufNeu = true;
       starten(true); /* Formular 1: neues Absenden startet die Abfrage neu (z. B. nach 'fehler') */
     });

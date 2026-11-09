@@ -1918,8 +1918,11 @@
       var b = new Uint8Array(16); crypto.getRandomValues(b);
       return Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
     }
-    var vorgang = q.get('vorgang');
-    if (!GUELTIG.test(vorgang || '')) { try { vorgang = sessionStorage.getItem('vorgang'); } catch (e) { vorgang = null; } }
+    /* Vorgangskennung (Sicherheitsfix 09.11.2026): nur aus dem Speicher dieses Tabs oder neu, NIE aus der Adresse.
+       Eine Kennung in der Adresse (geteilter Link, von Google übernommener Sitelink) würde sonst von mehreren Besuchern
+       geteilt, deren Unterlagen und Ergebnisse dann unter demselben Vorgang lägen. */
+    var vorgang = null;
+    try { vorgang = sessionStorage.getItem('vorgang'); } catch (e) { vorgang = null; }
     if (!GUELTIG.test(vorgang || '')) vorgang = neueId();
     try { sessionStorage.setItem('vorgang', vorgang); } catch (e) {}
     var QUELLE_OK = /^[a-z0-9-]{1,32}$/;
@@ -1948,8 +1951,14 @@
       var v = q.get(k);
       if (v && /^[\p{L}\p{N} _.+\-]{1,100}$/u.test(v)) utmParam += '&' + k + '=' + encodeURIComponent(v);
     });
-    if (q.get('vorgang') !== vorgang) {
-      try { history.replaceState(null, '', location.pathname + '?vorgang=' + vorgang + quelleParam + klickParam + utmParam + location.hash); } catch (e) {}
+    /* Die Kennung kommt nicht mehr in die Adresse (Sicherheitsfix 09.11.2026). Steht dort noch eine aus einem alten Link,
+       wird nur sie entfernt; Herkunft, Klick-IDs und Kampagnenkennung bleiben unverändert stehen. */
+    if (q.has('vorgang')) {
+      try {
+        var ohne = new URLSearchParams(location.search); ohne.delete('vorgang');
+        var rest = ohne.toString();
+        history.replaceState(null, '', location.pathname + (rest ? '?' + rest : '') + location.hash);
+      } catch (e) {}
     }
     frame.setAttribute('data-tally-src', frame.getAttribute('data-tally-base') + '&vorgang=' + vorgang + quelleParam);
     var direkt = document.getElementById('tally-direkt');
