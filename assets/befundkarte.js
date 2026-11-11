@@ -276,7 +276,9 @@
       if (typeof opt.beiBestellen === 'function') knopf.addEventListener('click', function (e) { opt.beiBestellen(e); });
       el.appendChild(knopf);
     }
-    absatz('Die ' + PREIS + ' tragen Sie selbst. Ihr Vermieter erstattet sie in der Regel nicht.', 'vp-betrag__klein');
+    /* 11.11.2026 (Weisung Zahid): nur noch auf der Ergebnisseite am Bestellknopf, nicht im Beispiel der Startseite;
+       dazu steht es in den FAQ (Was kostet die Prüfung). */
+    if (!opt.beispiel) absatz('Die ' + PREIS + ' tragen Sie selbst. Ihr Vermieter erstattet sie in der Regel nicht.', 'vp-betrag__klein');
     el.hidden = false;
     return true;
   }

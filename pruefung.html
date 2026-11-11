@@ -160,6 +160,7 @@
 
   /* ============ Formular-Bereich ============ */
   .form-area { padding: 0 0 clamp(3rem, 6vw, 4.5rem); }
+  .hat-ergebnis .form-area { padding-top: clamp(1.5rem, 4vw, 2.5rem); }
   .form-card {
     max-width: 40rem; margin: 0 auto;
     background: var(--paper-deep);
@@ -546,7 +547,7 @@
             <ul>
               <li>die Heizkostenabrechnung im Einzelnen</li>
               <li>die Rechenwege</li>
-              <li>ob die Kosten wirtschaftlich sind</li>
+              <li>ob einzelne Kosten auffällig hoch sind</li>
             </ul>
           </div>
           <a class="vp-button" href="#bestellen" id="vp-bestellen">Jetzt kostenpflichtig prüfen lassen — 79,90 Euro</a>
@@ -678,7 +679,7 @@
   </div>
 </footer>
 
-<script src="assets/befundkarte.js?v=1111"></script>
+<script src="assets/befundkarte.js?v=1111b"></script>
 <script>
   (function () {
     /* ---------- Vorgangskennung: zufällig, nur in dieser Sitzung, kein Personenbezug ---------- */
@@ -876,8 +877,20 @@
       li.appendChild(box);
       punkteEl.appendChild(li);
     }
+    /* 11.11.2026 (Weisung Zahid): Mit fertigem Ergebnis steht das Ergebnis oben, nicht erneut das Upload-Formular.
+       Bei Fehler oder laufender Vorprüfung bleibt alles sichtbar. */
+    function uploadAusblenden() {
+      ['.page-head', '.assure', '.beispiel-klapp', '#form-card', '.form-fallback', '.form-trust'].forEach(function (s) {
+        Array.prototype.forEach.call(document.querySelectorAll(s), function (el) {
+          if (el.closest && el.closest('#vorpruefung, #mietvertrag-schritt, #bestellen')) return;
+          el.hidden = true; el.style.display = 'none';
+        });
+      });
+      document.body.classList.add('hat-ergebnis');
+    }
     function zeigeErgebnis(erg, lauf) {
       fertig = true;
+      uploadAusblenden();
       if (typeof lauf === 'number') gezeigterLauf = lauf;
       /* Aufbereitung, Empfehlung und Karte aus assets/befundkarte.js (dasselbe wie das Beispiel). */
       var b = NB.auswerten(erg || {}, NB.heuteIso());

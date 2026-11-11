@@ -1328,7 +1328,6 @@
       <div class="preis__lohnt reveal">
         <p>Schon ein einzelner Posten, der nicht umgelegt werden darf, kann mehr ausmachen als der Preis der Prüfung.
         Ob das bei Ihnen so ist, zeigt die Vorprüfung, bevor Sie etwas bezahlen. Findet sie nichts, sagt sie Ihnen auch das.</p>
-        <p>Die 79,90&nbsp;€ tragen Sie selbst. Ihr Vermieter erstattet sie in der Regel nicht.</p>
       </div>
       <p class="preis__aktion"><a class="btn" href="#vorpruefung-start" data-start="preis">Abrechnung kostenlos vorprüfen</a></p>
     </div>
@@ -1924,7 +1923,7 @@
   })();
 </script>
 
-<script src="assets/befundkarte.js?v=1111"></script>
+<script src="assets/befundkarte.js?v=1111b"></script>
 <script>
   if (window.NkaBefund) window.NkaBefund.zeigeBeispiel(document.getElementById('beispiel-start'));
 </script>
@@ -2015,7 +2014,9 @@
           else if (nav && nav.type === 'back_forward') art = 'zurueck';
         }
       } catch (e) {}
-      if (art) zaehle('seite_wieder_geladen', { art: art });
+      var nachFormular = 'nein';
+      try { if (sessionStorage.getItem('nka_formular_beruehrt') === '1') nachFormular = 'ja'; } catch (e) {}
+      if (art) zaehle('seite_wieder_geladen', { art: art, nach_formular: nachFormular });
     })();
 
     var STUFEN = [[10, '10s'], [30, '30s'], [90, '90s']];
@@ -2112,7 +2113,8 @@
     window.addEventListener('blur', function () {
       if (beruehrt) return;
       window.setTimeout(function () {
-        if (!beruehrt && document.activeElement === frame) { beruehrt = true; zaehle('formular_beruehrt', { formular: 'vorpruefung' }); }
+        if (!beruehrt && document.activeElement === frame) { beruehrt = true; zaehle('formular_beruehrt', { formular: 'vorpruefung' });
+          try { sessionStorage.setItem('nka_formular_beruehrt', '1'); } catch (e) {} }
       }, 0);
     });
 
