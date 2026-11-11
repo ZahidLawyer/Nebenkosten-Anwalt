@@ -304,6 +304,15 @@
   .ergebnis-frist { font-size: 0.9rem; color: #24312B; margin: 0.2rem 0 0.8rem; }
   .ergebnis-frist[hidden] { display: none; }
   .bestellen { max-width: 40rem; margin: 1.75rem auto 0; scroll-margin-top: 5rem; }
+  /* Mietvertrag vor der Bestellung (Entscheidung Zahid 11.11.2026) */
+  .mv-schritt { max-width: 40rem; margin: 1.75rem auto 0; scroll-margin-top: 5rem; }
+  .mv-schritt[hidden] { display: none; }
+  .mv-schritt .prep-box { margin-bottom: 1rem; }
+  .mv-schritt .form-card { margin-top: 0.5rem; }
+  .mv-status { font-size: 0.95rem; line-height: 1.5; color: #24312B; background: #F7F4EE; border-left: 3px solid #2F5D4C;
+    border-radius: 6px; padding: 0.6rem 0.85rem; margin: 0.9rem 0 0; }
+  .mv-status[hidden] { display: none; }
+  .mv-spaeter { font-size: 0.9rem; line-height: 1.5; color: var(--ink-soft); margin: 0.9rem 0 0; }
   #vorpruefung { scroll-margin-top: 5rem; }
   .bestellen .prep-box { margin-bottom: 1rem; }
   .bestellen .form-card { margin-top: 0.5rem; }
@@ -392,7 +401,7 @@
         <h1 class="section-title">Ihre Unterlagen hochladen</h1>
         <p class="section-lead">
           <span class="nur-gross">Ihre Nebenkostenabrechnung und Ihre E-Mail-Adresse, mehr braucht es nicht. Den Mietvertrag
-          können Sie mitschicken oder später nachreichen. Die Vorprüfung ist kostenlos und zeigt Ihnen in wenigen
+          können Sie mitschicken oder vor der Bestellung hochladen. Die Vorprüfung ist kostenlos und zeigt Ihnen in wenigen
           Minuten, ob es Anhaltspunkte für Fehler gibt. Danach entscheiden Sie, ob ich als
           Rechtsanwalt prüfe.</span>
           <span class="nur-handy">Ihre Nebenkostenabrechnung, alle Seiten. Handyfotos genügen. Den Mietvertrag gern dazu.
@@ -515,7 +524,7 @@
           <!-- Mietvertrag freiwillig (11.11.2026): Die Vorprüfung sagt offen, was sie ohne Vertrag nicht geprüft hat. -->
           <div class="vp-ohne-mv" id="vp-ohne-mv" hidden><p><strong>Ohne Mietvertrag nicht geprüft:</strong> ob die
             abgerechneten Kostenarten in Ihrem Vertrag vereinbart sind und ob der Verteilerschlüssel stimmt. Das prüfe ich
-            in der anwaltlichen Prüfung.</p></div>
+            in der anwaltlichen Prüfung. Den Mietvertrag laden Sie vor der Bestellung hoch.</p></div>
           <!-- Paket 1b (29.10.2026): Ergebnis speichern oder teilen (Link mit Vorgangskennung, ohne Namen) -->
           <div class="vp-teilen" id="vp-teilen" hidden>
             <button type="button" class="vp-teilen__knopf" id="vp-teilen-knopf">Ergebnis speichern oder teilen</button>
@@ -546,6 +555,39 @@
         </div>
       </section>
 
+      <!-- ============ B2: Mietvertrag vor der Bestellung (Entscheidung Zahid 11.11.2026) ============
+           Die Vorprüfung läuft auch ohne Mietvertrag, die anwaltliche Prüfung nicht. Fehlt er, führt der Bestellknopf
+           zuerst hierher. Hochgeladen wird über Formular 1 mit demselben Vorgang und dem versteckten Feld schritt=mv:
+           n8n und Prüfdienst legen die Datei wie bei der Vorprüfung in die Akte und rechnen die Vorprüfung mit Vertrag
+           neu, ohne dass dort etwas geändert werden muss. Danach öffnet die Seite den Bestellabschnitt. -->
+      <section class="mv-schritt" id="mietvertrag-schritt" hidden aria-labelledby="mv-title">
+        <div class="prep-box auftrag-box">
+          <h2 id="mv-title">Noch ein Schritt: Ihr Mietvertrag</h2>
+          <p>Für die anwaltliche Prüfung brauche ich Ihren Mietvertrag, alle Seiten als Foto oder PDF. Laden Sie ihn
+          hier hoch, danach geht es weiter zur Bestellung.</p>
+        </div>
+        <div class="form-card" id="mv-card">
+          <div class="form-card__iframe-wrap">
+            <p class="form-fallback" id="mv-platzhalter">Das Formular wird geladen. Dafür muss JavaScript in Ihrem Browser aktiv sein.</p>
+            <iframe
+              id="mv-frame"
+              data-tally-base="https://tally.so/embed/kdgJDM?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+              title="Mietvertrag hochladen — Formular"
+              loading="lazy"
+              width="100%"
+              height="1"
+            ></iframe>
+          </div>
+        </div>
+        <p class="form-fallback" id="mv-fallback" hidden>
+          Formular lädt nicht?
+          <a id="mv-direkt" href="#mietvertrag-schritt" target="_blank" rel="noopener">Direkt bei Tally öffnen</a>.
+        </p>
+        <p class="mv-status" id="mv-status" hidden role="status" aria-live="polite"></p>
+        <p class="mv-spaeter">Mietvertrag gerade nicht zur Hand? Speichern Sie Ihr Ergebnis oben über „Ergebnis speichern
+        oder teilen“ und kommen Sie mit dem Vertrag zurück.</p>
+      </section>
+
       <!-- ============ C: Anwaltliche Prüfung bestellen (§ 312d, § 312j BGB) ============ -->
       <section class="bestellen" id="bestellen" hidden aria-labelledby="bestellen-title">
         <!-- Kurzfassung unmittelbar vor der Bestellung (§ 312j Abs. 2 BGB: wesentliche Merkmale und Gesamtpreis).
@@ -558,9 +600,7 @@
             Ihren Vermieter, das Sie selbst absenden.</span></li>
             <li><span><strong>Preis:</strong> 79,90 Euro einmalig, Endpreis einschließlich Umsatzsteuer, kein Abo.</span></li>
           </ul>
-          <div class="vp-ohne-mv" id="bestell-mv" hidden><p><strong>Ihr Mietvertrag fehlt noch.</strong> Für die anwaltliche
-            Prüfung brauche ich ihn. Senden Sie ihn nach der Bestellung an
-            <a href="mailto:info@nebenkosten-anwalt.de">info@nebenkosten-anwalt.de</a>, Fotos genügen.</p></div>
+          <div class="vp-ohne-mv" id="bestell-mv-ok" hidden><p><strong>Ihr Mietvertrag ist angekommen.</strong> Sie können jetzt bestellen.</p></div>
           <p><a href="mandatsbedingungen.html">Mandatsbedingungen und Vergütung</a>,
           <a href="mandatsbedingungen.html#widerruf">Widerrufsbelehrung</a>,
           <a href="datenschutz.html">Datenschutzerklärung</a></p>
@@ -687,6 +727,42 @@
     var letzteEmpfehlung = null, gemeldeterLauf = null, aufrufNeu = false;
     /* Plan 11.11.2026: Stufe des möglichen Betrags (nur grob, kein Betrag) und ob ein Mietvertrag vorlag. */
     var letzterBetrag = null, ohneMietvertrag = false;
+    /* Mietvertrag vor der Bestellung (Entscheidung Zahid 11.11.2026). Ob der Vertrag vorliegt, sagt das Ergebnis
+       (Feld 'geprueft' enthält 'vertrag') oder die Meldung des Formulars beim Absenden: Merker nur im Sitzungsspeicher
+       dieses Tabs, '1' = Datei im Feld Mietvertrag, '0' = Feld leer. Fehlt der Vertrag, führt der Bestellknopf zuerst
+       zum Schritt „Ihr Mietvertrag“. Die Sperre sitzt in der Seite, nicht im Prüfdienst. */
+    var hatErgebnis = false, weiterNachMietvertrag = false, mvMerk = null;
+    function mvMerker(wert) {
+      if (wert) mvMerk = wert;
+      try {
+        if (wert) sessionStorage.setItem('nka_mv_' + vorgang, wert);
+        else mvMerk = sessionStorage.getItem('nka_mv_' + vorgang) || mvMerk;
+      } catch (e) {}
+      return mvMerk;
+    }
+    function mietvertragImFormular(p) {
+      /* '1' = Datei im Feld „Mietvertrag“, '0' = Feld leer, null = aus der Meldung nicht erkennbar */
+      try {
+        var felder = (p && Array.isArray(p.fields)) ? p.fields : [];
+        var gefunden = null;
+        for (var i = 0; i < felder.length; i++) {
+          var f = felder[i] || {};
+          if (!/mietvertrag/i.test(String(f.title || f.label || ''))) continue;
+          if (String(f.type || '').toUpperCase().indexOf('FILE') === -1) continue;
+          var a = f.answer || {};
+          var v = a.value !== undefined ? a.value : (a.raw !== undefined ? a.raw : f.value);
+          if (Array.isArray(v) ? v.length > 0 : !!v) return '1';
+          gefunden = '0';
+        }
+        return gefunden;
+      } catch (e) { return null; }
+    }
+    function mietvertragFehlt() {
+      var merk = mvMerker();
+      if (merk === '1') return false;
+      if (hatErgebnis) return ohneMietvertrag;
+      return merk === '0';
+    }
     /* Reichweitenmessung: Flyer-Standort einmal je Ankunft als Ereignis melden (nur Standortcode, keine Vorgangskennung). */
     if (quelle && q.get('quelle')) {
       window.addEventListener('load', function () {
@@ -814,6 +890,7 @@
       /* Lief die Vorprüfung ohne Mietvertrag (Feld 'geprueft' ohne 'vertrag')? Ältere Ergebnisse ohne 'geprueft'
          gelten als mit Mietvertrag. */
       ohneMietvertrag = Array.isArray(b.geprueft) && b.geprueft.indexOf('vertrag') === -1;
+      hatErgebnis = true;
       if (ohneMvEl) ohneMvEl.hidden = !ohneMietvertrag;
       punkteEl.innerHTML = '';
       b.andere.forEach(function (x) { punkt(x.titel, '', x.baustein, x.art); });
@@ -861,7 +938,7 @@
       manuell.hidden = true;
       /* Zum Ergebnis springen (Wunsch Zahid 28.10.2026: nach dem Hochladen musste man erst nach unten scrollen),
          außer die Karte steht schon oben im Blick oder die Adresse zielt auf #bestellen. */
-      if (location.hash !== '#bestellen') {
+      if (location.hash !== '#bestellen' && !weiterNachMietvertrag) {
         var oben = panel.getBoundingClientRect().top;
         if (oben < 0 || oben > window.innerHeight * 0.3) {
           try { panel.scrollIntoView({ behavior: ruhig ? 'auto' : 'smooth', block: 'start' }); } catch (e) {}
@@ -869,7 +946,8 @@
       }
       /* Button „kostenpflichtig prüfen lassen" nach der letzten Zeile; der Bestellabschnitt öffnet erst
          auf Klick — außer die Adresse zielt mit #bestellen direkt darauf. */
-      if (location.hash === '#bestellen') { zeigeCta(); zeigeBestellen(true); }
+      if (weiterNachMietvertrag) { weiterNachMietvertrag = false; zeigeCta(); nachMietvertragWeiter(); }
+      else if (location.hash === '#bestellen') { zeigeCta(); oeffneAusAdresse(); }
       else window.setTimeout(zeigeCta, dauer);
     }
     function abfragen() {
@@ -900,7 +978,17 @@
               : 'Die automatische Vorprüfung konnte Ihre Unterlagen nicht auswerten — etwa, weil Fotos unscharf oder unvollständig sind. Sie können es mit neuen Aufnahmen noch einmal versuchen oder Ihre Abrechnung direkt anwaltlich prüfen lassen.', false);
             manuell.hidden = true;
             zeigeCta();
-            if (location.hash === '#bestellen') zeigeBestellen(true);
+            if (weiterNachMietvertrag) {
+              weiterNachMietvertrag = false;
+              /* 'ausgelastet' (Tageslimit je Adresse): Der Dienst sichert die Unterlagen vor der Ablehnung, der
+                 Mietvertrag liegt also in der Akte. 'fehler': Datei ließ sich nicht verarbeiten, Schritt bleibt offen. */
+              if (d.status === 'ausgelastet') nachMietvertragWeiter();
+              else {
+                mvMerk = '0'; try { sessionStorage.setItem('nka_mv_' + vorgang, '0'); } catch (e) {}
+                mvStatus('Ihr Mietvertrag ließ sich nicht verarbeiten, etwa wegen unscharfer Fotos. Bitte laden Sie ihn noch einmal hoch.');
+                ladeMvFormular(true);
+              }
+            } else if (location.hash === '#bestellen') oeffneAusAdresse();
             return;
           }
           if (vergangen > 900) {
@@ -916,13 +1004,13 @@
           timer = window.setTimeout(abfragen, d.status === 'pause' ? 30000 : (vergangen < 120 ? 5000 : 15000));
         });
     }
-    function starten(neu) {
+    function starten(neu, ohneSprung) {
       if (laeuft && !neu) return;
       window.clearTimeout(timer);
       erwarteNeuenLauf = !!neu && typeof gezeigterLauf === 'number';
       laeuft = true; fertig = false; begonnen = Date.now();
       panel.hidden = false;
-      try { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
+      if (!ohneSprung) { try { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} }
       abfragen();
     }
     document.getElementById('vp-start').addEventListener('click', function (e) {
@@ -941,6 +1029,11 @@
       var p = d.payload || {};
       var bestellId = document.getElementById('bestell-frame').getAttribute('data-bestell-form');
       if (p.formId && p.formId === bestellId) { nachBestellformular(p); return; }
+      /* Mietvertrag-Schritt (dasselbe Formular 1, eigener Rahmen): keine zweite „Vorprüfung abgeschickt“, keine Werbemessung */
+      var mvRahmen = document.getElementById('mv-frame');
+      if (mvRahmen && mvRahmen.contentWindow && e.source === mvRahmen.contentWindow) { nachMietvertrag(p); return; }
+      /* Hat das Formular einen Mietvertrag gemeldet? Nur '1' oder '0', im Sitzungsspeicher dieses Tabs. */
+      var mvGemeldet = mietvertragImFormular(p); if (mvGemeldet) mvMerker(mvGemeldet);
       /* Werbemessung „Vorprüfung abgeschickt“: nur mit Einwilligung, Kennung nur als Hashwert (assets/einwilligung.js) */
       if (typeof window.nkaMessung === 'function') { try { window.nkaMessung('vorpruefung', vorgang); } catch (err) {} }
       /* Reichweitenmessung (Umami, cookielos): nur die Tatsache des Absendens, keine Vorgangskennung */
@@ -968,6 +1061,9 @@
       var p = d.payload || {};
       var bestellId = document.getElementById('bestell-frame').getAttribute('data-bestell-form');
       var formular = (p.formId && bestellId && p.formId === bestellId) ? 'bestellung' : 'vorpruefung';
+      /* Der Mietvertrag-Schritt nutzt Formular 1 in einem eigenen Rahmen; er zählt nicht als Seite der Vorprüfung. */
+      var mvF = document.getElementById('mv-frame');
+      if (mvF && mvF.contentWindow && e.source === mvF.contentWindow) formular = 'mietvertrag';
       if (d.event === 'Tally.FormLoaded') {
         if (formularGezaehlt[formular + ':geladen']) return;
         formularGezaehlt[formular + ':geladen'] = true;
@@ -1000,6 +1096,60 @@
     /* Bestellabschnitt öffnen: vom Knopf im Betragskasten ('kasten') oder vom Knopf unter dem Ergebnis ('unten'). */
     function oeffneBestellung(stelle) {
       zaehle('bestellen_geoeffnet', { empfehlung: letzteEmpfehlung || 'ohne_ergebnis', betrag: letzterBetrag || 'ohne_ergebnis', stelle: stelle });
+      if (mietvertragFehlt()) { zeigeMietvertragSchritt(true, stelle); return; }
+      zeigeBestellen(true);
+    }
+    /* Adresse zielt mit #bestellen direkt auf die Bestellung: dieselbe Sperre. */
+    function oeffneAusAdresse() {
+      if (mietvertragFehlt()) zeigeMietvertragSchritt(true, 'adresse');
+      else zeigeBestellen(true);
+    }
+    function mvStatus(text) {
+      var s = document.getElementById('mv-status');
+      if (!s) return;
+      s.textContent = text; s.hidden = !text;
+    }
+    function ladeMvFormular(neu) {
+      var f = document.getElementById('mv-frame');
+      if (neu) f.removeAttribute('src');
+      if (window.Tally && typeof window.Tally.loadEmbeds === 'function') window.Tally.loadEmbeds();
+    }
+    function zeigeMietvertragSchritt(scrollen, stelle) {
+      var sek = document.getElementById('mietvertrag-schritt');
+      var f = document.getElementById('mv-frame');
+      sek.hidden = false;
+      if (!f.getAttribute('data-tally-src')) {
+        /* E-Mail aus der Vorprüfung als Vorbelegung (wie beim Bestellformular), nur an Tally. */
+        var emailParam = '';
+        try { var em = sessionStorage.getItem('nka_email'); if (em) emailParam = '&email=' + encodeURIComponent(em); } catch (e) {}
+        f.setAttribute('data-tally-src', f.getAttribute('data-tally-base') + '&vorgang=' + vorgang + quelleParam + '&schritt=mv' + emailParam);
+        document.getElementById('mv-platzhalter').hidden = true;
+        document.getElementById('mv-fallback').hidden = false;
+        document.getElementById('mv-direkt').href = 'https://tally.so/r/kdgJDM?vorgang=' + vorgang + quelleParam + '&schritt=mv';
+        ladeMvFormular(false);
+        zaehle('mietvertrag_schritt', { stelle: stelle || 'ohne' });
+      }
+      if (scrollen) { try { sek.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} }
+    }
+    /* Formular 1 im Mietvertrag-Schritt abgeschickt: Der Vertrag ist unterwegs zur Akte, die Vorprüfung läuft damit
+       neu. Sobald der Dienst antwortet (neuer Befund, spätestens nach 90 Sekunden der alte), öffnet die Bestellung. */
+    function nachMietvertrag(p) {
+      if (mietvertragImFormular(p) === '0') {
+        mvStatus('Im Formular war kein Mietvertrag. Bitte laden Sie ihn hoch, dann geht es weiter zur Bestellung.');
+        ladeMvFormular(true);
+        return;
+      }
+      mvMerker('1');
+      zaehle('mietvertrag_nachgereicht');
+      mvStatus('Ihr Mietvertrag ist angekommen. Die Vorprüfung läuft damit noch einmal, gleich geht es weiter zur Bestellung.');
+      weiterNachMietvertrag = true;
+      starten(true, true);
+    }
+    function nachMietvertragWeiter() {
+      var sek = document.getElementById('mietvertrag-schritt');
+      if (sek) sek.hidden = true;
+      var ok = document.getElementById('bestell-mv-ok');
+      if (ok) ok.hidden = false;
       zeigeBestellen(true);
     }
     document.getElementById('vp-bestellen').addEventListener('click', function (e) {
@@ -1079,8 +1229,6 @@
       var f = document.getElementById('bestell-frame');
       var id = f.getAttribute('data-bestell-form');
       b.hidden = false;
-      var mvHinweis = document.getElementById('bestell-mv');
-      if (mvHinweis) mvHinweis.hidden = !ohneMietvertrag;
       if (id && /^[A-Za-z0-9]{4,}$/.test(id) && id !== 'TALLY_FORMULAR_2_ID') {
         document.getElementById('bestell-platzhalter').hidden = true;
         var emailParam = '';

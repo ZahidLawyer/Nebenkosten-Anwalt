@@ -874,7 +874,7 @@
       "name": "Welche Unterlagen brauche ich?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Für die kostenlose Vorprüfung genügt Ihre aktuelle Nebenkostenabrechnung. Haben Sie den Mietvertrag zur Hand, laden Sie ihn gleich mit hoch: Dann prüft die Vorprüfung auch, ob die Kostenarten vereinbart sind und der Verteilerschlüssel stimmt. Für die anwaltliche Prüfung brauche ich den Mietvertrag in jedem Fall, Sie können ihn bei der Bestellung nachreichen. Ein Handyfoto genügt, Sie brauchen keinen Scanner. Weitere Belege brauchen Sie nicht vorab. Sollte die anwaltliche Prüfung einzelne Unterlagen zusätzlich erfordern, melde ich mich gezielt bei Ihnen."
+        "text": "Für die kostenlose Vorprüfung genügt Ihre aktuelle Nebenkostenabrechnung. Haben Sie den Mietvertrag zur Hand, laden Sie ihn gleich mit hoch: Dann prüft die Vorprüfung auch, ob die Kostenarten vereinbart sind und der Verteilerschlüssel stimmt. Für die anwaltliche Prüfung brauche ich den Mietvertrag in jedem Fall. Sie laden ihn spätestens vor der Bestellung hoch. Ein Handyfoto genügt, Sie brauchen keinen Scanner. Weitere Belege brauchen Sie nicht vorab. Sollte die anwaltliche Prüfung einzelne Unterlagen zusätzlich erfordern, melde ich mich gezielt bei Ihnen."
       }
     },
     {
@@ -1073,9 +1073,10 @@
           <h2>Kostenlose Vorprüfung</h2>
           <span>Schritt 1 von 2</span>
         </div>
-        <!-- Mietvertrag freiwillig (Entscheidung Zahid 11.11.2026): Für die Vorprüfung genügt die Abrechnung, der
-             Mietvertrag wird für die anwaltliche Prüfung nachgereicht. -->
-        <p class="hero__form-satz">Es genügt Ihre Nebenkostenabrechnung, alle Seiten als Foto oder PDF. Den Mietvertrag können Sie mitschicken oder später nachreichen.</p>
+        <!-- Mietvertrag freiwillig (Entscheidung Zahid 11.11.2026): Für die Vorprüfung genügt die Abrechnung. Für die
+             anwaltliche Prüfung ist der Mietvertrag Pflicht; wer ihn nicht mitgeschickt hat, lädt ihn vor der
+             Bestellung hoch (pruefung.html, Schritt „Ihr Mietvertrag“). -->
+        <p class="hero__form-satz">Es genügt Ihre Nebenkostenabrechnung, alle Seiten als Foto oder PDF. Den Mietvertrag brauchen Sie erst für die Bestellung.</p>
         <div class="form-card" id="form-card">
           <div class="form-card__iframe-wrap">
             <div class="form-skeleton" aria-hidden="true">
@@ -1237,8 +1238,8 @@
       </div>
 
       <p class="steps-prep reveal"><strong>Das sollten Sie bereithalten:</strong> Ihre
-      Nebenkostenabrechnung, alle Seiten, Handyfotos genügen. Den Mietvertrag gern dazu, sonst reichen Sie
-      ihn bei der Bestellung nach.<span class="steps-prep__spaeter" data-spaeter-zeile hidden>Nicht zur Hand?
+      Nebenkostenabrechnung, alle Seiten, Handyfotos genügen. Den Mietvertrag gern dazu, sonst laden Sie
+      ihn bei der Bestellung hoch.<span class="steps-prep__spaeter" data-spaeter-zeile hidden>Nicht zur Hand?
       <button type="button" class="spaeter-knopf" data-spaeter="ablauf">Link für später speichern</button></span></p>
       <ol class="steps steps--drei">
         <li class="step reveal" style="--i:0">
@@ -1656,7 +1657,7 @@
             <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </summary>
           <div>
-            <p>Für die kostenlose Vorprüfung genügt Ihre aktuelle Nebenkostenabrechnung. Haben Sie den Mietvertrag zur Hand, laden Sie ihn gleich mit hoch: Dann prüft die Vorprüfung auch, ob die Kostenarten vereinbart sind und der Verteilerschlüssel stimmt. Für die anwaltliche Prüfung brauche ich den Mietvertrag in jedem Fall, Sie können ihn bei der Bestellung nachreichen. Ein Handyfoto genügt, Sie brauchen keinen Scanner.</p>
+            <p>Für die kostenlose Vorprüfung genügt Ihre aktuelle Nebenkostenabrechnung. Haben Sie den Mietvertrag zur Hand, laden Sie ihn gleich mit hoch: Dann prüft die Vorprüfung auch, ob die Kostenarten vereinbart sind und der Verteilerschlüssel stimmt. Für die anwaltliche Prüfung brauche ich den Mietvertrag in jedem Fall. Sie laden ihn spätestens vor der Bestellung hoch. Ein Handyfoto genügt, Sie brauchen keinen Scanner.</p>
             <p>Weitere Belege brauchen Sie nicht vorab. Sollte die anwaltliche Prüfung einzelne Unterlagen zusätzlich erfordern, melde ich mich gezielt bei Ihnen.</p>
           </div>
         </details>
@@ -2142,6 +2143,21 @@
         /* Werbemessung nur mit Einwilligung, Kennung nur als Hashwert (assets/einwilligung.js); Umami nur die Tatsache. */
         if (typeof window.nkaMessung === 'function') { try { window.nkaMessung('vorpruefung', vorgang); } catch (err) {} }
         zaehle('vorpruefung_abgeschickt');
+        /* Mietvertrag vor der Bestellung (11.11.2026): Die Prüfseite soll wissen, ob schon ein Mietvertrag dabei war.
+           Gemerkt wird nur '1' (Datei im Feld Mietvertrag) oder '0' (Feld leer), im Sitzungsspeicher dieses Tabs. */
+        try {
+          var alle = Array.isArray(p.fields) ? p.fields : [], mv = null;
+          for (var j = 0; j < alle.length; j++) {
+            var fm = alle[j] || {};
+            if (!/mietvertrag/i.test(String(fm.title || fm.label || ''))) continue;
+            if (String(fm.type || '').toUpperCase().indexOf('FILE') === -1) continue;
+            var am = fm.answer || {};
+            var vm = am.value !== undefined ? am.value : (am.raw !== undefined ? am.raw : fm.value);
+            if (Array.isArray(vm) ? vm.length > 0 : !!vm) { mv = '1'; break; }
+            mv = '0';
+          }
+          if (mv) sessionStorage.setItem('nka_mv_' + vorgang, mv);
+        } catch (err) {}
         /* E-Mail für das Bestellformular merken (wie pruefung.html, merkeEmail): nur sessionStorage, nur für Tally. */
         try {
           var felder = Array.isArray(p.fields) ? p.fields : [];
