@@ -352,7 +352,7 @@
     .footer__grid { grid-template-columns: 1fr auto; align-items: start; }
   }
 </style>
-<link rel="stylesheet" href="assets/befundkarte.css">
+<link rel="stylesheet" href="assets/befundkarte.css?v=1111">
   <!-- Reichweitenmessung: Umami, selbst gehostet auf dem Kanzlei-Server (stats.nebenkosten-anwalt.de), cookielos;
        data-exclude-search verhindert, dass die Vorgangskennung (?vorgang=) in der Statistik landet. -->
   <script defer src="https://stats.nebenkosten-anwalt.de/script.js" data-website-id="d1858dae-dd51-4e26-ad65-438c7778cad7" data-domains="nebenkosten-anwalt.de" data-before-send="nkaUmamiVorSenden"></script>
@@ -391,10 +391,11 @@
         <span class="page-badge">Rechtsanwalt Zahid Akcay<span class="nur-gross">, Kanzlei Akcay</span>, Frankfurt am Main</span>
         <h1 class="section-title">Ihre Unterlagen hochladen</h1>
         <p class="section-lead">
-          <span class="nur-gross">Zwei Unterlagen und Ihre E-Mail-Adresse, mehr braucht es nicht. Die Vorprüfung ist kostenlos und zeigt Ihnen in wenigen
+          <span class="nur-gross">Ihre Nebenkostenabrechnung und Ihre E-Mail-Adresse, mehr braucht es nicht. Den Mietvertrag
+          können Sie mitschicken oder später nachreichen. Die Vorprüfung ist kostenlos und zeigt Ihnen in wenigen
           Minuten, ob es Anhaltspunkte für Fehler gibt. Danach entscheiden Sie, ob ich als
           Rechtsanwalt prüfe.</span>
-          <span class="nur-handy">Nebenkostenabrechnung und Mietvertrag, jeweils alle Seiten. Handyfotos genügen.
+          <span class="nur-handy">Ihre Nebenkostenabrechnung, alle Seiten. Handyfotos genügen. Den Mietvertrag gern dazu.
           In wenigen Minuten sehen Sie, ob es Anhaltspunkte für Fehler gibt.</span>
         </p>
         <p class="spaeter-zeile" data-spaeter-zeile hidden>Nicht zur Hand?
@@ -409,11 +410,11 @@
       <h2>Das sollten Sie bereithalten</h2>
       <ul>
         <li><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="#2F5D4C" stroke-width="1.4"/><path d="M5.5 9.2l2.3 2.3 4.7-5" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> Ihre Nebenkostenabrechnung (alle Seiten)</li>
-        <li><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="#2F5D4C" stroke-width="1.4"/><path d="M5.5 9.2l2.3 2.3 4.7-5" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> Ihren Mietvertrag (alle Seiten)</li>
+        <li><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="#2F5D4C" stroke-width="1.4"/><path d="M5.5 9.2l2.3 2.3 4.7-5" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> Ihren Mietvertrag, wenn Sie ihn zur Hand haben (sonst bei der Bestellung)</li>
       </ul>
-      <p>Handyfotos genügen — Sie brauchen keinen Scanner.<span class="prep-warum"> Der Mietvertrag ist nötig, weil nur
-      er zeigt, welche Kosten überhaupt auf Sie umgelegt werden dürfen und welcher
-      Verteilerschlüssel vereinbart ist.</span></p>
+      <p>Handyfotos genügen — Sie brauchen keinen Scanner.<span class="prep-warum"> Mit Mietvertrag prüft die Vorprüfung auch, ob die
+      Kostenarten vereinbart sind und der Verteilerschlüssel stimmt. Für die anwaltliche Prüfung brauche ich ihn in
+      jedem Fall.</span></p>
     </div>
   </div>
 
@@ -434,7 +435,7 @@
     <details class="beispiel-klapp">
       <summary>Beispiel-Ergebnis ansehen</summary>
       <div class="beispiel" id="beispiel-pruefseite"></div>
-      <p class="beispiel-unter">So sieht Ihr Ergebnis aus. Die Vorprüfung dauert meist unter einer Minute.</p>
+      <p class="beispiel-unter">Erfundenes Beispiel. Nicht jede Abrechnung enthält solche Posten. Dann sagt Ihnen die Vorprüfung auch das.</p>
     </details>
   </div>
 
@@ -501,6 +502,9 @@
         <div id="vp-ergebnis" hidden>
           <!-- Paket 1a (29.10.2026): Nachforderung und Einwendungsfrist ganz oben -->
           <p class="vp-kopf" id="vp-kopf" hidden></p>
+          <!-- Plan 11.11.2026: möglicher Betrag neben dem Festpreis. Erscheint nur, wenn die Vorprüfung gegenrechnen
+               konnte (Summenprobe bestanden) und die Einwendungsfrist läuft (assets/befundkarte.js, baueBetrag). -->
+          <div class="vp-betrag" id="vp-betrag" hidden></div>
           <p id="vp-zusammenfassung"></p>
           <ul class="punkte" id="vp-punkte"></ul>
           <div class="befund" id="vp-befund" hidden role="group" aria-label="Positionen der Vorprüfung"></div>
@@ -508,6 +512,10 @@
                entfällt, er wiederholte den Hinweis unten (vp-hinweis). -->
           <p class="ergebnis-frist" id="vp-frist" hidden></p>
           <div class="vp-geprueft" id="vp-geprueft" hidden></div>
+          <!-- Mietvertrag freiwillig (11.11.2026): Die Vorprüfung sagt offen, was sie ohne Vertrag nicht geprüft hat. -->
+          <div class="vp-ohne-mv" id="vp-ohne-mv" hidden><p><strong>Ohne Mietvertrag nicht geprüft:</strong> ob die
+            abgerechneten Kostenarten in Ihrem Vertrag vereinbart sind und ob der Verteilerschlüssel stimmt. Das prüfe ich
+            in der anwaltlichen Prüfung.</p></div>
           <!-- Paket 1b (29.10.2026): Ergebnis speichern oder teilen (Link mit Vorgangskennung, ohne Namen) -->
           <div class="vp-teilen" id="vp-teilen" hidden>
             <button type="button" class="vp-teilen__knopf" id="vp-teilen-knopf">Ergebnis speichern oder teilen</button>
@@ -550,6 +558,9 @@
             Ihren Vermieter, das Sie selbst absenden.</span></li>
             <li><span><strong>Preis:</strong> 79,90 Euro einmalig, Endpreis einschließlich Umsatzsteuer, kein Abo.</span></li>
           </ul>
+          <div class="vp-ohne-mv" id="bestell-mv" hidden><p><strong>Ihr Mietvertrag fehlt noch.</strong> Für die anwaltliche
+            Prüfung brauche ich ihn. Senden Sie ihn nach der Bestellung an
+            <a href="mailto:info@nebenkosten-anwalt.de">info@nebenkosten-anwalt.de</a>, Fotos genügen.</p></div>
           <p><a href="mandatsbedingungen.html">Mandatsbedingungen und Vergütung</a>,
           <a href="mandatsbedingungen.html#widerruf">Widerrufsbelehrung</a>,
           <a href="datenschutz.html">Datenschutzerklärung</a></p>
@@ -627,7 +638,7 @@
   </div>
 </footer>
 
-<script src="assets/befundkarte.js"></script>
+<script src="assets/befundkarte.js?v=1111"></script>
 <script>
   (function () {
     /* ---------- Vorgangskennung: zufällig, nur in dieser Sitzung, kein Personenbezug ---------- */
@@ -658,11 +669,14 @@
     var herkunft = QUELLE_OK.test(q.get('quelle') || '') ? q.get('quelle')
       : (['gclid', 'gbraid', 'wbraid'].some(function (k) { return !!q.get(k); }) ? 'anzeige' : 'ohne');
     window.NKA_HERKUNFT = herkunft;   /* für assets/spaeter.js („Link für später“) */
+    /* Fassung der Seite (Plan 11.11.2026): in jedem Ereignis, damit zwischengespeicherte alte Seiten nicht mitzählen. */
+    window.NKA_FASSUNG = 'L2';
     /* Umami-Ereignis mit Herkunft; nie mit Vorgangskennung, Beträgen oder Positionsnamen. Umami lädt mit „defer“:
        Ist es beim Aufruf noch nicht da (Rückkehr von Stripe gleich beim Seitenaufbau), wird nach „load“ gemeldet. */
     function zaehle(name, daten) {
       var d = daten || {};
       d.herkunft = herkunft;
+      d.fassung = window.NKA_FASSUNG;
       function senden() {
         if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track(name, d); } catch (e) {} return true; }
         return false;
@@ -671,6 +685,8 @@
     }
     function stufe(n) { return n <= 0 ? '0' : n === 1 ? '1' : n <= 3 ? '2-3' : '4+'; }
     var letzteEmpfehlung = null, gemeldeterLauf = null, aufrufNeu = false;
+    /* Plan 11.11.2026: Stufe des möglichen Betrags (nur grob, kein Betrag) und ob ein Mietvertrag vorlag. */
+    var letzterBetrag = null, ohneMietvertrag = false;
     /* Reichweitenmessung: Flyer-Standort einmal je Ankunft als Ereignis melden (nur Standortcode, keine Vorgangskennung). */
     if (quelle && q.get('quelle')) {
       window.addEventListener('load', function () {
@@ -753,6 +769,8 @@
     var fristEl = document.getElementById('vp-frist');
     var kopfEl = document.getElementById('vp-kopf');
     var geprueftEl = document.getElementById('vp-geprueft');
+    var betragEl = document.getElementById('vp-betrag');
+    var ohneMvEl = document.getElementById('vp-ohne-mv');
     var teilenEl = document.getElementById('vp-teilen');
     var manuell = document.getElementById('vp-manuell');
     var laeuft = false, begonnen = 0, timer = null, fertig = false;
@@ -787,6 +805,16 @@
       if (typeof lauf === 'number') gezeigterLauf = lauf;
       /* Aufbereitung, Empfehlung und Karte aus assets/befundkarte.js (dasselbe wie das Beispiel). */
       var b = NB.auswerten(erg || {}, NB.heuteIso());
+      /* Betragskasten (Plan 11.11.2026); fehlt die neue Fassung von befundkarte.js im Zwischenspeicher, bleibt er weg. */
+      if (betragEl && typeof NB.baueBetrag === 'function') {
+        NB.baueBetrag(betragEl, b, { beiBestellen: function (e) { e.preventDefault(); oeffneBestellung('kasten'); } });
+      }
+      letzterBetrag = !b.betrag || b.betrag.stufe === 'C' ? 'keiner'
+        : b.betrag.stufe === 'B' ? 'nachforderung' : (b.betrag.ueberPreis ? 'ueber_preis' : 'unter_preis');
+      /* Lief die Vorprüfung ohne Mietvertrag (Feld 'geprueft' ohne 'vertrag')? Ältere Ergebnisse ohne 'geprueft'
+         gelten als mit Mietvertrag. */
+      ohneMietvertrag = Array.isArray(b.geprueft) && b.geprueft.indexOf('vertrag') === -1;
+      if (ohneMvEl) ohneMvEl.hidden = !ohneMietvertrag;
       punkteEl.innerHTML = '';
       b.andere.forEach(function (x) { punkt(x.titel, '', x.baustein, x.art); });
       var dauer = NB.baueBefund(befundEl, b, { schritt: SCHRITT,
@@ -822,6 +850,8 @@
           pruefen: stufe(b.markiert.filter(function (p) { return p.status === 'pruefen'; }).length),
           hinweise: b.andereTitel.length > 0 ? '1+' : '0',
           frist: b.fristDatum ? (b.fristAbgelaufen ? 'abgelaufen' : b.fristUnklar ? 'unklar' : 'offen') : 'unbekannt',
+          betrag: letzterBetrag,
+          mietvertrag: Array.isArray(b.geprueft) ? (ohneMietvertrag ? 'nein' : 'ja') : 'unbekannt',
           aufruf: aufrufNeu ? 'neu' : 'erneut'
         });
       }
@@ -967,10 +997,14 @@
         navigator.clipboard.writeText(url).then(function () { gezeigt('Link kopiert'); }, function () { window.prompt('Link zu Ihrem Ergebnis:', url); });
       } else { window.prompt('Link zu Ihrem Ergebnis:', url); }
     });
+    /* Bestellabschnitt öffnen: vom Knopf im Betragskasten ('kasten') oder vom Knopf unter dem Ergebnis ('unten'). */
+    function oeffneBestellung(stelle) {
+      zaehle('bestellen_geoeffnet', { empfehlung: letzteEmpfehlung || 'ohne_ergebnis', betrag: letzterBetrag || 'ohne_ergebnis', stelle: stelle });
+      zeigeBestellen(true);
+    }
     document.getElementById('vp-bestellen').addEventListener('click', function (e) {
       e.preventDefault();
-      zaehle('bestellen_geoeffnet', { empfehlung: letzteEmpfehlung || 'ohne_ergebnis' });
-      zeigeBestellen(true);
+      oeffneBestellung('unten');
     });
 
     /* ---------- Formular 2 abgeschickt -> Stripe-Zahlungslink (seit 27.10.2026) ----------
@@ -1045,6 +1079,8 @@
       var f = document.getElementById('bestell-frame');
       var id = f.getAttribute('data-bestell-form');
       b.hidden = false;
+      var mvHinweis = document.getElementById('bestell-mv');
+      if (mvHinweis) mvHinweis.hidden = !ohneMietvertrag;
       if (id && /^[A-Za-z0-9]{4,}$/.test(id) && id !== 'TALLY_FORMULAR_2_ID') {
         document.getElementById('bestell-platzhalter').hidden = true;
         var emailParam = '';
@@ -1060,7 +1096,7 @@
   })();
 </script>
 
-<script src="assets/spaeter.js"></script>
+<script src="assets/spaeter.js?v=1111"></script>
 
 <!-- Offizielles Tally-Skript: löst data-tally-src ein und passt die iframe-Höhe dynamisch an den Formularinhalt an. -->
 <script async src="https://tally.so/widgets/embed.js"></script>

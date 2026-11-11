@@ -61,3 +61,29 @@
 .befund__row { flex-wrap: wrap; }
 /* Breite = Zeile minus Einzug, sonst ragt der Text um den Einzug über die Karte hinaus (Befund 29.10.2026) */
 .befund__row > .befund__erkl { flex: 0 0 calc(100% - 16px - 0.6rem); max-width: calc(100% - 16px - 0.6rem); min-width: 0; margin: 0 0 0 calc(16px + 0.6rem); }
+
+/* Betragskasten (Plan 11.11.2026): möglicher Betrag neben dem Festpreis der anwaltlichen Prüfung. Steht nur, wenn die
+   Vorprüfung gegenrechnen konnte (assets/befundkarte.js, moeglicherBetrag). Ruhig gehalten: keine Signalfarbe,
+   kein Zähler. */
+.vp-betrag { border: 2px solid #2F5D4C; border-radius: 10px; background: #FFFFFF; padding: 0.85rem 0.95rem 0.95rem; margin: 0.2rem 0 1rem; }
+.vp-betrag[hidden] { display: none; }
+.vp-betrag__zeile { display: flex; justify-content: space-between; align-items: baseline; gap: 0.4rem 0.75rem; flex-wrap: wrap; }
+.vp-betrag__zeile span { font-size: 0.95rem; color: #24312B; }
+.vp-betrag__zeile strong { font-family: "Source Serif 4", Georgia, serif; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.vp-betrag__zeile--haupt strong { font-size: 1.5rem; line-height: 1.2; color: #24493C; }
+.vp-betrag__zeile--preis { margin-top: 0.3rem; padding-top: 0.45rem; border-top: 1px solid #EDE7DA; }
+.vp-betrag__zeile--preis strong { font-size: 1.05rem; color: #24312B; }
+.vp-betrag__text { font-size: 0.93rem; line-height: 1.5; color: #24312B; margin: 0.6rem 0 0; }
+.vp-betrag__knopf { display: block; text-align: center; margin: 0.85rem 0 0; background: #2F5D4C; color: #FFFFFF; font-weight: 600;
+  text-decoration: none; padding: 0.75rem 0.8rem; border-radius: 8px; min-height: 44px; box-sizing: border-box; font-size: 0.98rem; line-height: 1.35; }
+.vp-betrag__knopf:hover { background: #24493C; }
+.vp-betrag__knopf:focus-visible { outline: 3px solid #B97C3B; outline-offset: 2px; }
+.vp-betrag__knopf--ruhig { background: #FFFFFF; color: #2F5D4C; box-shadow: inset 0 0 0 1.5px #2F5D4C; }
+.vp-betrag__knopf--ruhig:hover { background: #F7F4EE; }
+.vp-betrag__klein { font-size: 0.84rem; line-height: 1.45; color: #55655D; margin: 0.55rem 0 0; }
+.beispiel .vp-betrag { margin-bottom: 0.8rem; }
+/* Ohne Mietvertrag (Entscheidung 11.11.2026): offen sagen, was die Vorprüfung dann nicht geprüft hat */
+.vp-ohne-mv { font-size: 0.93rem; line-height: 1.5; color: #24312B; background: #F7F4EE; border-left: 3px solid #2F5D4C;
+  border-radius: 6px; padding: 0.6rem 0.85rem; margin: 0.6rem 0 0.4rem; }
+.vp-ohne-mv[hidden] { display: none; }
+.vp-ohne-mv p { margin: 0; }

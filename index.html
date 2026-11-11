@@ -163,7 +163,7 @@
     background: var(--moss); color: #fff; border-radius: 6px; border-bottom: 0;
   }
   .mobile-nav a.mobile-nav__cta:hover { background: var(--moss-deep); color: #fff; }
-  #ablauf, #ergebnis, #leistungsumfang, #transparenz, #faq { scroll-margin-top: 5rem; }
+  #ablauf, #ergebnis, #preis, #leistungsumfang, #transparenz, #faq, #quelle { scroll-margin-top: 5rem; }
 
   /* ============ Hero ============ */
   .hero {
@@ -186,6 +186,31 @@
     max-width: 23ch; margin-bottom: 1.1rem; text-wrap: balance;
   }
   .hero__sub { max-width: 34rem; margin-bottom: 1.75rem; color: rgba(255,255,255,0.88); }
+  /* Startseite neu (Plan 11.11.2026): Dachzeile mit dem Suchbegriff in der H1, darunter die Hauptzeile. */
+  .hero__dach {
+    display: block; font-family: var(--sans); font-size: 0.85rem; font-weight: 700; line-height: 1.3;
+    letter-spacing: 0.09em; text-transform: uppercase; color: #F3E3CE; margin-bottom: 0.5rem;
+  }
+  /* Mieterbund-Satz: auf jeder Breite mit „geht davon aus“, nie als nackte Tatsache. Wortlaut bei ZDFheute
+     (25.10.2026) am 11.11.2026 geprüft; eine Primärquelle auf mieterbund.de fehlt. Die Quelle steht im FAQ (#quelle). */
+  .hero__fakt { max-width: 34rem; margin: -0.35rem 0 1rem; padding-left: 0.8rem; border-left: 3px solid #F3E3CE; color: rgba(255,255,255,0.9); font-size: 1rem; line-height: 1.4; }
+  .hero__fakt strong { color: #fff; }
+  .hero__fakt a { color: rgba(255,255,255,0.8); font-size: 0.82rem; text-underline-offset: 3px; white-space: nowrap; }
+  .hero__fakt-kurz, .hero__sub-kurz, .hero__kosten--kurz { display: none; }
+  .hero__aktion { display: none; margin: 0 0 0.6rem; }
+  .hero__knopf { display: block; text-align: center; padding: 0.85rem 1rem; }
+  .hero__kosten { font-size: 0.9rem; margin-top: 1rem; color: rgba(255,255,255,0.84); max-width: 34rem; }
+  @media (max-width: 61.99rem) {
+    /* Einspaltig (Handy, Tablet): Der Hauptknopf steht über dem Formular und springt dorthin. */
+    .hero__aktion { display: block; max-width: 34rem; }
+  }
+  @media (max-width: 45.99rem) {
+    .hero__dach { font-size: 0.72rem; letter-spacing: 0.05em; margin-bottom: 0.35rem; }
+    .hero__fakt { font-size: 0.9rem; line-height: 1.3; margin: -0.3rem 0 0.6rem; padding-left: 0.6rem; }
+    .hero__fakt-lang, .hero__sub-lang, .hero__kosten--lang { display: none; }
+    .hero__fakt-kurz, .hero__sub-kurz { display: inline; }
+    .hero__kosten--kurz { display: block; font-size: 0.8rem; line-height: 1.35; margin: 0 0 0.75rem; }
+  }
   .hero__anwalt {
     display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.1rem;
     font-size: 0.88rem; line-height: 1.3; color: rgba(255,255,255,0.86);
@@ -197,9 +222,9 @@
   .hero__anwalt strong { display: block; color: #fff; font-size: 0.95rem; }
   /* Am Handy: Start-Button auch mit Einwilligungsbanner (kleines Android 360x740) im ersten Bildschirm */
   @media (max-width: 45.99rem) {
-    .hero__inner { padding-top: 1.4rem; }
-    .hero__anwalt { margin-bottom: 0.8rem; }
-    .hero__title { margin-bottom: 0.7rem; }
+    .hero__inner { padding-top: 1rem; }
+    .hero__anwalt { margin-bottom: 0.6rem; }
+    .hero__title { font-size: 1.6rem; margin-bottom: 0.7rem; }
     .hero__sub { margin-bottom: 1.25rem; }
   }
   .hero__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
@@ -208,9 +233,6 @@
   .hero .btn--ghost { background: transparent; color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.7); }
   .hero .btn--ghost:hover { background: rgba(255,255,255,0.1); }
   .hero__note { font-size: 0.9rem; margin-top: 1rem; color: rgba(255,255,255,0.84); max-width: 34rem; }
-  /* „Link für später“ (Vorschau 30.10.2026): Textknopf, nur mit JavaScript sichtbar (assets/spaeter.js) */
-  .hero__spaeter { font-size: 0.9rem; margin-top: 0.55rem; color: rgba(255,255,255,0.84); max-width: 34rem; }
-  .hero__spaeter[hidden] { display: none; }
   /* Vorprüfung im ersten Bildschirm (Vorschau 01.11.2026): dasselbe Tally-Formular wie auf pruefung.html,
      als helle Karte im Hero. Skeleton und Ausweichkasten wie dort (pruefung.html .form-card). */
   .hero__form {
@@ -260,27 +282,28 @@
   .hero__kontakt-box iframe { width: 100%; border: none; display: block; background: transparent; }
   /* Aufgeklappt wird die Karte sehr hoch: linke Spalte oben halten statt mittig (sonst große Lücke oben links) */
   .hero__inner.kontakt-offen { align-items: start; }
-  /* Zweiter Einstieg oben in der Karte (Vorschau 06.11.2026): am Handy ohne Scrollen sichtbar */
-  .hero__kontakt-oben { font-size: 0.92rem; line-height: 1.4; color: var(--ink-soft); margin: 0.1rem 0 0.5rem; }
   .hero__punkte { list-style: none; margin: 1.1rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.95rem; color: rgba(255,255,255,0.92); }
   .hero__punkte li { display: flex; gap: 0.6rem; align-items: flex-start; }
   .hero__punkte svg { flex: none; margin-top: 0.15rem; }
   .hero__punkte strong { color: #fff; }
-  .hero__preis { font-size: 0.9rem; margin-top: 1rem; color: rgba(255,255,255,0.84); max-width: 34rem; }
   @media (max-width: 45.99rem) {
-    /* Handy: das Formular soll im ersten Bildschirm beginnen. Deshalb kürzerer Text, die drei Punkte als
-       Schlagworte in einer Reihe, Festpreis und „Link für später“ erst weiter unten auf der Seite. */
-    .hero__sub { font-size: 1rem; margin-bottom: 0.9rem; }
-    .hero__sub-mehr { display: none; }
+    /* Handy (Plan 11.11.2026): Im ersten Bildschirm stehen Überschrift, Mieterbund-Satz, Unterzeile, Hauptknopf und
+       Kostenzeile, alles oberhalb der Höhe des Banners zur Anzeigenmessung. Die drei Punkte folgen als Schlagworte. */
+    .hero__sub { font-size: 1rem; line-height: 1.5; margin-bottom: 0.8rem; }
     .hero__punkte { flex-direction: row; flex-wrap: wrap; margin-top: 0; gap: 0.4rem; }
     .hero__punkte li { align-items: center; gap: 0.35rem; background: rgba(255,255,255,0.12); border-radius: 999px; padding: 0.3rem 0.7rem 0.3rem 0.55rem; font-size: 0.84rem; }
     .hero__punkte svg { width: 15px; height: 15px; margin-top: 0; }
     .hero__punkte strong { font-weight: 600; }
     .hero__punkt-mehr { display: none; }
     .hero__form { margin-top: 1.1rem; padding: 0.9rem 0.85rem 0.75rem; }
-    .hero__preis, .hero__spaeter { display: none; }
     .hero__inner { padding-bottom: 1.5rem; }
   }
+  /* Unter dem Formular: Vertrauenszeile und „Link für später“ (auch am Handy sichtbar, Plan 11.11.2026) */
+  .hero__vertrauen { font-size: 0.84rem; line-height: 1.45; color: var(--ink-soft); margin: 0.6rem 0 0; }
+  .hero__spaeter-karte { font-size: 0.95rem; line-height: 1.45; color: var(--ink-soft); margin: 0.6rem 0 0; text-align: center; }
+  .hero__spaeter-karte[hidden] { display: none; }
+  .hero__form .spaeter-knopf { color: var(--moss); min-height: 44px; }
+  .hero__form .spaeter-knopf:hover { color: var(--moss-deep); }
   .spaeter-knopf {
     font: inherit; font-weight: 600; color: #fff; background: none; border: 0; padding: 0.3rem 0; margin: 0;
     text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; cursor: pointer;
@@ -634,6 +657,50 @@
   .danach p { font-size: 0.95rem; color: var(--ink-soft); margin-bottom: 0.6rem; }
   .danach__link { font-weight: 600; color: var(--moss); text-underline-offset: 3px; }
 
+  /* ============ Startseite neu (Plan 11.11.2026) ============ */
+  /* Fallbeispiele stehen direkt unter dem ersten Bildschirm: weniger Abstand oben, eigener Startknopf. */
+  .stimmen-section { padding-top: clamp(2rem, 5vw, 3.25rem); padding-bottom: clamp(2rem, 5vw, 3.25rem); }
+  .stimmen__aktion { margin: 1.25rem 0 0; }
+  /* Ablauf in drei Schritten: einspaltig, ab 62rem drei Spalten; das Video steht darunter. */
+  .steps--drei .step { grid-template-columns: auto 1fr; }
+  .video--unten { margin: 2.25rem 0 0; }
+  /* Preis und Nutzen */
+  .preis { padding-top: clamp(2.5rem, 6vw, 4rem); padding-bottom: clamp(2.5rem, 6vw, 4rem); }
+  .preis + section { border-top: 1px solid var(--line); }
+  .preis__karten { display: grid; gap: 1rem; max-width: 44rem; margin: 0.75rem 0 1.25rem; }
+  .preis__karte { background: #fff; border: 1px solid var(--line-strong); border-radius: 10px; padding: 1.1rem 1.25rem 1.15rem; }
+  .preis__karte--haupt { border: 2px solid var(--moss); }
+  .preis__name { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+  .preis__betrag { font-family: var(--serif); font-weight: 700; font-size: 1.9rem; line-height: 1.2; color: var(--moss-deep); font-variant-numeric: tabular-nums; margin: 0.15rem 0 0.3rem; }
+  .preis__text { font-size: 0.95rem; color: var(--ink-soft); line-height: 1.5; }
+  .preis__lohnt { max-width: 44rem; }
+  .preis__lohnt p { margin: 0 0 0.6rem; }
+  .preis__lohnt p:last-child { font-size: 0.95rem; color: var(--ink-soft); }
+  .preis__aktion { margin: 1.1rem 0 0; }
+  /* Feste Leiste am Handy mit Startknopf */
+  .leiste {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 25;
+    padding: 0.55rem 1rem calc(0.55rem + env(safe-area-inset-bottom, 0px));
+    background: rgba(247,244,238,0.97); border-top: 1px solid var(--line-strong);
+    box-shadow: 0 -6px 18px rgba(36,49,43,0.12);
+  }
+  .leiste[hidden] { display: none; }
+  .leiste__knopf { display: block; text-align: center; padding: 0.8rem 1rem; }
+  @media (max-width: 45.99rem) {
+    footer { padding-bottom: 5.5rem; }
+    /* Startknöpfe der Abschnitte am Handy über die volle Breite, Text mittig (sonst zweizeilig linksbündig) */
+    .stimmen__aktion .btn, .beispiel-start__aktion .btn, .preis__aktion .btn { display: block; text-align: center; padding-left: 1rem; padding-right: 1rem; }
+  }
+  @media (min-width: 46rem) {
+    .leiste { display: none !important; }
+    .steps.steps--drei { grid-template-columns: 1fr; max-width: 44rem; }
+    .preis__karten { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 62rem) {
+    .steps.steps--drei { grid-template-columns: repeat(3, 1fr); max-width: none; }
+    .steps--drei .step { grid-template-columns: 1fr; align-content: start; }
+  }
+
   /* ============ Abschluss-CTA ============ */
   .closing { text-align: left; }
   .closing__box {
@@ -760,13 +827,13 @@
   @media (min-width: 62rem) {
     .hero__inner {
       display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 3rem; align-items: center;
+      gap: 3rem; align-items: start;
       padding-top: 3.25rem; padding-bottom: 3.25rem;
     }
-    .hero__inner > div:first-child { padding-right: 0.5rem; }
+    .hero__inner > div:first-child { padding-right: 0.5rem; padding-top: 1.25rem; }
     .hero__form { margin-right: -2.5rem; padding: 1.1rem 1.4rem 0.6rem; }
     .hero__form .form-card__iframe-wrap { min-height: 18rem; }
-    .hero__preis { margin-top: 1.25rem; }
+    .hero__kosten { margin-top: 1.25rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -780,7 +847,7 @@
   }
 </style>
 <link rel="preconnect" href="https://tally.so">
-<link rel="stylesheet" href="assets/befundkarte.css">
+<link rel="stylesheet" href="assets/befundkarte.css?v=1111">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -799,7 +866,7 @@
       "name": "Was ist die Vorprüfung — und was kann sie nicht?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Die Vorprüfung meldet Ihnen in wenigen Minuten, ob es Auffälligkeiten in Ihrer Abrechnung gibt — zum Beispiel Kosten, die nicht umgelegt werden dürfen, oder eine Frist, die überschritten sein könnte. Die Vorprüfung ist keine anwaltliche Prüfung und keine Rechtsberatung. Sie kann Fehler übersehen oder falsch einordnen und nennt keine Beträge. Ob ein Punkt wirklich trägt, sage ich Ihnen erst in der anwaltlichen Prüfung — die bestellen Sie danach, wenn Sie möchten."
+        "text": "Die Vorprüfung meldet Ihnen in wenigen Minuten, ob es Auffälligkeiten in Ihrer Abrechnung gibt — zum Beispiel Kosten, die nicht umgelegt werden dürfen, oder eine Frist, die überschritten sein könnte. Die Vorprüfung ist keine anwaltliche Prüfung und keine Rechtsberatung. Sie kann Fehler übersehen oder falsch einordnen. Einen Betrag nennt sie nur, wenn sie die Abrechnung sicher lesen und gegenrechnen konnte. Ob ein Punkt wirklich trägt, sage ich Ihnen erst in der anwaltlichen Prüfung — die bestellen Sie danach, wenn Sie möchten."
       }
     },
     {
@@ -807,7 +874,7 @@
       "name": "Welche Unterlagen brauche ich?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Ihre aktuelle Nebenkostenabrechnung und Ihren Mietvertrag — der Vertrag ist wichtig, weil dort Umlageschlüssel und vereinbarte Kostenarten stehen. Ein Handyfoto genügt, Sie brauchen keinen Scanner. Weitere Belege brauchen Sie nicht vorab. Sollte die anwaltliche Prüfung einzelne Unterlagen zusätzlich erfordern, melde ich mich gezielt bei Ihnen."
+        "text": "Für die kostenlose Vorprüfung genügt Ihre aktuelle Nebenkostenabrechnung. Haben Sie den Mietvertrag zur Hand, laden Sie ihn gleich mit hoch: Dann prüft die Vorprüfung auch, ob die Kostenarten vereinbart sind und der Verteilerschlüssel stimmt. Für die anwaltliche Prüfung brauche ich den Mietvertrag in jedem Fall, Sie können ihn bei der Bestellung nachreichen. Ein Handyfoto genügt, Sie brauchen keinen Scanner. Weitere Belege brauchen Sie nicht vorab. Sollte die anwaltliche Prüfung einzelne Unterlagen zusätzlich erfordern, melde ich mich gezielt bei Ihnen."
       }
     },
     {
@@ -816,6 +883,14 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Die Vorprüfung läuft automatisch. Die anwaltliche Prüfung übernehme ich als Rechtsanwalt: Die Auswertung wird technisch unterstützt, die juristische Bewertung und die Freigabe liegen bei mir — kein Prüfergebnis verlässt die Kanzlei ungeprüft."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Woher stammt die Zahl zur Fehlerquote?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Der Deutsche Mieterbund geht davon aus, dass jede zweite Abrechnung fehlerhaft ist. Grundlage ist nach Angaben des Mieterbundes die Auswertung seiner Beratungsfälle (zitiert nach ZDFheute, 25.10.2026). Die Annahme sagt nichts über Ihre Abrechnung."
       }
     },
     {
@@ -934,8 +1009,8 @@
     <nav class="nav" aria-label="Hauptnavigation">
       <a href="#ablauf">So funktioniert’s</a>
       <a href="#ergebnis">Ihr Ergebnis</a>
+      <a href="#preis">Preis</a>
       <a href="#leistungsumfang">Leistungsumfang</a>
-      <a href="#transparenz">Transparenz</a>
       <a href="#faq">FAQ</a>
       <a href="ueber-mich.html">Über mich</a>
     </nav>
@@ -953,6 +1028,7 @@
   <nav class="mobile-nav" id="mobile-nav" aria-label="Hauptnavigation (mobil)" hidden>
     <a href="#ablauf">So funktioniert’s</a>
     <a href="#ergebnis">Ihr Ergebnis</a>
+    <a href="#preis">Preis</a>
     <a href="#leistungsumfang">Leistungsumfang</a>
     <a href="#transparenz">Transparenz</a>
     <a href="#faq">FAQ</a>
@@ -971,23 +1047,23 @@
           <img src="assets/portrait-zahid.jpg" alt="" width="44" height="44">
           <span><strong>Rechtsanwalt Zahid Akcay</strong>Kanzlei Akcay, Frankfurt am Main</span>
         </p>
-        <h1 class="hero__title">Nebenkosten&shy;abrechnung prüfen lassen</h1>
-        <p class="hero__sub">
-          Laden Sie Abrechnung und Mietvertrag hoch. In wenigen Minuten sehen Sie, ob es Anhaltspunkte
-          für Fehler gibt. <span class="hero__sub-mehr">Danach entscheiden Sie, ob ich als Rechtsanwalt prüfe.</span>
-        </p>
+        <!-- Startseite neu (Plan 11.11.2026, Freigabe Zahid): Die Dachzeile behält den Suchbegriff in der H1. -->
+        <h1 class="hero__title"><span class="hero__dach">Nebenkosten&shy;abrechnung prüfen lassen</span>Zahlen Sie nur, was Sie wirklich schulden.</h1>
+        <p class="hero__fakt"><span class="hero__fakt-lang">Der Deutsche Mieterbund geht davon aus, dass <strong>jede zweite Abrechnung fehlerhaft</strong> ist.</span><span class="hero__fakt-kurz">Der Mieterbund geht davon aus: <strong>Jede zweite Abrechnung ist fehlerhaft.</strong></span> <a href="#quelle" data-quelle>Quelle</a></p>
+        <p class="hero__sub"><span class="hero__sub-lang">Fotografieren Sie Ihre Abrechnung. Die kostenlose Vorprüfung zeigt Ihnen in wenigen Minuten, welche
+          Posten auffällig sind, wo möglich mit Betrag. Danach entscheiden Sie, ob ich als Rechtsanwalt prüfe.</span><span class="hero__sub-kurz">Abrechnung fotografieren, in wenigen Minuten auffällige Posten sehen.</span></p>
+        <p class="hero__aktion"><a class="btn hero__knopf" href="#vorpruefung-start" data-start="hero">Abrechnung kostenlos vorprüfen</a></p>
+        <p class="hero__kosten hero__kosten--kurz">Kostenlos. Anwaltliche Prüfung auf Wunsch: 79,90&nbsp;€.</p>
         <ul class="hero__punkte">
-          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F3E3CE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
-            <span><strong>Handyfoto genügt.</strong> <span class="hero__punkt-mehr">Kein Scanner, kein Papierkram.</span></span></li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F3E3CE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>
+            <span><strong>Beträge auf einen Blick.</strong> <span class="hero__punkt-mehr">Die Vorprüfung nennt auffällige Posten mit Betrag, wo sie die Abrechnung sicher lesen kann.</span></span></li>
           <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F3E3CE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
-            <span><strong>Kostenlos und unverbindlich.</strong> <span class="hero__punkt-mehr">Die Vorprüfung ist automatisch, ohne anwaltliche Prüfung.</span></span></li>
-          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F3E3CE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg>
-            <span><strong>Anwaltliche Verschwiegenheit.</strong> <span class="hero__punkt-mehr">Ihre Unterlagen dienen nur Ihrer Prüfung.</span></span></li>
+            <span><strong>Ein Rechtsanwalt prüft.</strong> <span class="hero__punkt-mehr">Jede bestellte Abrechnung prüfe ich selbst und verantworte das Ergebnis.</span></span></li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F3E3CE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M4 7l8 6 8-6"/></svg>
+            <span><strong>Das Schreiben gleich dazu.</strong> <span class="hero__punkt-mehr">Lohnt sich ein Widerspruch, erhalten Sie das fertige Schreiben an Ihren Vermieter. Lohnt er sich nicht, sage ich Ihnen das.</span></span></li>
         </ul>
-        <p class="hero__preis">Lohnt sich eine anwaltliche Prüfung, bestellen Sie sie zum Festpreis von 79,90 € inklusive
-        Umsatzsteuer. Sie erhalten ein Prüfergebnis und ein fertiges Schreiben an Ihren Vermieter.</p>
-        <p class="hero__spaeter" data-spaeter-zeile hidden>Nicht zur Hand?
-          <button type="button" class="spaeter-knopf" data-spaeter="hero">Link für später speichern</button></p>
+        <p class="hero__kosten hero__kosten--lang">Die Vorprüfung kostet nichts. Die anwaltliche Prüfung kostet 79,90&nbsp;€ inklusive
+        Umsatzsteuer, und nur, wenn Sie sie danach bestellen.</p>
       </div>
 
       <!-- Vorprüfung im ersten Bildschirm (Vorschau 01.11.2026): Formular 1 wie auf pruefung.html.
@@ -995,9 +1071,11 @@
       <div class="hero__form" id="vorpruefung-start">
         <div class="hero__form-kopf">
           <h2>Kostenlose Vorprüfung</h2>
-          <span>Dauer: etwa eine Minute</span>
+          <span>Schritt 1 von 2</span>
         </div>
-        <p class="hero__kontakt-oben">Keine Unterlagen zur Hand? <a class="kontakt-knopf" id="kontakt-oben" href="#kontakt">Kurze Nachricht schreiben</a></p>
+        <!-- Mietvertrag freiwillig (Entscheidung Zahid 11.11.2026): Für die Vorprüfung genügt die Abrechnung, der
+             Mietvertrag wird für die anwaltliche Prüfung nachgereicht. -->
+        <p class="hero__form-satz">Es genügt Ihre Nebenkostenabrechnung, alle Seiten als Foto oder PDF. Den Mietvertrag können Sie mitschicken oder später nachreichen.</p>
         <div class="form-card" id="form-card">
           <div class="form-card__iframe-wrap">
             <div class="form-skeleton" aria-hidden="true">
@@ -1023,10 +1101,16 @@
             ></iframe>
           </div>
         </div>
+        <p class="hero__vertrauen">Anwaltliche Verschwiegenheit. Bestellen Sie nicht, lösche ich Ihre Unterlagen nach 30&nbsp;Tagen.
+          Rechtsanwalt Zahid Akcay, Mitglied der Rechtsanwaltskammer Frankfurt am Main.</p>
+        <!-- „Link für später“ steht jetzt unter der Karte und ist auch am Handy sichtbar (assets/spaeter.js, kein Versand
+             durch die Kanzlei). -->
+        <p class="hero__spaeter-karte" data-spaeter-zeile hidden>Abrechnung gerade nicht zur Hand?
+          <button type="button" class="spaeter-knopf" data-spaeter="formular">Link für später speichern</button></p>
         <!-- Unverbindliche Nachricht (Vorschau 05.11.2026): Tally-Formular e5DR6Q, Zustellung per E-Mail an info@.
              Ohne JavaScript öffnet der Link das Formular in einem neuen Tab. -->
         <div class="hero__kontakt" id="kontakt">
-          <p class="hero__kontakt-zeile">Unterlagen gerade nicht zur Hand?
+          <p class="hero__kontakt-zeile">Lieber erst fragen?
             <a class="kontakt-knopf" id="kontakt-knopf" href="https://tally.so/r/e5DR6Q" target="_blank" rel="noopener">Schreiben Sie mir unverbindlich, worum es geht.</a></p>
           <div class="hero__kontakt-box" id="kontakt-box" hidden>
             <iframe
@@ -1044,13 +1128,88 @@
     </div>
   </section>
 
+  <!-- ============ Fallbeispiele (bis 27.10.2026 Mandantenstimmen) ============
+       Seit dem Plan vom 11.11.2026 direkt unter dem ersten Bildschirm: Dort lesen rund 60 % der Besucher, an der
+       alten Stelle sah sie nur jeder Zehnte. Inhalt und Auswahlhinweis unverändert. -->
+  <section id="stimmen" class="stimmen-section" aria-labelledby="stimmen-title">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="kicker">Aus meiner Prüfung</p>
+        <h2 id="stimmen-title" class="section-title">Was die Prüfung in einzelnen Fällen ergeben hat</h2>
+        <p class="ergebnis__caveat">Ausgewählte Beispiele aus meinen Prüfungen von Abrechnungen für 2025. Jede Abrechnung ist anders: Die Fälle zeigen, was vorkommt, nicht, was Sie erwarten können.</p>
+      </div>
+      <ul class="stimmen reveal" id="stimmen-liste" tabindex="0" aria-label="Fallbeispiele, waagerecht wischen">
+        <li>
+          <article class="stimme fall">
+            <div class="fall__kopf"><strong>Albion M.</strong><span>Mannheim, Abrechnung 2025</span></div>
+            <div class="fall__zahlen">
+              <div><span class="fall__lbl">laut Abrechnung</span><span class="fall__wert">rund 900&nbsp;€ Nachforderung</span></div>
+              <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><path d="M1 7h18m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              <div><span class="fall__lbl">nach Korrektur</span><span class="fall__wert">rund 250&nbsp;€</span></div>
+            </div>
+            <p class="fall__text">Die kalten Betriebskosten waren nach Personen verteilt, der Mietvertrag sieht die Wohnfläche vor. Dazu kam ein Kürzungsrecht bei den Heizkosten. Der Vermieter hat beides anerkannt und eine korrigierte Abrechnung geschickt.</p>
+            <div class="fall__fuss"><span class="fall__marke fall__marke--anerkannt">Vom Vermieter anerkannt</span><strong>rund 650&nbsp;€ weniger</strong></div>
+          </article>
+        </li>
+        <li>
+          <article class="stimme fall">
+            <div class="fall__kopf"><strong>Damir B.</strong><span>Kassel, Abrechnung 2025</span></div>
+            <div class="fall__zahlen">
+              <div><span class="fall__lbl">laut Abrechnung</span><span class="fall__wert">rund 65&nbsp;€ Nachforderung</span></div>
+              <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><path d="M1 7h18m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              <div><span class="fall__lbl">nach Korrektur</span><span class="fall__wert">rund 15&nbsp;€ Guthaben</span></div>
+            </div>
+            <p class="fall__text">Abgerechnet wurde ab Mitte April, abgezogen waren aber nur die Vorauszahlungen ab Mai. Der Vermieter hat den fehlenden Anteil für April berücksichtigt: Statt einer Nachzahlung gab es ein Guthaben.</p>
+            <div class="fall__fuss"><span class="fall__marke fall__marke--anerkannt">Vom Vermieter anerkannt</span><strong>80&nbsp;€ zugunsten des&nbsp;Mieters</strong></div>
+          </article>
+        </li>
+        <li>
+          <article class="stimme fall">
+            <div class="fall__kopf"><strong>Fabienne D.</strong><span>Bad Homburg, Abrechnung 2025</span></div>
+            <div class="fall__zahlen">
+              <div><span class="fall__lbl">laut Abrechnung</span><span class="fall__wert">rund 530&nbsp;€ Nachforderung</span></div>
+              <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><path d="M1 7h18m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              <div><span class="fall__lbl">Kürzungsrecht</span><span class="fall__wert">15&nbsp;% bei Heizung und Warmwasser</span></div>
+            </div>
+            <p class="fall__text">Heizung und Warmwasser laufen über eine gemeinsame Anlage. Die Wärme für das Warmwasser hätte mit einem Wärmezähler gemessen werden müssen, sie wurde aber nur rechnerisch ermittelt. Deshalb darf die Mieterin ihre Heiz- und Warmwasserkosten um 15&nbsp;% kürzen.</p>
+            <div class="fall__fuss"><span class="fall__marke fall__marke--pruefung">Ergebnis der Prüfung</span><strong>rund 200&nbsp;€ weniger</strong></div>
+          </article>
+        </li>
+        <li>
+          <article class="stimme fall">
+            <div class="fall__kopf"><strong>Nouri N.</strong><span>Flensburg, Abrechnung 2025</span></div>
+            <div class="fall__zahlen">
+              <div><span class="fall__lbl">laut Abrechnung</span><span class="fall__wert">rund 845&nbsp;€ Gutschrift</span></div>
+              <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><path d="M1 7h18m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              <div><span class="fall__lbl">zusätzlich</span><span class="fall__wert">15&nbsp;% Kürzung beim Warmwasser</span></div>
+            </div>
+            <p class="fall__text">Die Warmwasserkosten des Hauses waren vollständig nach Fläche verteilt. Die Heizkostenverordnung verlangt, dass mindestens die Hälfte nach gemessenem Verbrauch verteilt wird. Deshalb darf der Mieter seinen Warmwasseranteil kürzen, obwohl die Abrechnung schon mit einer Gutschrift endete.</p>
+            <div class="fall__fuss"><span class="fall__marke fall__marke--pruefung">Ergebnis der Prüfung</span><strong>rund 57&nbsp;€ zusätzlich</strong></div>
+          </article>
+        </li>
+      </ul>
+      <div class="stimmen__steuerung">
+        <div class="stimmen__punkte" role="group" aria-label="Fall wählen"></div>
+        <div class="stimmen__pfeile">
+          <button type="button" class="stimmen__pfeil" data-richtung="-1" aria-label="Vorheriger Fall">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" class="stimmen__pfeil" data-richtung="1" aria-label="Nächster Fall">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <p class="stimmen__aktion"><a class="btn" href="#vorpruefung-start" data-start="belege">Meine Abrechnung vorprüfen</a></p>
+    </div>
+  </section>
+
   <!-- ============ Beispiel-Ergebnis der Vorprüfung (Paket 1a, 29.10.2026) ============
        Dieselbe Karte wie das echte Ergebnis (assets/befundkarte.js), gekennzeichnet, erfundene Daten. -->
   <section class="beispiel-start" aria-labelledby="beispiel-titel">
     <div class="wrap">
-      <h2 id="beispiel-titel" class="beispiel-start__titel">Das zeigt Ihnen die kostenlose Vorprüfung</h2>
+      <h2 id="beispiel-titel" class="beispiel-start__titel">So sieht Ihr Ergebnis aus</h2>
       <div class="beispiel" id="beispiel-start"></div>
-      <p class="beispiel-unter">So sieht Ihr Ergebnis aus. Die Vorprüfung dauert meist unter einer Minute.</p>
+      <p class="beispiel-unter">Erfundenes Beispiel. Nicht jede Abrechnung enthält solche Posten. Dann sagt Ihnen die Vorprüfung auch das.</p>
       <p class="beispiel-start__aktion"><a class="btn" href="#vorpruefung-start" data-start="beispiel">Kostenlose Vorprüfung starten</a></p>
     </div>
   </section>
@@ -1071,13 +1230,60 @@
     <div class="wrap">
       <div class="reveal">
         <p class="kicker">So funktioniert’s</p>
-        <h2 id="ablauf-title" class="section-title">In vier Schritten zum Prüfergebnis</h2>
+        <h2 id="ablauf-title" class="section-title">In drei Schritten zum Ergebnis</h2>
         <p class="section-lead">
-          Sie brauchen weder Scanner noch Aktenordner — Fotos mit dem Handy reichen.
+          Sie brauchen weder Scanner noch Aktenordner. Fotos mit dem Handy reichen.
         </p>
       </div>
 
-      <figure class="video reveal">
+      <p class="steps-prep reveal"><strong>Das sollten Sie bereithalten:</strong> Ihre
+      Nebenkostenabrechnung, alle Seiten, Handyfotos genügen. Den Mietvertrag gern dazu, sonst reichen Sie
+      ihn bei der Bestellung nach.<span class="steps-prep__spaeter" data-spaeter-zeile hidden>Nicht zur Hand?
+      <button type="button" class="spaeter-knopf" data-spaeter="ablauf">Link für später speichern</button></span></p>
+      <ol class="steps steps--drei">
+        <li class="step reveal" style="--i:0">
+          <span class="step__icon" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <rect x="4" y="2" width="15" height="20" rx="2" stroke="#2F5D4C" stroke-width="1.8" fill="none"/>
+              <line x1="8" y1="8" x2="15" y2="8" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round"/>
+              <line x1="8" y1="12" x2="14" y2="12" stroke="#D9D2C4" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M15 17l3-3 4 4v4a2 2 0 0 1-2 2h-5v-7z" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.4" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Abrechnung fotografieren</h3>
+            <p>Alle Seiten als Foto oder PDF, dazu Ihre E-Mail-Adresse. Kostenlos.</p>
+          </div>
+        </li>
+        <li class="step reveal" style="--i:1">
+          <span class="step__icon" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <path d="M4 4h18v13H12l-5 5v-5H4V4z" stroke="#2F5D4C" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
+              <path d="M9 10.5l2.5 2.5 5-5.5" stroke="#B97C3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Ergebnis ansehen</h3>
+            <p>In wenigen Minuten auf dieser Seite: auffällige Posten, Beträge, Ihre Frist. Automatisch erstellt, ohne anwaltliche Prüfung.</p>
+          </div>
+        </li>
+        <li class="step reveal" style="--i:2">
+          <span class="step__icon" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <rect x="2.5" y="6" width="21" height="15" rx="2" stroke="#2F5D4C" stroke-width="1.8" fill="none"/>
+              <path d="M3.5 7.5L13 14.5 22.5 7.5" stroke="#2F5D4C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <circle cx="20" cy="19" r="5" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.4"/>
+              <path d="M17.8 19l1.5 1.5 2.6-3" stroke="#B97C3B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Wenn Sie möchten: anwaltliche Prüfung</h3>
+            <p>79,90&nbsp;€ Festpreis. Ich prüfe Ihre Abrechnung selbst. Sie erhalten mein Prüfergebnis und, wenn sich ein Widerspruch lohnt, das fertige Schreiben an Ihren Vermieter, in der Regel innerhalb von 48&nbsp;Stunden.</p>
+          </div>
+        </li>
+      </ol>
+
+      <figure class="video video--unten reveal">
         <div class="video__frame">
           <video
             controls
@@ -1095,78 +1301,35 @@
           Der Ablauf in unter einer Minute. Beispielhafte Darstellung, keine Zusage eines Ergebnisses.
         </figcaption>
       </figure>
+    </div>
+  </section>
 
-      <p class="steps-prep reveal"><strong>Das sollten Sie bereithalten:</strong> Ihre
-      Nebenkostenabrechnung und Ihren Mietvertrag — jeweils alle Seiten, Handyfotos
-      genügen.<span class="steps-prep__spaeter" data-spaeter-zeile hidden>Nicht zur Hand?
-      <button type="button" class="spaeter-knopf" data-spaeter="ablauf">Link für später speichern</button></span></p>
-      <ol class="steps">
-        <li class="step reveal" style="--i:0">
-          <span class="step__icon" aria-hidden="true">
-            <!-- Icon: Blatt mit Foto-Ecke -->
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-              <rect x="4" y="2" width="15" height="20" rx="2" stroke="#2F5D4C" stroke-width="1.8" fill="none"/>
-              <line x1="8" y1="8" x2="15" y2="8" stroke="#B97C3B" stroke-width="1.6" stroke-linecap="round"/>
-              <line x1="8" y1="12" x2="14" y2="12" stroke="#D9D2C4" stroke-width="1.6" stroke-linecap="round"/>
-              <path d="M15 17l3-3 4 4v4a2 2 0 0 1-2 2h-5v-7z" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.4" stroke-linejoin="round"/>
-            </svg>
-          </span>
-          <div>
-            <h3>Unterlagen hochladen — die Vorprüfung ist kostenlos</h3>
-            <p>Nebenkostenabrechnung und Mietvertrag hochladen oder abfotografieren, dazu
-            Ihre E-Mail-Adresse. Alles Weitere ergibt sich aus Ihren Unterlagen.
-            Die Vorprüfung kostet nichts und verpflichtet zu nichts. Ob Sie danach die
-            anwaltliche Prüfung bestellen, entscheiden Sie.</p>
-          </div>
-        </li>
-        <li class="step reveal" style="--i:1">
-          <span class="step__icon" aria-hidden="true">
-            <!-- Icon: Sprechblase mit Prüfhaken -->
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-              <path d="M4 4h18v13H12l-5 5v-5H4V4z" stroke="#2F5D4C" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
-              <path d="M9 10.5l2.5 2.5 5-5.5" stroke="#B97C3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
-          </span>
-          <div>
-            <h3>Vorprüfung — sofort</h3>
-            <p>Die Vorprüfung meldet Ihnen in wenigen Minuten, ob es Auffälligkeiten in Ihrer
-            Abrechnung gibt — automatisch, ohne anwaltliche Prüfung, unverbindlich. Das Ergebnis
-            erscheint direkt auf der Seite.</p>
-          </div>
-        </li>
-        <li class="step reveal" style="--i:2">
-          <span class="step__icon" aria-hidden="true">
-            <!-- Icon: Karte -->
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-              <rect x="2.5" y="6" width="21" height="14" rx="2" stroke="#2F5D4C" stroke-width="1.8" fill="none"/>
-              <line x1="2.5" y1="10.5" x2="23.5" y2="10.5" stroke="#2F5D4C" stroke-width="1.8"/>
-              <rect x="6" y="14" width="6" height="2.5" rx="1" fill="#B97C3B"/>
-            </svg>
-          </span>
-          <div>
-            <h3>Anwaltliche Prüfung bestellen — wenn Sie möchten</h3>
-            <p>Wenn Sie möchten, bestellen Sie danach meine Prüfung. Sie erhalten sofort eine
-            Bestellbestätigung per E-Mail.</p>
-          </div>
-        </li>
-        <li class="step reveal" style="--i:3">
-          <span class="step__icon" aria-hidden="true">
-            <!-- Icon: Umschlag mit Häkchen -->
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-              <rect x="2.5" y="6" width="21" height="15" rx="2" stroke="#2F5D4C" stroke-width="1.8" fill="none"/>
-              <path d="M3.5 7.5L13 14.5 22.5 7.5" stroke="#2F5D4C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <circle cx="20" cy="19" r="5" fill="#F3E3CE" stroke="#B97C3B" stroke-width="1.4"/>
-              <path d="M17.8 19l1.5 1.5 2.6-3" stroke="#B97C3B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
-          </span>
-          <div>
-            <h3>Wissen, woran Sie sind</h3>
-            <p>Sie erhalten per E-Mail mein Prüfergebnis — welche Positionen angreifbar sind,
-            welche Fristen gelten — und, wenn sich ein Widerspruch lohnt, das vorbereitete
-            Schreiben an Ihren Vermieter.</p>
-          </div>
-        </li>
-      </ol>
+  <!-- ============ Preis und Nutzen (Plan 11.11.2026) ============
+       Der Preis stand am Handy bisher nur im FAQ, das 4 % der Anzeigenbesucher erreichten. -->
+  <section id="preis" class="preis" aria-labelledby="preis-title">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="kicker">Preis</p>
+        <h2 id="preis-title" class="section-title">Was es kostet, und wann es sich lohnt</h2>
+      </div>
+      <div class="preis__karten reveal">
+        <div class="preis__karte">
+          <p class="preis__name">Vorprüfung</p>
+          <p class="preis__betrag">0&nbsp;€</p>
+          <p class="preis__text">Automatisch, unverbindlich, ohne anwaltliche Prüfung.</p>
+        </div>
+        <div class="preis__karte preis__karte--haupt">
+          <p class="preis__name">Anwaltliche Prüfung</p>
+          <p class="preis__betrag">79,90&nbsp;€</p>
+          <p class="preis__text">Festpreis inklusive Umsatzsteuer. Einmalig, kein Abo, nur wenn Sie bestellen.</p>
+        </div>
+      </div>
+      <div class="preis__lohnt reveal">
+        <p>Schon ein einzelner Posten, der nicht umgelegt werden darf, kann mehr ausmachen als der Preis der Prüfung.
+        Ob das bei Ihnen so ist, zeigt die Vorprüfung, bevor Sie etwas bezahlen. Findet sie nichts, sagt sie Ihnen auch das.</p>
+        <p>Die 79,90&nbsp;€ tragen Sie selbst. Ihr Vermieter erstattet sie in der Regel nicht.</p>
+      </div>
+      <p class="preis__aktion"><a class="btn" href="#vorpruefung-start" data-start="preis">Abrechnung kostenlos vorprüfen</a></p>
     </div>
   </section>
 
@@ -1249,78 +1412,6 @@
           <a class="danach__link" href="vermieter-antwortet.html">So geht es weiter, wenn Ihr Vermieter antwortet</a>
         </div>
       </aside>
-    </div>
-  </section>
-
-  <!-- ============ Fallbeispiele (bis 27.10.2026 Mandantenstimmen) ============ -->
-  <section id="stimmen" class="stimmen-section" aria-labelledby="stimmen-title">
-    <div class="wrap">
-      <div class="reveal">
-        <p class="kicker">Aus meiner Prüfung</p>
-        <h2 id="stimmen-title" class="section-title">Was die Prüfung in einzelnen Fällen ergeben hat</h2>
-        <p class="ergebnis__caveat">Ausgewählte Beispiele aus meinen Prüfungen von Abrechnungen für 2025. Jede Abrechnung ist anders: Die Fälle zeigen, was vorkommt, nicht, was Sie erwarten können.</p>
-      </div>
-      <ul class="stimmen reveal" id="stimmen-liste" tabindex="0" aria-label="Fallbeispiele, waagerecht wischen">
-        <li>
-          <article class="stimme fall">
-            <div class="fall__kopf"><strong>Albion M.</strong><span>Mannheim, Abrechnung 2025</span></div>
-            <div class="fall__zahlen">
-              <div><span class="fall__lbl">laut Abrechnung</span><span class="fall__wert">rund 900&nbsp;€ Nachforderung</span></div>
-              <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><path d="M1 7h18m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-              <div><span class="fall__lbl">nach Korrektur</span><span class="fall__wert">rund 250&nbsp;€</span></div>
-            </div>
-            <p class="fall__text">Die kalten Betriebskosten waren nach Personen verteilt, der Mietvertrag sieht die Wohnfläche vor. Dazu kam ein Kürzungsrecht bei den Heizkosten. Der Vermieter hat beides anerkannt und eine korrigierte Abrechnung geschickt.</p>
-            <div class="fall__fuss"><span class="fall__marke fall__marke--anerkannt">Vom Vermieter anerkannt</span><strong>rund 650&nbsp;€ weniger</strong></div>
-          </article>
-        </li>
-        <li>
-          <article class="stimme fall">
-            <div class="fall__kopf"><strong>Damir B.</strong><span>Kassel, Abrechnung 2025</span></div>
-            <div class="fall__zahlen">
-              <div><span class="fall__lbl">laut Abrechnung</span><span class="fall__wert">rund 65&nbsp;€ Nachforderung</span></div>
-              <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><path d="M1 7h18m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-              <div><span class="fall__lbl">nach Korrektur</span><span class="fall__wert">rund 15&nbsp;€ Guthaben</span></div>
-            </div>
-            <p class="fall__text">Abgerechnet wurde ab Mitte April, abgezogen waren aber nur die Vorauszahlungen ab Mai. Der Vermieter hat den fehlenden Anteil für April berücksichtigt: Statt einer Nachzahlung gab es ein Guthaben.</p>
-            <div class="fall__fuss"><span class="fall__marke fall__marke--anerkannt">Vom Vermieter anerkannt</span><strong>80&nbsp;€ zugunsten des&nbsp;Mieters</strong></div>
-          </article>
-        </li>
-        <li>
-          <article class="stimme fall">
-            <div class="fall__kopf"><strong>Fabienne D.</strong><span>Bad Homburg, Abrechnung 2025</span></div>
-            <div class="fall__zahlen">
-              <div><span class="fall__lbl">laut Abrechnung</span><span class="fall__wert">rund 530&nbsp;€ Nachforderung</span></div>
-              <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><path d="M1 7h18m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-              <div><span class="fall__lbl">Kürzungsrecht</span><span class="fall__wert">15&nbsp;% bei Heizung und Warmwasser</span></div>
-            </div>
-            <p class="fall__text">Heizung und Warmwasser laufen über eine gemeinsame Anlage. Die Wärme für das Warmwasser hätte mit einem Wärmezähler gemessen werden müssen, sie wurde aber nur rechnerisch ermittelt. Deshalb darf die Mieterin ihre Heiz- und Warmwasserkosten um 15&nbsp;% kürzen.</p>
-            <div class="fall__fuss"><span class="fall__marke fall__marke--pruefung">Ergebnis der Prüfung</span><strong>rund 200&nbsp;€ weniger</strong></div>
-          </article>
-        </li>
-        <li>
-          <article class="stimme fall">
-            <div class="fall__kopf"><strong>Nouri N.</strong><span>Flensburg, Abrechnung 2025</span></div>
-            <div class="fall__zahlen">
-              <div><span class="fall__lbl">laut Abrechnung</span><span class="fall__wert">rund 845&nbsp;€ Gutschrift</span></div>
-              <svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><path d="M1 7h18m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-              <div><span class="fall__lbl">zusätzlich</span><span class="fall__wert">15&nbsp;% Kürzung beim Warmwasser</span></div>
-            </div>
-            <p class="fall__text">Die Warmwasserkosten des Hauses waren vollständig nach Fläche verteilt. Die Heizkostenverordnung verlangt, dass mindestens die Hälfte nach gemessenem Verbrauch verteilt wird. Deshalb darf der Mieter seinen Warmwasseranteil kürzen, obwohl die Abrechnung schon mit einer Gutschrift endete.</p>
-            <div class="fall__fuss"><span class="fall__marke fall__marke--pruefung">Ergebnis der Prüfung</span><strong>rund 57&nbsp;€ zusätzlich</strong></div>
-          </article>
-        </li>
-      </ul>
-      <div class="stimmen__steuerung">
-        <div class="stimmen__punkte" role="group" aria-label="Fall wählen"></div>
-        <div class="stimmen__pfeile">
-          <button type="button" class="stimmen__pfeil" data-richtung="-1" aria-label="Vorheriger Fall">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button type="button" class="stimmen__pfeil" data-richtung="1" aria-label="Nächster Fall">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -1557,7 +1648,7 @@
           </summary>
           <div>
             <p>Die Vorprüfung meldet Ihnen in wenigen Minuten, ob es Auffälligkeiten in Ihrer Abrechnung gibt — zum Beispiel Kosten, die nicht umgelegt werden dürfen, oder eine Frist, die überschritten sein könnte.</p>
-            <p>Die Vorprüfung ist keine anwaltliche Prüfung und keine Rechtsberatung. Sie kann Fehler übersehen oder falsch einordnen und nennt keine Beträge. Ob ein Punkt wirklich trägt, sage ich Ihnen erst in der anwaltlichen Prüfung — die bestellen Sie danach, wenn Sie möchten.</p>
+            <p>Die Vorprüfung ist keine anwaltliche Prüfung und keine Rechtsberatung. Sie kann Fehler übersehen oder falsch einordnen. Einen Betrag nennt sie nur, wenn sie die Abrechnung sicher lesen und gegenrechnen konnte. Ob ein Punkt wirklich trägt, sage ich Ihnen erst in der anwaltlichen Prüfung — die bestellen Sie danach, wenn Sie möchten.</p>
           </div>
         </details>
         <details>
@@ -1565,7 +1656,7 @@
             <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </summary>
           <div>
-            <p>Ihre aktuelle Nebenkostenabrechnung und Ihren Mietvertrag — der Vertrag ist wichtig, weil dort Umlageschlüssel und vereinbarte Kostenarten stehen. Ein Handyfoto genügt, Sie brauchen keinen Scanner.</p>
+            <p>Für die kostenlose Vorprüfung genügt Ihre aktuelle Nebenkostenabrechnung. Haben Sie den Mietvertrag zur Hand, laden Sie ihn gleich mit hoch: Dann prüft die Vorprüfung auch, ob die Kostenarten vereinbart sind und der Verteilerschlüssel stimmt. Für die anwaltliche Prüfung brauche ich den Mietvertrag in jedem Fall, Sie können ihn bei der Bestellung nachreichen. Ein Handyfoto genügt, Sie brauchen keinen Scanner.</p>
             <p>Weitere Belege brauchen Sie nicht vorab. Sollte die anwaltliche Prüfung einzelne Unterlagen zusätzlich erfordern, melde ich mich gezielt bei Ihnen.</p>
           </div>
         </details>
@@ -1575,6 +1666,14 @@
           </summary>
           <div>
             <p>Die Vorprüfung läuft automatisch. Die anwaltliche Prüfung übernehme ich als Rechtsanwalt: Die Auswertung wird technisch unterstützt, die juristische Bewertung und die Freigabe liegen bei mir — kein Prüfergebnis verlässt die Kanzlei ungeprüft.</p>
+          </div>
+        </details>
+        <details id="quelle">
+          <summary>Woher stammt die Zahl zur Fehlerquote?
+            <span class="faq__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#2F5D4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </summary>
+          <div>
+            <p>Der Deutsche Mieterbund geht davon aus, dass jede zweite Abrechnung fehlerhaft ist. Grundlage ist nach Angaben des Mieterbundes die Auswertung seiner Beratungsfälle (zitiert nach ZDFheute, 25.10.2026). Die Annahme sagt nichts über Ihre Abrechnung.</p>
           </div>
         </details>
         <details>
@@ -1648,14 +1747,19 @@
     <div class="wrap">
       <div class="closing__box reveal">
         <h2 id="closing-title">Lassen Sie mich einen Blick auf Ihre Abrechnung werfen.</h2>
-        <p>Handyfotos genügen. Die Vorprüfung kostet nichts — und Sie entscheiden danach, ob
-        ich prüfe.</p>
+        <p>Ein Foto genügt. Die Vorprüfung kostet nichts, und Sie entscheiden danach, ob ich prüfe.</p>
         <a class="btn" href="#vorpruefung-start" data-start="ende">Abrechnung prüfen lassen</a>
       </div>
     </div>
   </section>
 
 </main>
+
+<!-- Feste Leiste am Handy (Plan 11.11.2026): erscheint, sobald die Formularkarte aus dem Bild ist; nicht, solange das
+     Banner zur Anzeigenmessung offen ist. Ohne JavaScript bleibt sie verborgen. -->
+<div class="leiste" id="leiste" hidden>
+  <a class="btn leiste__knopf" href="#vorpruefung-start" data-start="leiste">Kostenlose Vorprüfung starten</a>
+</div>
 
 <!-- ============ Footer ============ -->
 <footer>
@@ -1819,7 +1923,7 @@
   })();
 </script>
 
-<script src="assets/befundkarte.js"></script>
+<script src="assets/befundkarte.js?v=1111"></script>
 <script>
   if (window.NkaBefund) window.NkaBefund.zeigeBeispiel(document.getElementById('beispiel-start'));
 </script>
@@ -1835,13 +1939,16 @@
     var herkunft = OK.test(q.get('quelle') || '') ? q.get('quelle')
       : (['gclid', 'gbraid', 'wbraid'].some(function (k) { return !!q.get(k); }) ? 'anzeige' : 'ohne');
     window.NKA_HERKUNFT = herkunft;   /* für assets/spaeter.js und die Lesemessung */
+    /* Fassung der Seite (Plan 11.11.2026): steht in jedem Ereignis, damit zwischengespeicherte alte Seiten bei der
+       Vorher-Nachher-Auswertung nicht mitzählen. */
+    window.NKA_FASSUNG = 'L2';
     var knoepfe = document.querySelectorAll('a[data-start]');
     Array.prototype.forEach.call(knoepfe, function (a) {
       /* Vorschau 01.11.2026: Die Knöpfe springen zum Formular im Hero; nur echte Verweise auf die Prüfseite tragen die Herkunft weiter. */
       if (herkunft !== 'ohne' && a.getAttribute('href').indexOf('#') !== 0) a.setAttribute('href', 'pruefung.html?quelle=' + herkunft);
       a.addEventListener('click', function () {
         if (window.umami && typeof window.umami.track === 'function') {
-          try { window.umami.track('start_klick', { stelle: a.getAttribute('data-start'), herkunft: herkunft }); } catch (e) {}
+          try { window.umami.track('start_klick', { stelle: a.getAttribute('data-start'), herkunft: herkunft, fassung: window.NKA_FASSUNG }); } catch (e) {}
         }
       });
     });
@@ -1858,6 +1965,7 @@
     var herkunft = window.NKA_HERKUNFT || 'ohne';
     function zaehle(name, d) {
       d.herkunft = herkunft;
+      d.fassung = window.NKA_FASSUNG || 'L2';
       function senden() {
         if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track(name, d); } catch (e) {} return true; }
         return false;
@@ -1865,11 +1973,14 @@
       if (!senden() && document.readyState !== 'complete') window.addEventListener('load', senden);
     }
 
+    /* Reihenfolge seit dem Plan vom 11.11.2026: Fallbeispiele ('belege', vorher 'stimmen') stehen direkt unter dem
+       ersten Bildschirm, neu ist der Abschnitt 'preis'. */
     var ABSCHNITTE = [
+      ['belege', '#stimmen'],
       ['beispiel', '.beispiel-start'],
       ['ablauf', '#ablauf'],
+      ['preis', '#preis'],
       ['ergebnis', '#ergebnis'],
-      ['stimmen', '#stimmen'],
       ['faq', '#faq'],
       ['ende', '.closing']
     ];
@@ -1890,6 +2001,21 @@
         if (el) { el.setAttribute('data-messung', a[0]); beobachter.observe(el); }
       });
     }
+
+    /* „seite_wieder_geladen“ {art}: Hat der Browser den Tab verworfen (etwa während Kamera oder Dateiauswahl offen
+       war) oder wurde die Seite neu geladen? Nur die Auskunft des Browsers, nichts wird gespeichert. */
+    (function () {
+      var art = null;
+      try {
+        if (document.wasDiscarded === true) art = 'verworfen';
+        else {
+          var nav = (performance.getEntriesByType && performance.getEntriesByType('navigation')[0]) || null;
+          if (nav && nav.type === 'reload') art = 'neu_geladen';
+          else if (nav && nav.type === 'back_forward') art = 'zurueck';
+        }
+      } catch (e) {}
+      if (art) zaehle('seite_wieder_geladen', { art: art });
+    })();
 
     var STUFEN = [[10, '10s'], [30, '30s'], [90, '90s']];
     var sekunden = 0, naechste = 0;
@@ -1933,6 +2059,7 @@
     function zaehle(name, daten) {
       var d = daten || {};
       d.herkunft = herkunft;
+      d.fassung = window.NKA_FASSUNG || 'L2';
       function senden() {
         if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track(name, d); } catch (e) {} return true; }
         return false;
@@ -1977,6 +2104,16 @@
         else if (versuche >= 120) window.clearInterval(wache);
       }, 1000);
     }, 4500);
+
+    /* „formular_beruehrt“: erste Berührung des Formulars. Der Inhalt des Tally-Rahmens ist für diese Seite nicht
+       einsehbar; gezählt wird nur, dass der Fokus in den Rahmen gewandert ist, einmal je Aufruf. */
+    var beruehrt = false;
+    window.addEventListener('blur', function () {
+      if (beruehrt) return;
+      window.setTimeout(function () {
+        if (!beruehrt && document.activeElement === frame) { beruehrt = true; zaehle('formular_beruehrt', { formular: 'vorpruefung' }); }
+      }, 0);
+    });
 
     var formularGezaehlt = {};
     window.addEventListener('message', function (e) {
@@ -2035,6 +2172,7 @@
     function zaehle(name, daten) {
       var d = daten || {};
       d.herkunft = herkunft;
+      d.fassung = window.NKA_FASSUNG || 'L2';
       function senden() {
         if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track(name, d); } catch (e) {} return true; }
         return false;
@@ -2084,8 +2222,37 @@
     });
   })();
 </script>
+<script>
+  /* Feste Leiste am Handy (Plan 11.11.2026): sichtbar, sobald die Formularkarte aus dem Bild ist und das Banner zur
+     Anzeigenmessung (assets/einwilligung.js, .nka-einw) nicht offen ist. */
+  (function () {
+    var leiste = document.getElementById('leiste');
+    var karte = document.getElementById('vorpruefung-start');
+    if (!leiste || !karte || !('IntersectionObserver' in window)) return;
+    var karteImBild = true;
+    function setze() {
+      var banner = document.querySelector('.nka-einw:not(.nka-einw--fuss)');
+      leiste.hidden = karteImBild || !!banner || window.scrollY < 240;
+    }
+    new IntersectionObserver(function (e) { karteImBild = e[0].isIntersecting; setze(); }, { threshold: 0 }).observe(karte);
+    window.addEventListener('scroll', setze, { passive: true });
+    document.addEventListener('click', function () { window.setTimeout(setze, 60); });
+  })();
+
+  /* „Quelle“ am Mieterbund-Satz: öffnet die Antwort im FAQ. */
+  (function () {
+    var ziel = document.getElementById('quelle');
+    if (!ziel) return;
+    function oeffne() { if (location.hash === '#quelle') ziel.open = true; }
+    Array.prototype.forEach.call(document.querySelectorAll('a[data-quelle]'), function (a) {
+      a.addEventListener('click', function () { ziel.open = true; });
+    });
+    window.addEventListener('hashchange', oeffne);
+    oeffne();
+  })();
+</script>
 <!-- Offizielles Tally-Skript: löst data-tally-src ein und passt die iframe-Höhe dynamisch an den Formularinhalt an. -->
 <script async src="https://tally.so/widgets/embed.js"></script>
-<script src="assets/spaeter.js"></script>
+<script src="assets/spaeter.js?v=1111"></script>
 </body>
 </html>

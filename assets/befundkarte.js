@@ -1,8 +1,11 @@
 /* Befundkarte der Vorprüfung (Paket 1a, Freigabe Zahid 29.10.2026).
    Ein Code für das echte Ergebnis (pruefung.html) und das gekennzeichnete Beispiel (index.html, pruefung.html),
    damit das Beispiel nie anders aussieht als das, was die Vorprüfung wirklich liefert.
-   Kein Ersparnisbetrag auf der Seite (Entscheidung Zahid 28.10.2026); die interne Obergrenze entscheidet nur
-   über den Kasten „Anwaltliche Prüfung empfohlen“ (ab SCHWELLE_EMPFEHLUNG_CENT). */
+   Seit 11.11.2026 (Entscheidung Zahid, hebt „kein Ersparnisbetrag auf der Seite“ vom 28.10.2026 auf): Ein möglicher
+   Betrag steht neben dem Preis der anwaltlichen Prüfung, aber nur, wenn die Vorprüfung gegenrechnen konnte
+   (Summenprobe bestanden) und die Einwendungsfrist läuft (moeglicherBetrag, baueBetrag). In allen anderen Fällen
+   bleibt es bei der internen Obergrenze, die nur über den Kasten „Anwaltliche Prüfung empfohlen“ entscheidet
+   (ab SCHWELLE_EMPFEHLUNG_CENT). */
 (function () {
   'use strict';
 
@@ -85,6 +88,39 @@
     return { cent: wert, quelle: wert > 0 ? quelle : 'keine' };
   }
 
+  /* Möglicher Betrag für die Gegenüberstellung mit dem Preis (Plan 11.11.2026). Ein Betrag wird NUR genannt, wenn
+     die Summenprobe bestanden ist: Dann ergeben die gelesenen Posten die Summe der Abrechnung, die auffälligen
+     stecken also nachweislich im Anteil des Mieters und sind richtig gelesen (Gegenbeispiel Lauf 25 vom 10.11.2026:
+     durchgereichte WEG-Abrechnung, auffällige Posten standen im Dokument, aber nicht im Anteil des Mieters).
+       Stufe A: Summe von betrag_relevant_cent der auffälligen Posten der Arten unten; bei einer Nachforderung
+                höchstens deren Höhe, bei Guthaben ohne Deckel. „prüfen“-Posten, abweichende Schlüssel und
+                Hinweise ohne Betrag zählen nicht.
+       Stufe B: Punkt 'frist' (Abrechnung erst nach Ablauf der Abrechnungsfrist) -> die Nachforderung.
+       Stufe C: kein Betrag (alles andere, auch abgelaufene Einwendungsfrist). */
+  var PREIS_CENT = 7990; /* Festpreis der anwaltlichen Prüfung, 79,90 € inklusive Umsatzsteuer */
+  var ARTEN_MIT_BETRAG = { nicht_umlagefaehig: 1, nicht_vereinbart: 1, kabel_nach_2024: 1, rauchmelder_miete: 1 };
+  function moeglicherBetrag(markiert, andere, nachforderung, guthaben, stimmig, fristAbgelaufen) {
+    var kein = { stufe: 'C', cent: 0, posten: 0, summe: 0, gedeckelt: false, ueberPreis: false, guthaben: false };
+    if (stimmig !== true || fristAbgelaufen) return kein;
+    if (nachforderung && andere.some(function (x) { return x.art === 'frist'; })) {
+      return { stufe: 'B', cent: nachforderung, posten: 0, summe: nachforderung, gedeckelt: false,
+               ueberPreis: nachforderung >= PREIS_CENT, guthaben: false };
+    }
+    var posten = markiert.filter(function (p) {
+      return p.status === 'auffaellig' && ARTEN_MIT_BETRAG[p.art] === 1 &&
+        typeof p.betrag_relevant_cent === 'number' && p.betrag_relevant_cent > 0;
+    });
+    if (!posten.length) return kein;
+    var summe = posten.reduce(function (s, p) { return s + p.betrag_relevant_cent; }, 0);
+    var cent = nachforderung ? Math.min(summe, nachforderung) : summe;
+    return { stufe: 'A', cent: cent, posten: posten.length, summe: summe, gedeckelt: cent < summe,
+             ueberPreis: cent >= PREIS_CENT, guthaben: !nachforderung && !!guthaben };
+  }
+  function tageBis(iso, heute) {
+    var a = String(heute).slice(0, 10).split('-'), b = String(iso).slice(0, 10).split('-');
+    return Math.round((Date.UTC(+b[0], +b[1] - 1, +b[2]) - Date.UTC(+a[0], +a[1] - 1, +a[2])) / 86400000);
+  }
+
   /* Ergebnis des Prüfdienstes aufbereiten: Positionen, Punkte ohne Positionsbezug, Empfehlung. */
   function auswerten(erg, heute) {
     erg = erg || {};
@@ -122,7 +158,12 @@
     var ersparnis = unsicher ? { cent: dienst, quelle: dienst > 0 ? 'dienst' : 'unsicher' }
                              : ersparnisObergrenze(markiert, andere, nachforderung, dienst);
     var empfehlen = n > 0 && !unsicher && !fristAbgelaufen && ersparnis.cent >= SCHWELLE_EMPFEHLUNG_CENT;
+    /* Plan 11.11.2026: möglicher Betrag nur bei bestandener Summenprobe; Tage bis Fristende nur bei bekanntem Zugang. */
+    var stimmig = (erg.summenprobe && typeof erg.summenprobe.stimmig === 'boolean') ? erg.summenprobe.stimmig : null;
+    var betrag = moeglicherBetrag(markiert, andere, nachforderung, guthaben, stimmig, fristAbgelaufen);
+    var fristTage = (fristDatum && !abBriefdatum && !fristAbgelaufen) ? tageBis(fristDatum, stichtag) : null;
     return {
+      betrag: betrag, stimmig: stimmig, fristTage: fristTage, fristVonFormular: !!(fristDatum && !abBriefdatum),
       markiert: markiert, unauffaellig: unauffaellig, andere: andere, andereTitel: andereTitel, anzahl: n,
       nachforderung: nachforderung, guthaben: guthaben, geprueft: Array.isArray(erg.geprueft) ? erg.geprueft : null, unsicher: unsicher, fristDatum: fristDatum, fristAbgelaufen: fristAbgelaufen,
       fristAbBriefdatum: abBriefdatum, fristUnklar: fristUnklar,
@@ -153,6 +194,10 @@
           ' abgelaufen (zwölf Monate ab Zugang). Danach sind Einwendungen in der Regel ausgeschlossen, ' +
           'außer Sie hatten die Verspätung nicht zu vertreten.'
         : 'Einwendungen sind bis zum ' + datumDe(b.fristDatum) + ' möglich (zwölf Monate ab Zugang). ' +
+          /* sachliche Fristangabe ohne Zähler und ohne Farbe (Plan 11.11.2026) */
+          ((typeof b.fristTage === 'number' && b.fristTage >= 0 && b.fristTage <= 30)
+            ? (b.fristTage === 0 ? 'Die Frist endet heute. ' : b.fristTage === 1 ? 'Die Frist endet morgen. '
+               : 'Die Frist endet in ' + b.fristTage + ' Tagen. ') : '') +
           'Fristen werden durch die Vorprüfung nicht gewahrt.');
     }
     return teile.length ? teile.join(' ') : null;
@@ -166,6 +211,74 @@
     }
     return 'Die Vorprüfung hat keine Anhaltspunkte für typische Fehler gefunden. ' +
       'Das heißt nicht, dass die Abrechnung fehlerfrei ist — nur, dass das Programm nichts Auffälliges erkannt hat.';
+  }
+
+  /* Betragskasten (Plan 11.11.2026): möglicher Betrag neben dem Festpreis, nur Stufe A und B. Jeder Satz ist bedingt
+     formuliert („Bestätigt sich der Befund, könnten Sie …“) und nennt die Vorprüfung als automatisch, ohne anwaltliche
+     Prüfung. Liegt der Betrag unter dem Preis, sagt der Kasten das offen. opt.beispiel: ohne Bestellknopf (Startseite);
+     opt.beiBestellen: Klick auf den Knopf (pruefung.html öffnet den Bestellabschnitt). Liefert true, wenn er steht. */
+  function baueBetrag(el, b, opt) {
+    opt = opt || {};
+    if (!el) return false;
+    el.innerHTML = '';
+    var m = b.betrag;
+    if (!m || m.stufe === 'C') { el.hidden = true; return false; }
+    el.setAttribute('role', 'group');
+    el.setAttribute('aria-label', 'Möglicher Betrag und Preis der anwaltlichen Prüfung');
+    function zeile(klasse, label, wert) {
+      var z = document.createElement('div'); z.className = 'vp-betrag__zeile ' + klasse;
+      var l = document.createElement('span'); l.textContent = label;
+      var w = document.createElement('strong'); w.textContent = wert;
+      z.appendChild(l); z.appendChild(w); el.appendChild(z);
+    }
+    function absatz(text, klasse) {
+      var para = document.createElement('p'); para.className = klasse || 'vp-betrag__text';
+      para.textContent = text; el.appendChild(para);
+    }
+    var AUTOMATISCH = 'Die Vorprüfung ist automatisch erstellt, ohne anwaltliche Prüfung.';
+    var PREIS = euro(PREIS_CENT);
+    if (m.stufe === 'B') {
+      zeile('vp-betrag__zeile--haupt', 'Es geht um Ihre Nachzahlung', euro(m.cent));
+      zeile('vp-betrag__zeile--preis', 'Anwaltliche Prüfung', PREIS + ' Festpreis');
+      absatz((b.fristVonFormular
+          ? 'Ihre Abrechnung ist nach Ihren Angaben erst nach Ablauf der Abrechnungsfrist bei Ihnen angekommen.'
+          : 'Ihre Abrechnung ist nach Ablauf der Abrechnungsfrist datiert.') +
+        ' Bestätigt sich das, darf Ihr Vermieter die ' + euro(m.cent) + ' in der Regel nicht mehr nachfordern. ' +
+        'Sicher ist das erst nach der anwaltlichen Prüfung, denn es kommt darauf an, ob Ihr Vermieter die Verspätung ' +
+        'zu vertreten hat. ' + AUTOMATISCH);
+    } else {
+      zeile('vp-betrag__zeile--haupt', 'Möglicher Betrag', 'bis zu ' + euro(m.cent));
+      zeile('vp-betrag__zeile--preis', 'Anwaltliche Prüfung', PREIS + ' Festpreis');
+      var fund = m.posten === 1
+        ? 'Die Vorprüfung hat einen Posten über ' + euro(m.summe) + ' gefunden, der in der Regel nicht auf Mieter umgelegt werden darf.'
+        : 'Die Vorprüfung hat ' + m.posten + ' Posten über zusammen ' + euro(m.summe) + ' gefunden, die in der Regel nicht auf Mieter umgelegt werden dürfen.';
+      var folge = m.guthaben
+        ? ' Bestätigt sich der Befund, könnte Ihr Guthaben um bis zu ' + euro(m.cent) + ' höher ausfallen.'
+        : m.gedeckelt
+          ? ' Bestätigt sich der Befund, könnte Ihre Nachzahlung von ' + euro(m.cent) + ' entfallen. Die auffälligen Posten ' +
+            'übersteigen Ihre Nachzahlung. Ob Ihnen darüber hinaus eine Erstattung zusteht, kläre ich in der Prüfung.'
+          : ' Bestätigt sich der Befund, könnten Sie bis zu ' + euro(m.cent) + ' weniger zahlen.';
+      absatz(fund + folge);
+      if (!m.ueberPreis) {
+        absatz('Der mögliche Betrag liegt unter dem Preis der anwaltlichen Prüfung. Sie umfasst mehr als die Vorprüfung, ' +
+          'etwa die Heizkostenabrechnung im Einzelnen und die Rechenwege. Ob sich das für Sie lohnt, entscheiden Sie.');
+      }
+      if (b.markiert.some(function (p) { return p.status === 'pruefen'; })) {
+        absatz('Dazu kommen Posten, die genauer geprüft werden sollten. Dafür kann die Vorprüfung keinen Betrag nennen.');
+      }
+      absatz(AUTOMATISCH + ' Ob und in welcher Höhe der Befund trägt, zeigt erst meine Prüfung.');
+    }
+    if (!opt.beispiel) {
+      var knopf = document.createElement('a');
+      knopf.className = 'vp-betrag__knopf' + (m.ueberPreis ? '' : ' vp-betrag__knopf--ruhig');
+      knopf.href = '#bestellen';
+      knopf.textContent = 'Jetzt kostenpflichtig prüfen lassen, ' + euroText(PREIS_CENT).replace(' ', '\u00a0');
+      if (typeof opt.beiBestellen === 'function') knopf.addEventListener('click', function (e) { opt.beiBestellen(e); });
+      el.appendChild(knopf);
+    }
+    absatz('Die ' + PREIS + ' tragen Sie selbst. Ihr Vermieter erstattet sie in der Regel nicht.', 'vp-betrag__klein');
+    el.hidden = false;
+    return true;
   }
 
   /* Paket 1b: fester Textbaustein je Befundart (app/vorpruefung_texte.py, freigegeben 29.10.2026), aufklappbar. */
@@ -234,22 +347,34 @@
       b.unauffaellig.forEach(function (p) { weitere.appendChild(befundZeile(p, b.unsicher)); });
       el.appendChild(weitere); zeilen.push(weitere);
     }
-    /* Kein Ersparnisbetrag auf der Seite (Entscheidung Zahid 28.10.2026). Stattdessen die Empfehlung, sobald die
-       intern errechnete Obergrenze mindestens SCHWELLE_EMPFEHLUNG_CENT erreicht; nicht bei abgelaufener
-       Einwendungsfrist und nicht, wenn die Beträge unsicher gelesen sind. */
+    /* Steht der Betragskasten über der Karte (Stufe A oder B, Plan 11.11.2026), entfällt hier die Empfehlung: Der
+       Kasten sagt, um welchen Betrag es geht und wie er zum Preis steht. Ohne belastbaren Betrag (Stufe C) bleibt es
+       bei der Empfehlung ab der intern errechneten Obergrenze (SCHWELLE_EMPFEHLUNG_CENT; nicht bei abgelaufener
+       Einwendungsfrist), ergänzt um den Satz, warum kein Betrag dasteht. */
     var sum = null;
-    if (b.empfehlen || (b.anzahl > 0 && b.unsicher)) {
+    var mitKasten = !!(b.betrag && b.betrag.stufe !== 'C');
+    var nAuff = b.markiert.filter(function (p) { return p.status === 'auffaellig'; }).length;
+    var nPruef = b.markiert.filter(function (p) { return p.status === 'pruefen'; }).length;
+    var nAuffMitBetrag = b.markiert.filter(function (p) {
+      return p.status === 'auffaellig' && ARTEN_MIT_BETRAG[p.art] === 1 &&
+        typeof p.betrag_relevant_cent === 'number' && p.betrag_relevant_cent > 0;
+    }).length;
+    /* Summenprobe ohne Ergebnis: Die Abrechnung nennt keine Summe, mit der gegengerechnet werden konnte. */
+    var ohneGegenrechnung = !b.unsicher && b.stimmig !== true && nAuffMitBetrag > 0 && !b.fristAbgelaufen;
+    if (!mitKasten && (b.empfehlen || (b.anzahl > 0 && b.unsicher) || ohneGegenrechnung)) {
       sum = document.createElement('div'); sum.className = 'befund__sum';
       var kopf = document.createElement('div'); kopf.className = 'befund__sum-kopf';
       var titel = document.createElement('strong');
       var text = document.createElement('p'); text.className = 'befund__sum-text';
+      var KEINE_SUMME = 'Ihre Abrechnung weist keine Gesamtsumme aus, mit der die Vorprüfung gegenrechnen konnte. ' +
+        'Deshalb steht hier kein Gesamtbetrag.';
       if (b.empfehlen) {
         titel.textContent = 'Anwaltliche Prüfung empfohlen';
-        var grund;
-        if (b.ersparnis.quelle === 'nachforderung') grund = 'Die Vorprüfung hat einen Hinweis gefunden, der Ihre Abrechnung insgesamt betreffen kann.';
-        else {
-          var nAuff = b.markiert.filter(function (p) { return p.status === 'auffaellig'; }).length;
-          var nPruef = b.markiert.filter(function (p) { return p.status === 'pruefen'; }).length;
+        var grund, zusatz;
+        if (b.ersparnis.quelle === 'nachforderung') {
+          grund = 'Die Vorprüfung hat einen Hinweis gefunden, der Ihre Abrechnung insgesamt betreffen kann.';
+          zusatz = 'Einen Betrag nenne ich dazu erst nach der anwaltlichen Prüfung.';
+        } else {
           if (nAuff && nPruef) {
             /* seit 30.10.2026 zählen beide Arten; die Begründung nennt beide */
             grund = 'Die Vorprüfung hat ' + (nAuff === 1 ? 'eine auffällige Position' : 'auffällige Positionen')
@@ -260,11 +385,16 @@
               ? 'Die Vorprüfung hat eine auffällige Position gefunden, die sich auf Ihr Ergebnis auswirken kann.'
               : 'Die Vorprüfung hat auffällige Positionen gefunden, die sich auf Ihr Ergebnis auswirken können.';
           } else grund = 'Die Vorprüfung hat Positionen gefunden, die genauer geprüft werden sollten.';
+          zusatz = ohneGegenrechnung ? KEINE_SUMME : 'Einen Betrag kann die Vorprüfung dafür nicht nennen.';
         }
-        text.textContent = grund + ' Ich prüfe jeden markierten Punkt am Original und sage Ihnen, ob und in welcher Höhe Sie weniger zahlen müssen.';
+        text.textContent = grund + ' Ich prüfe jeden markierten Punkt am Original und sage Ihnen, ob und in welcher Höhe Sie weniger zahlen müssen. ' + zusatz;
+      } else if (b.unsicher) {
+        titel.textContent = 'Kein Betrag genannt';
+        text.textContent = 'Die Vorprüfung konnte die gelesenen Beträge nicht mit der Summe Ihrer Abrechnung in Einklang bringen. ' +
+          'Deshalb nenne ich hier keinen Betrag. Die markierten Posten sind Anhaltspunkte, in der anwaltlichen Prüfung lese ich das Original.';
       } else {
-        titel.textContent = 'Beträge nicht sicher lesbar';
-        text.textContent = 'Die Beträge ließen sich aus Ihren Unterlagen nicht sicher lesen, etwa wegen eines unscharfen Fotos. In der anwaltlichen Prüfung lese ich das Original.';
+        titel.textContent = 'Kein Gesamtbetrag genannt';
+        text.textContent = KEINE_SUMME;
       }
       kopf.appendChild(titel); sum.appendChild(kopf); sum.appendChild(text);
       el.appendChild(sum);
@@ -339,7 +469,11 @@
     zf.textContent = zusammenfassung(b);
     var karte = document.createElement('div'); karte.className = 'befund';
     karte.setAttribute('role', 'group'); karte.setAttribute('aria-label', 'Beispiel: Positionen einer Vorprüfung');
-    container.appendChild(marke); container.appendChild(kopf); container.appendChild(zf); container.appendChild(karte);
+    /* Derselbe Betragskasten wie im echten Ergebnis, ohne Bestellknopf (Plan 11.11.2026). */
+    var kasten = document.createElement('div'); kasten.className = 'vp-betrag';
+    container.appendChild(marke); container.appendChild(kopf); container.appendChild(kasten);
+    container.appendChild(zf); container.appendChild(karte);
+    baueBetrag(kasten, b, { beispiel: true });
     baueBefund(karte, b, { schritt: 0 });
   }
 
@@ -363,6 +497,7 @@
     SCHWELLE_EMPFEHLUNG_CENT: SCHWELLE_EMPFEHLUNG_CENT,
     euro: euro, datumDe: datumDe, heuteIso: heuteIso, auswerten: auswerten, kopfzeile: kopfzeile,
     zusammenfassung: zusammenfassung, baueBefund: baueBefund, zeigeBeispiel: zeigeBeispiel,
-    beispielErgebnis: beispielErgebnis
+    beispielErgebnis: beispielErgebnis,
+    PREIS_CENT: PREIS_CENT, moeglicherBetrag: moeglicherBetrag, baueBetrag: baueBetrag
   };
 })();

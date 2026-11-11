@@ -26,6 +26,7 @@
   }
   function zaehle(stelle, weg) {
     var d = { stelle: stelle, weg: weg, herkunft: herkunft() };
+    if (window.NKA_FASSUNG) d.fassung = window.NKA_FASSUNG;   /* Fassung der Seite (Plan 11.11.2026) */
     try { if (window.umami && typeof window.umami.track === 'function') window.umami.track('link_fuer_spaeter', d); } catch (e) {}
   }
   function grob() {
@@ -33,7 +34,8 @@
   }
 
   var BETREFF = 'Nebenkostenabrechnung prüfen lassen';
-  var TEXT = 'Kostenlose Vorprüfung meiner Nebenkostenabrechnung, sobald ich Abrechnung und Mietvertrag zur Hand habe:';
+  /* 11.11.2026: Für die Vorprüfung genügt die Abrechnung, der Mietvertrag ist freiwillig. */
+  var TEXT = 'Kostenlose Vorprüfung meiner Nebenkostenabrechnung, sobald ich die Abrechnung zur Hand habe:';
 
   function bestaetige(knopf, text) {
     var alt = knopf.getAttribute('data-text') || knopf.textContent;
