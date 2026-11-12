@@ -243,6 +243,22 @@
   .hero__form-kopf h2 { font-family: var(--serif); font-size: 1.3rem; margin: 0; color: var(--ink); }
   .hero__form-kopf span { font-size: 0.85rem; color: var(--ink-soft); }
   /* Link per E-Mail (Vorschau 12.11.2026) */
+  /* Kompakte Fassung: nur eine Zeile über dem Formular, das Feld öffnet sich erst auf Antippen. */
+  .spaeter-klapp { margin: 0.2rem 0 1rem; }
+  .spaeter-klapp > summary { list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; gap: 0.15rem 0.45rem;
+    align-items: baseline; padding: 0.55rem 0.8rem; font-size: 0.92rem; line-height: 1.4; color: var(--ink-soft);
+    border: 1px dashed rgba(47,93,76,0.35); border-radius: 10px; }
+  .spaeter-klapp > summary::-webkit-details-marker { display: none; }
+  .spaeter-klapp__link { color: #2F5D4C; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+  .spaeter-klapp__link::after { content: " \203A"; text-decoration: none; display: inline-block; margin-left: 0.15rem; }
+  .spaeter-klapp[open] > summary { border-style: solid; border-color: rgba(47,93,76,0.22); border-bottom: 0;
+    border-radius: 12px 12px 0 0; background: rgba(47,93,76,0.06); }
+  .spaeter-klapp[open] .spaeter-klapp__link::after { content: ""; }
+  .spaeter-klapp .spaeter-mail { margin: 0; border-top: 0; border-radius: 0 0 12px 12px; padding-top: 0.2rem; }
+  @media (max-width: 380px) {
+    .spaeter-mail__zeile { flex-wrap: wrap; }
+    .spaeter-mail__zeile input, .spaeter-mail__knopf { flex: 1 1 100%; }
+  }
   .spaeter-mail { margin: 0.2rem 0 1rem; padding: 0.85rem 0.95rem; border: 1px solid rgba(47,93,76,0.22);
     border-radius: 12px; background: rgba(47,93,76,0.06); }
   .spaeter-mail__frage { margin: 0 0 0.6rem; font-size: 0.95rem; line-height: 1.4; color: var(--ink); }
@@ -1102,9 +1118,11 @@
         <!-- Link per E-Mail (Vorschau 12.11.2026): Wer die Abrechnung gerade nicht zur Hand hat, bekommt den Link zur
              Vorprüfung per E-Mail. Versand über den n8n-Workflow „Nebenkosten - Link per E-Mail“ (kkLS7spe1dcwRpmp). Das Feld
              „firma“ ist eine unsichtbare Falle für Bots: ist es gefüllt, antwortet n8n mit ok, verschickt aber nichts. -->
+        <details class="spaeter-klapp" id="spaeter-klapp">
+          <summary><span class="spaeter-klapp__frage">Abrechnung gerade nicht zur Hand?</span>
+            <span class="spaeter-klapp__link">Link per E-Mail schicken</span></summary>
         <form class="spaeter-mail" id="spaeter-mail" data-endpoint="https://n8n.nebenkosten-anwalt.de/webhook/link-per-mail" novalidate>
-          <p class="spaeter-mail__frage"><strong>Abrechnung gerade nicht zur Hand?</strong>
-            Ich schicke Ihnen den Link per E-Mail. Sie laden hoch, wann es passt.</p>
+          <p class="spaeter-mail__frage">Sie bekommen den Link zur Vorprüfung und laden hoch, wann es passt.</p>
           <div class="spaeter-mail__zeile">
             <label class="nur-sr" for="spaeter-mail-adresse">Ihre E-Mail-Adresse</label>
             <input type="email" id="spaeter-mail-adresse" name="email" autocomplete="email" inputmode="email"
@@ -1118,6 +1136,7 @@
             <a href="datenschutz.html#spaeter-mail">Datenschutz</a></p>
           <p class="spaeter-mail__status" id="spaeter-mail-status" role="status" aria-live="polite" hidden></p>
         </form>
+        </details>
         <div class="form-card" id="form-card">
           <div class="form-card__iframe-wrap">
             <div class="form-skeleton" aria-hidden="true">
@@ -1963,7 +1982,7 @@
 </script>
 
 <script src="assets/befundkarte.js?v=1111b"></script>
-<script src="assets/spaeter-mail.js?v=1112b"></script>
+<script src="assets/spaeter-mail.js?v=1112c"></script>
 <script>
   if (window.NkaBefund) window.NkaBefund.zeigeBeispiel(document.getElementById('beispiel-start'));
 </script>

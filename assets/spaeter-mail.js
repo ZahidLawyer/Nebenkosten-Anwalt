@@ -2,7 +2,7 @@
    Wer die Abrechnung gerade nicht zur Hand hat, trägt seine E-Mail-Adresse ein und bekommt den Link zur Vorprüfung.
    Versand über einen n8n-Webhook (data-endpoint am Formular). Ohne Endpunkt (Vorschau) wird nichts verschickt,
    die Seite zeigt nur, wie es aussähe. Optional: eine einzige Erinnerung nach zwei Tagen (Häkchen, Einwilligung).
-   Umami: „link_per_mail“ {erinnerung: ja/nein, ergebnis: gesendet/fehler/vorschau}. Die Adresse geht nie an Umami. */
+   Umami: „link_per_mail“ {erinnerung: ja/nein, ergebnis: geoeffnet/gesendet/fehler/vorschau}. Die Adresse geht nie an Umami. */
 (function () {
   'use strict';
   var form = document.getElementById('spaeter-mail');
@@ -23,6 +23,15 @@
   function zeige(text, fehler) {
     status.textContent = text; status.hidden = false;
     status.classList.toggle('fehler', !!fehler);
+  }
+  var klapp = document.getElementById('spaeter-klapp');
+  if (klapp) {
+    var gezaehlt = false;
+    klapp.addEventListener('toggle', function () {
+      if (!klapp.open) return;
+      if (!gezaehlt) { gezaehlt = true; zaehle('geoeffnet'); }
+      try { feld.focus({ preventScroll: true }); } catch (e) { feld.focus(); }
+    });
   }
   form.addEventListener('submit', function (ev) {
     ev.preventDefault();
