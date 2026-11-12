@@ -242,6 +242,28 @@
   .hero__form-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.35rem; }
   .hero__form-kopf h2 { font-family: var(--serif); font-size: 1.3rem; margin: 0; color: var(--ink); }
   .hero__form-kopf span { font-size: 0.85rem; color: var(--ink-soft); }
+  /* Link per E-Mail (Vorschau 12.11.2026) */
+  .spaeter-mail { margin: 0.2rem 0 1rem; padding: 0.85rem 0.95rem; border: 1px solid rgba(47,93,76,0.22);
+    border-radius: 12px; background: rgba(47,93,76,0.06); }
+  .spaeter-mail__frage { margin: 0 0 0.6rem; font-size: 0.95rem; line-height: 1.4; color: var(--ink); }
+  .spaeter-mail__zeile { display: flex; gap: 0.5rem; }
+  .spaeter-mail__zeile input { flex: 1 1 auto; min-width: 0; font: inherit; font-size: 1rem; padding: 0.6rem 0.75rem;
+    border: 1px solid rgba(47,93,76,0.35); border-radius: 8px; background: #fff; color: var(--ink); }
+  .spaeter-mail__zeile input:focus { outline: 2px solid #2F5D4C; outline-offset: 1px; }
+  .spaeter-mail__knopf { flex: 0 0 auto; font: inherit; font-weight: 600; font-size: 0.95rem; padding: 0.6rem 0.9rem;
+    border: 0; border-radius: 8px; background: #2F5D4C; color: #fff; cursor: pointer; }
+  .spaeter-mail__knopf[disabled] { opacity: 0.6; cursor: default; }
+  .spaeter-mail__erinnerung { display: flex; gap: 0.5rem; align-items: flex-start; margin: 0.6rem 0 0; font-size: 0.85rem;
+    line-height: 1.35; color: var(--ink-soft); }
+  .spaeter-mail__erinnerung input { margin-top: 0.15rem; }
+  .spaeter-mail__klein { margin: 0.45rem 0 0; font-size: 0.78rem; color: var(--ink-soft); }
+  .spaeter-mail__klein a { color: inherit; }
+  .spaeter-mail__falle { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+  .spaeter-mail__status { margin: 0.6rem 0 0; font-size: 0.92rem; font-weight: 600; color: #2F5D4C; }
+  .spaeter-mail__status.fehler { color: #A3412B; }
+  .spaeter-mail.erledigt .spaeter-mail__zeile, .spaeter-mail.erledigt .spaeter-mail__erinnerung,
+  .spaeter-mail.erledigt .spaeter-mail__klein { display: none; }
+  .nur-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .hero__form-satz { font-size: 0.92rem; color: var(--ink-soft); margin: 0 0 0.6rem; }
   .hero__form .form-card { background: transparent; border: 0; padding: 0; margin: 0; max-width: none; position: relative; }
   .hero__form .form-card__iframe-wrap { position: relative; min-height: 20rem; }
@@ -1077,6 +1099,25 @@
              anwaltliche Prüfung ist der Mietvertrag Pflicht; wer ihn nicht mitgeschickt hat, lädt ihn vor der
              Bestellung hoch (pruefung.html, Schritt „Ihr Mietvertrag“). -->
         <p class="hero__form-satz">Es genügt Ihre Nebenkostenabrechnung, alle Seiten als Foto oder PDF. Den Mietvertrag brauchen Sie erst für die Bestellung.</p>
+        <!-- Link per E-Mail (Vorschau 12.11.2026): Wer die Abrechnung gerade nicht zur Hand hat, bekommt den Link zur
+             Vorprüfung per E-Mail. Versand über den n8n-Workflow „Nebenkosten - Link per E-Mail“ (kkLS7spe1dcwRpmp). Das Feld
+             „firma“ ist eine unsichtbare Falle für Bots: ist es gefüllt, antwortet n8n mit ok, verschickt aber nichts. -->
+        <form class="spaeter-mail" id="spaeter-mail" data-endpoint="https://n8n.nebenkosten-anwalt.de/webhook/link-per-mail" novalidate>
+          <p class="spaeter-mail__frage"><strong>Abrechnung gerade nicht zur Hand?</strong>
+            Ich schicke Ihnen den Link per E-Mail. Sie laden hoch, wann es passt.</p>
+          <div class="spaeter-mail__zeile">
+            <label class="nur-sr" for="spaeter-mail-adresse">Ihre E-Mail-Adresse</label>
+            <input type="email" id="spaeter-mail-adresse" name="email" autocomplete="email" inputmode="email"
+                   placeholder="E-Mail-Adresse" required>
+            <button type="submit" class="spaeter-mail__knopf">Link schicken</button>
+          </div>
+          <div class="spaeter-mail__falle" aria-hidden="true"><label>Firma <input type="text" name="firma" tabindex="-1" autocomplete="off"></label></div>
+          <label class="spaeter-mail__erinnerung"><input type="checkbox" name="erinnerung" value="ja">
+            Erinnern Sie mich einmal nach zwei Tagen, falls ich noch nicht hochgeladen habe.</label>
+          <p class="spaeter-mail__klein">Ihre Adresse nutze ich nur dafür und lösche sie nach spätestens 7&nbsp;Tagen.
+            <a href="datenschutz.html#spaeter-mail">Datenschutz</a></p>
+          <p class="spaeter-mail__status" id="spaeter-mail-status" role="status" aria-live="polite" hidden></p>
+        </form>
         <div class="form-card" id="form-card">
           <div class="form-card__iframe-wrap">
             <div class="form-skeleton" aria-hidden="true">
@@ -1106,8 +1147,6 @@
           Rechtsanwalt Zahid Akcay, Mitglied der Rechtsanwaltskammer Frankfurt am Main.</p>
         <!-- „Link für später“ steht jetzt unter der Karte und ist auch am Handy sichtbar (assets/spaeter.js, kein Versand
              durch die Kanzlei). -->
-        <p class="hero__spaeter-karte" data-spaeter-zeile hidden>Abrechnung gerade nicht zur Hand?
-          <button type="button" class="spaeter-knopf" data-spaeter="formular">Link für später speichern</button></p>
         <!-- Unverbindliche Nachricht (Vorschau 05.11.2026): Tally-Formular e5DR6Q, Zustellung per E-Mail an info@.
              Ohne JavaScript öffnet der Link das Formular in einem neuen Tab. -->
         <div class="hero__kontakt" id="kontakt">
@@ -1924,6 +1963,7 @@
 </script>
 
 <script src="assets/befundkarte.js?v=1111b"></script>
+<script src="assets/spaeter-mail.js?v=1112b"></script>
 <script>
   if (window.NkaBefund) window.NkaBefund.zeigeBeispiel(document.getElementById('beispiel-start'));
 </script>
