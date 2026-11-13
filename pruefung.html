@@ -985,17 +985,24 @@
           if (d.status === 'fertig') { erwarteNeuenLauf = false; zeigeErgebnis(d.ergebnis, d.lauf); return; }
           if (d.status === 'fehler' || d.status === 'ausgelastet') {
             fertig = true;
-            zaehle('vorpruefung_fehler', { grund: d.status });
+            /* 13.11.2026 (Fall 72c0b1d0): Der Dienst meldet die Fehlerart. 'technik' = die Auswertung ist bei uns
+               gescheitert, nicht an den Unterlagen; der Anwalt bekommt die Alarm-Mail aus n8n und meldet sich.
+               Fehlt 'art' (älterer Dienst), bleibt der bisherige Text. */
+            var technik = d.status === 'fehler' && d.art === 'technik';
+            zaehle('vorpruefung_fehler', { grund: technik ? 'technik' : d.status });
             status(d.status === 'ausgelastet'
               ? 'Die kostenlose Vorprüfung ist heute ausgelastet. Versuchen Sie es morgen noch einmal — oder lassen Sie Ihre Abrechnung direkt anwaltlich prüfen.'
-              : 'Die automatische Vorprüfung konnte Ihre Unterlagen nicht auswerten — etwa, weil Fotos unscharf oder unvollständig sind. Sie können es mit neuen Aufnahmen noch einmal versuchen oder Ihre Abrechnung direkt anwaltlich prüfen lassen.', false);
+              : technik
+                ? 'Ihre Unterlagen sind angekommen. Die automatische Auswertung hat gerade aus technischen Gründen nicht geklappt — an Ihren Unterlagen liegt es nicht. Ich sehe mir Ihre Abrechnung selbst an und melde mich heute, spätestens am nächsten Werktag, per E-Mail bei Ihnen. Sie müssen nichts weiter tun.'
+                : 'Die automatische Vorprüfung konnte Ihre Unterlagen nicht auswerten — etwa, weil Fotos unscharf oder unvollständig sind. Sie können es mit neuen Aufnahmen noch einmal versuchen oder Ihre Abrechnung direkt anwaltlich prüfen lassen.', false);
             manuell.hidden = true;
             zeigeCta();
             if (weiterNachMietvertrag) {
               weiterNachMietvertrag = false;
               /* 'ausgelastet' (Tageslimit je Adresse): Der Dienst sichert die Unterlagen vor der Ablehnung, der
-                 Mietvertrag liegt also in der Akte. 'fehler': Datei ließ sich nicht verarbeiten, Schritt bleibt offen. */
-              if (d.status === 'ausgelastet') nachMietvertragWeiter();
+                 Mietvertrag liegt also in der Akte; ebenso bei 'technik' (Unterlagen gespeichert, nur die Auswertung scheiterte).
+                 'fehler' ohne 'technik': Datei ließ sich nicht verarbeiten, Schritt bleibt offen. */
+              if (d.status === 'ausgelastet' || technik) nachMietvertragWeiter();
               else {
                 mvMerk = '0'; try { sessionStorage.setItem('nka_mv_' + vorgang, '0'); } catch (e) {}
                 mvStatus('Ihr Mietvertrag ließ sich nicht verarbeiten, etwa wegen unscharfer Fotos. Bitte laden Sie ihn noch einmal hoch.');
