@@ -679,7 +679,7 @@
   </div>
 </footer>
 
-<script src="assets/befundkarte.js?v=1111b"></script>
+<script src="assets/befundkarte.js?v=1113"></script>
 <script>
   (function () {
     /* ---------- Vorgangskennung: zufällig, nur in dieser Sitzung, kein Personenbezug ---------- */
@@ -917,7 +917,8 @@
         var ul = document.createElement('ul');
         gepr.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
         geprueftEl.appendChild(ul);
-        var gs = document.createElement('p');
+        /* 13.11.2026: Steht die Empfehlung, nennt ihr Kasten schon, was die Vorprüfung nicht prüft. */
+        var gs = document.createElement('p'); if (b.empfehlen) gs.hidden = true;
         gs.textContent = 'Rechenwege und die Heizkostenabrechnung im Einzelnen prüft nur die anwaltliche Prüfung.';
         geprueftEl.appendChild(gs);
         geprueftEl.hidden = false;
@@ -936,6 +937,7 @@
         gemeldeterLauf = laufKey;
         zaehle('vorpruefung_ergebnis', {
           empfehlung: letzteEmpfehlung,
+          grundlage: b.grundlage || 'keine',
           auffaellig: stufe(b.markiert.filter(function (p) { return p.status === 'auffaellig'; }).length),
           pruefen: stufe(b.markiert.filter(function (p) { return p.status === 'pruefen'; }).length),
           hinweise: b.andereTitel.length > 0 ? '1+' : '0',

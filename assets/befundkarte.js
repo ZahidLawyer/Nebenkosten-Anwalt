@@ -9,7 +9,9 @@
 (function () {
   'use strict';
 
-  var SCHWELLE_EMPFEHLUNG_CENT = 6000; /* Empfehlung ab 60 € möglicher Ersparnis (Entscheidung Zahid 28.10.2026) */
+  /* Seit 13.11.2026 (Weisung Zahid: „möglichst immer empfehlen“) entscheidet die Schwelle nur noch über die BEGRÜNDUNG:
+     ab 60 € markierter Posten wie bisher, darunter zusätzlich der Satz, was die Vorprüfung nicht prüft. */
+  var SCHWELLE_EMPFEHLUNG_CENT = 6000;
 
   function euro(cent) {
     var z = Math.round(cent) / 100;
@@ -157,7 +159,13 @@
     var fristUnklar = !!(abBriefdatum && !fristAbgelaufen && fristDatum < stichtag);
     var ersparnis = unsicher ? { cent: dienst, quelle: dienst > 0 ? 'dienst' : 'unsicher' }
                              : ersparnisObergrenze(markiert, andere, nachforderung, dienst);
-    var empfehlen = n > 0 && !unsicher && !fristAbgelaufen && ersparnis.cent >= SCHWELLE_EMPFEHLUNG_CENT;
+    /* 13.11.2026 (Weisung Zahid): Die Empfehlung hängt nicht mehr davon ab, ob das Modell einen teuren Posten markiert
+       (dieselbe Heizkostenposition war einmal „prüfen“, einmal unauffällig). Empfohlen wird immer, außer die
+       Einwendungsfrist ist offensichtlich abgelaufen. Die Begründung bleibt wahr: Was die Vorprüfung nicht prüft
+       (Heizkostenabrechnung im Einzelnen, Rechenwege), steht dabei, wenn nichts oder nur wenig markiert ist. */
+    var empfehlen = !fristAbgelaufen;
+    var grundlage = !empfehlen ? null : unsicher ? 'unsicher' : n === 0 ? 'nicht_geprueft'
+      : (ersparnis.cent >= SCHWELLE_EMPFEHLUNG_CENT ? 'befund' : 'befund_klein');
     /* Plan 11.11.2026: möglicher Betrag nur bei bestandener Summenprobe; Tage bis Fristende nur bei bekanntem Zugang. */
     var stimmig = (erg.summenprobe && typeof erg.summenprobe.stimmig === 'boolean') ? erg.summenprobe.stimmig : null;
     var betrag = moeglicherBetrag(markiert, andere, nachforderung, guthaben, stimmig, fristAbgelaufen);
@@ -167,7 +175,7 @@
       markiert: markiert, unauffaellig: unauffaellig, andere: andere, andereTitel: andereTitel, anzahl: n,
       nachforderung: nachforderung, guthaben: guthaben, geprueft: Array.isArray(erg.geprueft) ? erg.geprueft : null, unsicher: unsicher, fristDatum: fristDatum, fristAbgelaufen: fristAbgelaufen,
       fristAbBriefdatum: abBriefdatum, fristUnklar: fristUnklar,
-      ersparnis: ersparnis, empfehlen: empfehlen
+      ersparnis: ersparnis, empfehlen: empfehlen, grundlage: grundlage
     };
   }
 
@@ -373,7 +381,24 @@
       if (b.empfehlen) {
         titel.textContent = 'Anwaltliche Prüfung empfohlen';
         var grund, zusatz;
-        if (b.ersparnis.quelle === 'nachforderung') {
+        var mitHeizung = b.markiert.concat(b.unauffaellig).some(function (p) { return /heiz|wärme|waerme|warmwasser/i.test(String(p.titel)); });
+        var NICHT_GEPRUEFT = mitHeizung ? 'Die Heizkostenabrechnung im Einzelnen und die Rechenwege prüft die Vorprüfung nicht.'
+                                        : 'Die Rechenwege und ob einzelne Kosten auffällig hoch sind, prüft die Vorprüfung nicht.';
+        var SCHLUSS = b.guthaben
+          ? 'Ich prüfe die Abrechnung am Original und sage Ihnen, ob Ihnen ein höheres Guthaben zusteht.'
+          : 'Ich prüfe die Abrechnung am Original und sage Ihnen, ob und in welcher Höhe Sie weniger zahlen müssen.';
+        if (b.grundlage === 'unsicher') {
+          text.textContent = 'Die Vorprüfung konnte die gelesenen Beträge nicht mit der Summe Ihrer Abrechnung in Einklang bringen. ' +
+            'Deshalb nenne ich hier keinen Betrag. ' + (b.anzahl > 0 ? 'Die markierten Posten sind Anhaltspunkte. ' : '') + SCHLUSS;
+        } else if (b.grundlage === 'nicht_geprueft') {
+          var bezug = b.nachforderung ? 'Bei einer Nachforderung von ' + euro(b.nachforderung) + ' empfehle ich deshalb die anwaltliche Prüfung. '
+            : b.guthaben ? 'Deshalb empfehle ich auch bei einem Guthaben die anwaltliche Prüfung. '
+            : 'Deshalb empfehle ich die anwaltliche Prüfung. ';
+          text.textContent = 'Die Vorprüfung hat keine auffälligen Positionen gefunden. ' + NICHT_GEPRUEFT + ' ' + bezug + SCHLUSS;
+        }
+        if (b.grundlage === 'unsicher' || b.grundlage === 'nicht_geprueft') {
+          /* Text steht, weiter unten nichts mehr setzen */
+        } else if (b.ersparnis.quelle === 'nachforderung') {
           grund = 'Die Vorprüfung hat einen Hinweis gefunden, der Ihre Abrechnung insgesamt betreffen kann.';
           zusatz = 'Einen Betrag nenne ich dazu erst nach der anwaltlichen Prüfung.';
         } else {
@@ -386,10 +411,15 @@
             grund = nAuff === 1
               ? 'Die Vorprüfung hat eine auffällige Position gefunden, die sich auf Ihr Ergebnis auswirken kann.'
               : 'Die Vorprüfung hat auffällige Positionen gefunden, die sich auf Ihr Ergebnis auswirken können.';
-          } else grund = 'Die Vorprüfung hat Positionen gefunden, die genauer geprüft werden sollten.';
+          } else grund = nPruef === 1 ? 'Die Vorprüfung hat eine Position gefunden, die genauer geprüft werden sollte.'
+                                      : 'Die Vorprüfung hat Positionen gefunden, die genauer geprüft werden sollten.';
           zusatz = ohneGegenrechnung ? KEINE_SUMME : 'Einen Betrag kann die Vorprüfung dafür nicht nennen.';
         }
-        text.textContent = grund + ' Ich prüfe jeden markierten Punkt am Original und sage Ihnen, ob und in welcher Höhe Sie weniger zahlen müssen. ' + zusatz;
+        if (b.grundlage === 'befund' || b.grundlage === 'befund_klein') {
+          text.textContent = grund + (b.grundlage === 'befund_klein' ? ' ' + NICHT_GEPRUEFT : '') +
+            (b.guthaben ? ' Ich prüfe jeden markierten Punkt am Original und sage Ihnen, ob Ihnen ein höheres Guthaben zusteht. '
+                        : ' Ich prüfe jeden markierten Punkt am Original und sage Ihnen, ob und in welcher Höhe Sie weniger zahlen müssen. ') + zusatz;
+        }
       } else if (b.unsicher) {
         titel.textContent = 'Kein Betrag genannt';
         text.textContent = 'Die Vorprüfung konnte die gelesenen Beträge nicht mit der Summe Ihrer Abrechnung in Einklang bringen. ' +
