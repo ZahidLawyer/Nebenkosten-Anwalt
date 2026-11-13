@@ -336,6 +336,19 @@
     .hero__form { margin-top: 1.1rem; padding: 0.9rem 0.85rem 0.75rem; }
     .hero__inner { padding-bottom: 1.5rem; }
   }
+  /* Handy, 13.11.2026 (Wunsch Zahid: oben weniger gedrängt): mehr Abstand zwischen den Blöcken, ohne Kanzleizeile
+     unter dem Namen und ohne Kostenzeile unter dem Knopf. Der Knopf bleibt auch mit dem Hinweisfenster zur
+     Anzeigenmessung (360 x 740) im ersten Bildschirm (gemessen: Knopf bis 425 px, Fenster ab 511 px). */
+  @media (max-width: 45.99rem) {
+    .hero__anwalt { margin-bottom: 1.1rem; }
+    .hero__anwalt-ort { display: none; }
+    .hero__dach { margin-bottom: 0.5rem; }
+    .hero__title { margin-bottom: 1.05rem; }
+    .hero__fakt { margin: 0 0 1.05rem; }
+    .hero__sub { margin-bottom: 1.3rem; }
+    .hero__aktion { margin-bottom: 1.2rem; }
+    .hero__punkte { gap: 0.5rem; }
+  }
   /* Unter dem Formular: Vertrauenszeile und „Link für später“ (auch am Handy sichtbar, Plan 11.11.2026) */
   .hero__vertrauen { font-size: 0.84rem; line-height: 1.45; color: var(--ink-soft); margin: 0.6rem 0 0; }
   .hero__spaeter-karte { font-size: 0.95rem; line-height: 1.45; color: var(--ink-soft); margin: 0.6rem 0 0; text-align: center; }
@@ -1083,7 +1096,7 @@
       <div>
         <p class="hero__anwalt">
           <img src="assets/portrait-zahid.jpg" alt="" width="44" height="44">
-          <span><strong>Rechtsanwalt Zahid Akcay</strong>Kanzlei Akcay, Frankfurt am Main</span>
+          <span><strong>Rechtsanwalt Zahid Akcay</strong><span class="hero__anwalt-ort">Kanzlei Akcay, Frankfurt am Main</span></span>
         </p>
         <!-- Startseite neu (Plan 11.11.2026, Freigabe Zahid): Die Dachzeile behält den Suchbegriff in der H1. -->
         <h1 class="hero__title"><span class="hero__dach">Nebenkosten&shy;abrechnung prüfen lassen</span>Zahlen Sie nur, was Sie wirklich schulden.</h1>
@@ -1091,7 +1104,6 @@
         <p class="hero__sub"><span class="hero__sub-lang">Fotografieren Sie Ihre Abrechnung. Die kostenlose Vorprüfung zeigt Ihnen in wenigen Minuten, welche
           Posten auffällig sind, wo möglich mit Betrag. Danach entscheiden Sie, ob ich als Rechtsanwalt prüfe.</span><span class="hero__sub-kurz">Abrechnung fotografieren, in wenigen Minuten auffällige Posten sehen.</span></p>
         <p class="hero__aktion"><a class="btn hero__knopf" href="#vorpruefung-start" data-start="hero">Abrechnung kostenlos vorprüfen</a></p>
-        <p class="hero__kosten hero__kosten--kurz">Kostenlos. Anwaltliche Prüfung auf Wunsch: 79,90&nbsp;€.</p>
         <ul class="hero__punkte">
           <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F3E3CE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>
             <span><strong>Beträge auf einen Blick.</strong> <span class="hero__punkt-mehr">Die Vorprüfung nennt auffällige Posten mit Betrag, wo sie die Abrechnung sicher lesen kann.</span></span></li>
