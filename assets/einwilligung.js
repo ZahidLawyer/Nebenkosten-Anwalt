@@ -25,7 +25,9 @@
   'use strict';
 
   var KONFIG = {
-    googleAdsId: 'AW-18542620852',          /* z. B. 'AW-123456789'; leer = alles aus */
+    /* 14.11.2026 (Weisung Zahid): Werbemessung abgeschaltet, kein Hinweisfenster mehr; gemessen wird nur noch mit
+       Umami. Wieder einschalten: 'AW-18542620852' eintragen UND Ziffer 10 der Datenschutzerklärung zurückholen. */
+    googleAdsId: '',          /* z. B. 'AW-123456789'; leer = alles aus */
     labelVorpruefung: '0pteCM7e-awdELTh54lF',     /* Conversion-Label "Vorprüfung abgeschickt" */
     labelKauf: 'T2XHCNWP-qwdELTh54lF',            /* Conversion-Label "Kauf" */
     wertKauf: 79.90,
@@ -173,6 +175,11 @@
     }
   }
 
+  /* 14.11.2026: Wer früher zugestimmt hat, dessen Google-Cookies werden gelöscht und die Entscheidung vergessen. */
+  if (!aktiv && lesen() === 'ja') {
+    googleCookiesLoeschen();
+    try { localStorage.removeItem(SCHLUESSEL); } catch (e) {}
+  }
   if (!aktiv) return;
   if (lesen() === 'ja') ladeGoogle();
 
