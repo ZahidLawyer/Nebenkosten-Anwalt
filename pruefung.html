@@ -369,6 +369,35 @@
 <!-- Einwilligung für die Messung des Werbeerfolgs (Google Ads). Ohne Konto-ID in der Datei inaktiv;
      ohne Einwilligung wird nichts von Google geladen. Muss synchron im <head> stehen. -->
 <script src="/assets/einwilligung.js"></script>
+  <!-- Kartenformular (Test 15.11.2026): nur mit ?formular=neu, für diesen Tab gemerkt; ?formular=alt schaltet zurück.
+       Ohne Vorgang ist diese Seite nur das Formular; das Kartenformular steht auf der Startseite, dorthin geht es weiter. -->
+  <script>
+    (function () {
+      var an = false, q = null;
+      try {
+        q = new URLSearchParams(location.search);
+        var f = q.get('formular');
+        if (f === 'neu') sessionStorage.setItem('nka_formular', 'neu');
+        if (f === 'alt') sessionStorage.removeItem('nka_formular');
+        an = sessionStorage.getItem('nka_formular') === 'neu';
+      } catch (e) { an = false; }
+      window.NKA_KARTEN = an;
+      if (!an) return;
+      document.documentElement.classList.add('karten');
+      if (!/^[a-f0-9]{32}$/.test(q.get('vorgang') || '') && !q.get('bezahlt') && !q.get('api')) {
+        location.replace('/' + location.search + '#vorpruefung-start');
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/kartenformular.css?v=1115b">
+  <style>
+    html.karten #form-card, html.karten #tally-fallback, html.karten #mv-card, html.karten #mv-fallback { display: none !important; }
+    .kf-erneut { max-width: 40rem; margin: 0 auto; padding: 1.2rem 1.25rem; text-align: center; background: var(--paper-deep);
+      border: 1px solid var(--line-strong); border-radius: 14px; }
+    .kf-erneut .kf__hilfe { margin: 0 0 0.8rem; }
+    .kf-erneut .kf__knopf { text-decoration: none; padding: 0 1.4rem; }
+    .kf--mv { margin-top: 0.6rem; }
+  </style>
 </head>
 <body>
 
@@ -488,7 +517,13 @@
           ></iframe>
         </div>
       </div>
-      <p class="form-fallback">
+      <!-- Kartenformular (Test 15.11.2026): statt Tally-Formular 1 ein Weg zum Formular der Startseite. Dort gilt
+           dieselbe Vorgangskennung (Sitzungsspeicher), neue Fotos rechnen die Vorprüfung neu. -->
+      <div class="kf kf-erneut" id="kf-erneut">
+        <p class="kf__hilfe">Andere oder besser lesbare Fotos? Laden Sie Ihre Abrechnung noch einmal hoch.</p>
+        <a class="kf__knopf" href="/#vorpruefung-start">Abrechnung erneut hochladen</a>
+      </div>
+      <p class="form-fallback" id="tally-fallback">
         Formular lädt nicht?
         <a id="tally-direkt" href="https://tally.so/r/kdgJDM" target="_blank" rel="noopener">Direkt bei Tally öffnen</a>.
       </p>
@@ -579,6 +614,23 @@
               height="1"
             ></iframe>
           </div>
+        </div>
+        <!-- Kartenformular (Test 15.11.2026): Mietvertrag direkt an den eigenen Server statt über Tally
+             (assets/kartenformular-mv.js, agent-service POST /vorpruefung/einreichen mit schritt "mv"). -->
+        <div class="kf kf--mv" id="kf-mv" data-endpoint="https://api.nebenkosten-anwalt.de/vorpruefung/einreichen">
+          <div class="kf__kacheln">
+            <label class="kf__kachel kf__kachel--haupt"><span class="kf__symbol"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+              Fotografieren<input type="file" accept="image/*" capture="environment" data-feld="mietvertrag"></label>
+            <label class="kf__kachel"><span class="kf__symbol"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+              Datei auswählen<input type="file" multiple accept="image/*,application/pdf,.pdf,.heic,.heif" data-feld="mietvertrag"></label>
+          </div>
+          <ul class="kf__liste" id="kf-mv-liste" hidden aria-live="polite"></ul>
+          <div class="kf__fuss kf__fuss--allein"><button type="button" class="kf__knopf" id="kf-mv-senden" disabled>Mietvertrag senden</button></div>
+          <div class="kf__senden" id="kf-mv-box" hidden>
+            <div class="kf__fortschritt" aria-hidden="true"><span id="kf-mv-fortschritt"></span></div>
+            <p class="kf__status" id="kf-mv-status" role="status" aria-live="polite"></p>
+          </div>
+          <p class="kf__fehler" id="kf-mv-fehler" role="alert" hidden></p>
         </div>
         <p class="form-fallback" id="mv-fallback" hidden>
           Formular lädt nicht?
@@ -803,7 +855,8 @@
     var frame = document.getElementById('tally-frame');
     var card = document.getElementById('form-card');
     if (!frame || !card) return;
-    frame.setAttribute('data-tally-src', frame.getAttribute('data-tally-base') + '&vorgang=' + vorgang + quelleParam);
+    /* 15.11.2026: Mit dem Kartenformular (?formular=neu) lädt Tally hier nicht; statt des Formulars steht #kf-erneut da. */
+    if (!window.NKA_KARTEN) frame.setAttribute('data-tally-src', frame.getAttribute('data-tally-base') + '&vorgang=' + vorgang + quelleParam);
     var direkt = document.getElementById('tally-direkt');
     if (direkt) direkt.href = 'https://tally.so/r/kdgJDM?vorgang=' + vorgang + quelleParam;
 
@@ -880,7 +933,7 @@
     /* 11.11.2026 (Weisung Zahid): Mit fertigem Ergebnis steht das Ergebnis oben, nicht erneut das Upload-Formular.
        Bei Fehler oder laufender Vorprüfung bleibt alles sichtbar. */
     function uploadAusblenden() {
-      ['.page-head', '.assure', '.beispiel-klapp', '#form-card', '.form-fallback', '.form-trust'].forEach(function (s) {
+      ['.page-head', '.assure', '.beispiel-klapp', '#form-card', '#kf-erneut', '.form-fallback', '.form-trust'].forEach(function (s) {
         Array.prototype.forEach.call(document.querySelectorAll(s), function (el) {
           if (el.closest && el.closest('#vorpruefung, #mietvertrag-schritt, #bestellen')) return;
           el.hidden = true; el.style.display = 'none';
@@ -1136,11 +1189,15 @@
       if (neu) f.removeAttribute('src');
       if (window.Tally && typeof window.Tally.loadEmbeds === 'function') window.Tally.loadEmbeds();
     }
+    var mvKartenGezaehlt = false;
     function zeigeMietvertragSchritt(scrollen, stelle) {
       var sek = document.getElementById('mietvertrag-schritt');
       var f = document.getElementById('mv-frame');
       sek.hidden = false;
-      if (!f.getAttribute('data-tally-src')) {
+      if (window.NKA_KARTEN) {
+        /* Kartenformular: Hochladen über assets/kartenformular-mv.js, kein Tally-Rahmen. */
+        if (!mvKartenGezaehlt) { mvKartenGezaehlt = true; zaehle('mietvertrag_schritt', { stelle: stelle || 'ohne', formular: 'karten' }); }
+      } else if (!f.getAttribute('data-tally-src')) {
         /* E-Mail aus der Vorprüfung als Vorbelegung (wie beim Bestellformular), nur an Tally. */
         var emailParam = '';
         try { var em = sessionStorage.getItem('nka_email'); if (em) emailParam = '&email=' + encodeURIComponent(em); } catch (e) {}
@@ -1167,6 +1224,14 @@
       weiterNachMietvertrag = true;
       starten(true, true);
     }
+    /* Kartenformular (assets/kartenformular-mv.js) meldet den angenommenen Mietvertrag: wie nach Tally-Formular 1 im Schritt. */
+    window.nkaMietvertragHochgeladen = function () {
+      mvMerker('1');
+      zaehle('mietvertrag_nachgereicht', { formular: 'karten' });
+      mvStatus('Ihr Mietvertrag ist angekommen. Die Vorprüfung läuft damit noch einmal, gleich geht es weiter zur Bestellung.');
+      weiterNachMietvertrag = true;
+      starten(true, true);
+    };
     function nachMietvertragWeiter() {
       var sek = document.getElementById('mietvertrag-schritt');
       if (sek) sek.hidden = true;
@@ -1269,6 +1334,7 @@
 <script src="assets/spaeter.js?v=1111"></script>
 
 <!-- Offizielles Tally-Skript: löst data-tally-src ein und passt die iframe-Höhe dynamisch an den Formularinhalt an. -->
+<script src="assets/kartenformular-mv.js?v=1115"></script>
 <script async src="https://tally.so/widgets/embed.js"></script>
 
 </body>
