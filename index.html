@@ -1041,16 +1041,17 @@
 <!-- Einwilligung für die Messung des Werbeerfolgs (Google Ads). Ohne Konto-ID in der Datei inaktiv;
      ohne Einwilligung wird nichts von Google geladen. Muss synchron im <head> stehen. -->
 <script src="/assets/einwilligung.js"></script>
-  <!-- Kartenformular (Test 15.11.2026): nur mit ?formular=neu, für diesen Tab gemerkt; ?formular=alt schaltet zurück. -->
+  <!-- Kartenformular: seit 15.11.2026 das Formular der Vorprüfung für alle (Freigabe Zahid). Notausgang zurück zu Tally:
+       ?formular=alt (für diesen Tab gemerkt), ?formular=neu hebt das wieder auf. -->
   <script>
     (function () {
-      var an = false;
+      var an = true;
       try {
         var f = new URLSearchParams(location.search).get('formular');
-        if (f === 'neu') sessionStorage.setItem('nka_formular', 'neu');
-        if (f === 'alt') sessionStorage.removeItem('nka_formular');
-        an = sessionStorage.getItem('nka_formular') === 'neu';
-      } catch (e) { an = false; }
+        if (f === 'alt') sessionStorage.setItem('nka_formular', 'alt');
+        if (f === 'neu') sessionStorage.removeItem('nka_formular');
+        an = sessionStorage.getItem('nka_formular') !== 'alt';
+      } catch (e) { an = true; }
       window.NKA_KARTEN = an;
       if (an) document.documentElement.classList.add('karten');
     })();
@@ -2126,13 +2127,18 @@
     var knoepfe = document.querySelectorAll('a[data-start]');
     Array.prototype.forEach.call(knoepfe, function (a) {
       /* Vorschau 01.11.2026: Die Knöpfe springen zum Formular im Hero; nur echte Verweise auf die Prüfseite tragen die Herkunft weiter. */
+      /* 15.11.2026: Mit dem Kartenformular steht das Formular hier auf der Seite; kein Umweg über die Prüfseite. */
+      if (window.NKA_KARTEN && a.getAttribute('href').indexOf('#') !== 0) { a.setAttribute('href', '#vorpruefung-start'); return bindeZaehler(a); }
       if (herkunft !== 'ohne' && a.getAttribute('href').indexOf('#') !== 0) a.setAttribute('href', 'pruefung.html?quelle=' + herkunft);
+      bindeZaehler(a);
+    });
+    function bindeZaehler(a) {
       a.addEventListener('click', function () {
         if (window.umami && typeof window.umami.track === 'function') {
           try { window.umami.track('start_klick', { stelle: a.getAttribute('data-start'), herkunft: herkunft, fassung: window.NKA_FASSUNG }); } catch (e) {}
         }
       });
-    });
+    }
   })();
 </script>
 <script>

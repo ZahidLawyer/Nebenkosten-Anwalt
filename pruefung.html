@@ -369,18 +369,17 @@
 <!-- Einwilligung für die Messung des Werbeerfolgs (Google Ads). Ohne Konto-ID in der Datei inaktiv;
      ohne Einwilligung wird nichts von Google geladen. Muss synchron im <head> stehen. -->
 <script src="/assets/einwilligung.js"></script>
-  <!-- Kartenformular (Test 15.11.2026): nur mit ?formular=neu, für diesen Tab gemerkt; ?formular=alt schaltet zurück.
+  <!-- Kartenformular: seit 15.11.2026 für alle (Freigabe Zahid); Notausgang ?formular=alt (für diesen Tab gemerkt).
        Ohne Vorgang ist diese Seite nur das Formular; das Kartenformular steht auf der Startseite, dorthin geht es weiter. -->
   <script>
     (function () {
-      var an = false, q = null;
+      var an = true, q = new URLSearchParams(location.search);
       try {
-        q = new URLSearchParams(location.search);
         var f = q.get('formular');
-        if (f === 'neu') sessionStorage.setItem('nka_formular', 'neu');
-        if (f === 'alt') sessionStorage.removeItem('nka_formular');
-        an = sessionStorage.getItem('nka_formular') === 'neu';
-      } catch (e) { an = false; }
+        if (f === 'alt') sessionStorage.setItem('nka_formular', 'alt');
+        if (f === 'neu') sessionStorage.removeItem('nka_formular');
+        an = sessionStorage.getItem('nka_formular') !== 'alt';
+      } catch (e) { an = true; }
       window.NKA_KARTEN = an;
       if (!an) return;
       document.documentElement.classList.add('karten');
