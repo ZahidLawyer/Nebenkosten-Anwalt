@@ -1041,6 +1041,21 @@
 <!-- Einwilligung für die Messung des Werbeerfolgs (Google Ads). Ohne Konto-ID in der Datei inaktiv;
      ohne Einwilligung wird nichts von Google geladen. Muss synchron im <head> stehen. -->
 <script src="/assets/einwilligung.js"></script>
+  <!-- Kartenformular (Test 15.11.2026): nur mit ?formular=neu, für diesen Tab gemerkt; ?formular=alt schaltet zurück. -->
+  <script>
+    (function () {
+      var an = false;
+      try {
+        var f = new URLSearchParams(location.search).get('formular');
+        if (f === 'neu') sessionStorage.setItem('nka_formular', 'neu');
+        if (f === 'alt') sessionStorage.removeItem('nka_formular');
+        an = sessionStorage.getItem('nka_formular') === 'neu';
+      } catch (e) { an = false; }
+      window.NKA_KARTEN = an;
+      if (an) document.documentElement.classList.add('karten');
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/kartenformular.css?v=1115">
 </head>
 <body>
 
@@ -1149,6 +1164,101 @@
           <p class="spaeter-mail__status" id="spaeter-mail-status" role="status" aria-live="polite" hidden></p>
         </form>
         </details>
+        <!-- Kartenformular (15.11.2026, Wunsch Zahid): vier Schritte, Unterlagen gehen direkt an den eigenen Server
+             (api.nebenkosten-anwalt.de/vorpruefung/einreichen, agent-service app/einreichung.py), kein Tally.
+             Im Test nur mit ?formular=neu sichtbar (Klasse html.karten); sonst bleibt der Tally-Rahmen. -->
+        <form class="kf" id="kartenformular" novalidate data-endpoint="https://api.nebenkosten-anwalt.de/vorpruefung/einreichen">
+          <div class="kf__kopf">
+            <div class="kf__kopfzeile">
+              <h2 class="kf__titel">Kostenlose Vorprüfung</h2>
+              <span class="kf__stand" id="kf-stand">1 von 4</span>
+            </div>
+            <div class="kf__balken" role="progressbar" aria-label="Fortschritt" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" id="kf-balken">
+              <span class="is-an"></span><span></span><span></span><span></span>
+            </div>
+          </div>
+
+          <section class="kf__schritt is-aktiv" data-schritt="1" tabindex="-1" aria-labelledby="kf-frage-1">
+            <h3 class="kf__frage" id="kf-frage-1">Wie endet Ihre Abrechnung?</h3>
+            <p class="kf__hilfe">Ein Tipp genügt. So kann ich Ihr Ergebnis gleich richtig einordnen.</p>
+            <fieldset class="kf__karten">
+              <legend>Ergebnis der Abrechnung</legend>
+              <label class="kf__karte"><input type="radio" name="ende" value="nachzahlung">
+                <span class="kf__symbol"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5L12 4l4.5 4.5M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg></span>
+                <span class="kf__karte-text"><span class="kf__karte-titel">Ich soll nachzahlen</span><span class="kf__karte-unter">Der Vermieter fordert Geld von Ihnen.</span></span>
+                <span class="kf__haken" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
+              <label class="kf__karte"><input type="radio" name="ende" value="guthaben">
+                <span class="kf__symbol"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg></span>
+                <span class="kf__karte-text"><span class="kf__karte-titel">Ich bekomme Geld zurück</span><span class="kf__karte-unter">Die Abrechnung endet mit einem Guthaben.</span></span>
+                <span class="kf__haken" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
+              <label class="kf__karte"><input type="radio" name="ende" value="unklar">
+                <span class="kf__symbol"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM9.6 9.3a2.5 2.5 0 1 1 3.6 2.3c-.8.4-1.2 1-1.2 1.9M12 17h.01"/></svg></span>
+                <span class="kf__karte-text"><span class="kf__karte-titel">Weiß ich nicht genau</span><span class="kf__karte-unter">Kein Problem, das lese ich aus der Abrechnung.</span></span>
+                <span class="kf__haken" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></label>
+            </fieldset>
+            <div class="kf__fuss kf__fuss--allein"><button type="button" class="kf__knopf" data-weiter disabled>Weiter</button></div>
+            <p class="kf__unter">Kostenlos und unverbindlich.</p>
+          </section>
+
+          <section class="kf__schritt" data-schritt="2" tabindex="-1" aria-labelledby="kf-frage-2">
+            <h3 class="kf__frage" id="kf-frage-2">Laden Sie Ihre Abrechnung hoch</h3>
+            <p class="kf__hilfe">Alle Seiten, als Foto oder PDF. Ein Handyfoto genügt.</p>
+            <div class="kf__kacheln">
+              <label class="kf__kachel kf__kachel--haupt"><span class="kf__symbol"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+                Fotografieren<input type="file" accept="image/*" capture="environment" data-feld="abrechnung"></label>
+              <label class="kf__kachel"><span class="kf__symbol"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+                Datei auswählen<input type="file" multiple accept="image/*,application/pdf,.pdf,.heic,.heif" data-feld="abrechnung"></label>
+            </div>
+            <ul class="kf__liste" id="kf-liste-abrechnung" hidden aria-live="polite"></ul>
+            <p class="kf__tipp">Tipp: jede Seite einzeln, gerade von oben und gut lesbar.</p>
+            <div class="kf__fuss"><button type="button" class="kf__knopf kf__knopf--zurueck" data-zurueck>Zurück</button>
+              <button type="button" class="kf__knopf" data-weiter disabled>Weiter</button></div>
+          </section>
+
+          <section class="kf__schritt" data-schritt="3" tabindex="-1" aria-labelledby="kf-frage-3">
+            <span class="kf__marke">Freiwillig</span>
+            <h3 class="kf__frage" id="kf-frage-3">Haben Sie Ihren Mietvertrag zur Hand?</h3>
+            <p class="kf__hilfe">Nur der Mietvertrag zeigt, welche Kosten auf Sie umgelegt werden dürfen. Mit ihm wird die Vorprüfung genauer.</p>
+            <div class="kf__kacheln">
+              <label class="kf__kachel"><span class="kf__symbol"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+                Fotografieren<input type="file" accept="image/*" capture="environment" data-feld="mietvertrag"></label>
+              <label class="kf__kachel"><span class="kf__symbol"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+                Datei auswählen<input type="file" multiple accept="image/*,application/pdf,.pdf,.heic,.heif" data-feld="mietvertrag"></label>
+            </div>
+            <ul class="kf__liste" id="kf-liste-mietvertrag" hidden aria-live="polite"></ul>
+            <p class="kf__hinweis"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px;color:var(--moss)"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+              <span>Nicht zur Hand? Die Vorprüfung läuft auch ohne. Den Mietvertrag können Sie bei der Bestellung nachreichen.</span></p>
+            <div class="kf__fuss"><button type="button" class="kf__knopf kf__knopf--zurueck" data-zurueck>Zurück</button>
+              <button type="button" class="kf__knopf" data-weiter id="kf-weiter-3">Ohne Mietvertrag weiter</button></div>
+          </section>
+
+          <section class="kf__schritt" data-schritt="4" tabindex="-1" aria-labelledby="kf-frage-4">
+            <h3 class="kf__frage" id="kf-frage-4">Fast geschafft</h3>
+            <p class="kf__hilfe">Ihr Ergebnis sehen Sie in wenigen Minuten direkt hier.</p>
+            <div class="kf__feld"><label for="kf-email">Ihre E-Mail-Adresse</label>
+              <input id="kf-email" type="email" name="email" autocomplete="email" inputmode="email" placeholder="name@beispiel.de" required></div>
+            <div class="kf__angaben">
+              <p class="kf__angaben-titel">Ihre Angaben</p>
+              <div class="kf__angabe"><span id="kf-angabe-ende">Abrechnung endet mit Nachzahlung</span><button type="button" data-geh="1">Ändern</button></div>
+              <div class="kf__angabe"><span id="kf-angabe-abrechnung">Abrechnung: 1 Datei</span><button type="button" data-geh="2">Ändern</button></div>
+              <div class="kf__angabe"><span id="kf-angabe-mietvertrag">Mietvertrag: nicht dabei</span><button type="button" data-geh="3">Ändern</button></div>
+            </div>
+            <p class="kf__klein">Die Vorprüfung ist kostenlos, automatisch und unverbindlich, ohne anwaltliche Prüfung. Sie begründet noch kein Mandat. Die anwaltliche Prüfung können Sie danach bestellen; erst damit beginnt ein Mandat.</p>
+            <label class="kf__haekchen"><input type="checkbox" id="kf-einwilligung" required>
+              <span>Ich willige ein, dass Rechtsanwalt Zahid Akcay für die Vorprüfung und eine etwaige anwaltliche Prüfung die in der <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> (Ziffern 4 bis 7) genannten Dienstleister einschaltet, die Zugang zu meinen Unterlagen erhalten: den Server für die Prüfung und den Dienst für die technische Auswertung. Die Dienstleister sind zur Verschwiegenheit verpflichtet. Ich kann diese Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen; die Bearbeitung auf diesem Weg ist dann nicht mehr möglich.</span></label>
+            <label class="kf__haekchen"><input type="checkbox" id="kf-datenschutz" required>
+              <span>Die <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> habe ich zur Kenntnis genommen.</span></label>
+            <div class="kf__falle" aria-hidden="true"><label>Firma <input type="text" name="firma" id="kf-firma" tabindex="-1" autocomplete="off"></label></div>
+            <div class="kf__fuss"><button type="button" class="kf__knopf kf__knopf--zurueck" data-zurueck>Zurück</button>
+              <button type="submit" class="kf__knopf" id="kf-senden">Vorprüfung starten</button></div>
+            <p class="kf__unter">Kostenlos. Beim Absenden zahlen Sie nichts.</p>
+            <div class="kf__senden" id="kf-senden-box" hidden>
+              <div class="kf__fortschritt" aria-hidden="true"><span id="kf-fortschritt"></span></div>
+              <p class="kf__status" id="kf-status" role="status" aria-live="polite"></p>
+            </div>
+            <p class="kf__fehler" id="kf-fehler" role="alert" hidden></p>
+          </section>
+        </form>
         <div class="form-card" id="form-card">
           <div class="form-card__iframe-wrap">
             <div class="form-skeleton" aria-hidden="true">
@@ -2111,6 +2221,8 @@
     var frame = document.getElementById('tally-frame');
     var card = document.getElementById('form-card');
     if (!frame || !card) return;
+    /* 15.11.2026: Mit dem Kartenformular (?formular=neu) lädt der Tally-Rahmen nicht (assets/kartenformular.js). */
+    if (window.NKA_KARTEN) return;
     var q = new URLSearchParams(location.search);
     var GUELTIG = /^[a-f0-9]{32}$/;
     function neueId() {
@@ -2341,6 +2453,7 @@
   })();
 </script>
 <!-- Offizielles Tally-Skript: löst data-tally-src ein und passt die iframe-Höhe dynamisch an den Formularinhalt an. -->
+<script src="assets/kartenformular.js?v=1115"></script>
 <script async src="https://tally.so/widgets/embed.js"></script>
 <script src="assets/spaeter.js?v=1111"></script>
 </body>

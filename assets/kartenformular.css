@@ -1,0 +1,117 @@
+/* Kartenformular der kostenlosen Vorprüfung (15.11.2026). Ersetzt im Test (?formular=neu) den Tally-Rahmen im Hero.
+   Farben und Schriften aus den Variablen der Startseite (index.html :root). */
+.kf { display: none; }
+html.karten .kf { display: block; }
+html.karten .hero__form-kopf,
+html.karten .hero__form-satz,
+html.karten #form-card { display: none; }
+
+.kf__kopf { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.1rem; }
+.kf__kopfzeile { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
+.kf__titel { font-family: var(--serif); font-size: 1.3rem; font-weight: 600; margin: 0; color: var(--ink); }
+.kf__stand { font-size: 0.85rem; font-weight: 500; color: var(--ink-soft); white-space: nowrap; }
+.kf__balken { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.kf__balken span { height: 5px; border-radius: 999px; background: var(--line); transition: background 0.2s; }
+.kf__balken span.is-an { background: var(--moss); }
+
+.kf__schritt { display: none; }
+/* Die Seite gibt jedem <section> Innenabstand; im Formular nicht. */
+.kf .kf__schritt { padding: 0; margin: 0; border: 0; background: none; }
+/* Kopfleiste der Seite ist fest (68 px): beim Schrittwechsel nicht darunter scrollen. */
+.kf { scroll-margin-top: 84px; }
+.kf__schritt.is-aktiv { display: block; animation: kf-rein 0.18s ease-out; }
+@keyframes kf-rein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .kf__schritt.is-aktiv { animation: none; } }
+.kf__schritt:focus { outline: none; }
+.kf__frage { font-family: var(--serif); font-size: 1.45rem; line-height: 1.18; font-weight: 600; margin: 0 0 0.4rem; color: var(--ink); }
+.kf__hilfe { font-size: 0.98rem; line-height: 1.5; color: var(--ink-soft); margin: 0 0 1.1rem; }
+.kf__marke { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; background: var(--paper-deep);
+  font-size: 0.8rem; font-weight: 600; color: var(--moss-deep); margin-bottom: 0.55rem; }
+
+/* Auswahlkarten */
+.kf__karten { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.7rem; }
+.kf__karten legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.kf__karte { position: relative; display: flex; align-items: center; gap: 0.85rem; min-height: 4.9rem; padding: 0.8rem 0.95rem;
+  box-sizing: border-box; border: 2px solid var(--line); border-radius: 14px; background: #fff; cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s; }
+.kf__karte:hover { border-color: var(--line-strong); }
+.kf__karte input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.kf__karte:has(input:focus-visible) { outline: 3px solid var(--amber); outline-offset: 2px; }
+.kf__karte.is-gewaehlt { border-color: var(--moss); background: #F1F6F3; box-shadow: 0 6px 18px rgba(36,49,43,0.10); }
+.kf__symbol { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem;
+  border-radius: 12px; background: var(--paper-deep); color: var(--moss); }
+.kf__karte.is-gewaehlt .kf__symbol { background: var(--moss); color: #fff; }
+.kf__karte-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+.kf__karte-titel { font-size: 1.05rem; font-weight: 600; color: var(--ink); }
+.kf__karte-unter { font-size: 0.88rem; line-height: 1.4; color: var(--ink-soft); }
+.kf__haken { flex: none; width: 1.5rem; height: 1.5rem; box-sizing: border-box; border-radius: 999px; border: 2px solid var(--line-strong);
+  background: #fff; display: inline-flex; align-items: center; justify-content: center; }
+.kf__haken svg { opacity: 0; }
+.kf__karte.is-gewaehlt .kf__haken { background: var(--moss); border-color: var(--moss); }
+.kf__karte.is-gewaehlt .kf__haken svg { opacity: 1; }
+
+/* Hochladen */
+.kf__kacheln { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; }
+.kf__kachel { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.55rem;
+  min-height: 7rem; padding: 0.8rem; box-sizing: border-box; border: 2px solid var(--line); border-radius: 14px; background: #fff;
+  cursor: pointer; text-align: center; font-size: 1rem; font-weight: 600; color: var(--ink); }
+.kf__kachel:hover { border-color: var(--moss); }
+.kf__kachel input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.kf__kachel:has(input:focus-visible) { outline: 3px solid var(--amber); outline-offset: 2px; }
+.kf__kachel--haupt { border-color: var(--moss); }
+.kf__kachel .kf__symbol { width: 3rem; height: 3rem; }
+.kf__kachel--haupt .kf__symbol { background: var(--moss); color: #fff; }
+.kf__liste { list-style: none; margin: 0.9rem 0 0; padding: 0.35rem 0.85rem; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.kf__liste[hidden] { display: none; }
+.kf__liste-kopf { display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0 0.35rem; font-size: 0.95rem; font-weight: 600; color: var(--moss-deep); }
+.kf__datei { display: flex; align-items: center; gap: 0.75rem; padding: 0.3rem 0; border-top: 1px solid #EDE7DA; }
+.kf__vorschau { flex: none; width: 2.4rem; height: 3rem; border-radius: 5px; border: 1px solid var(--line); background: var(--paper-deep) center/cover no-repeat;
+  display: inline-flex; align-items: center; justify-content: center; color: var(--moss); font-size: 0.7rem; font-weight: 700; }
+.kf__datei-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.1rem; }
+.kf__datei-name { font-size: 0.95rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kf__datei-info { font-size: 0.82rem; color: var(--ink-soft); }
+.kf__weg { flex: none; width: 2.75rem; height: 2.75rem; border: 0; border-radius: 10px; background: transparent; color: var(--ink-soft); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; }
+.kf__weg:hover { background: var(--paper-deep); color: var(--ink); }
+.kf__tipp { font-size: 0.85rem; line-height: 1.5; color: var(--ink-soft); margin: 0.8rem 0 0; }
+.kf__hinweis { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.75rem 0.9rem; border-radius: 12px; background: var(--paper-deep);
+  font-size: 0.9rem; line-height: 1.5; margin: 0.9rem 0 0; }
+.kf__textlink { display: inline-flex; align-items: center; min-height: 2.75rem; border: 0; background: none; padding: 0; margin-top: 0.4rem;
+  font: inherit; font-size: 1rem; font-weight: 600; color: var(--moss); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* E-Mail und Einwilligungen */
+.kf__feld { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
+.kf__feld label { font-size: 0.95rem; font-weight: 600; }
+.kf__feld input { box-sizing: border-box; width: 100%; min-height: 3.3rem; padding: 0 1rem; border: 2px solid var(--line-strong); border-radius: 12px;
+  background: #fff; font-size: 1.05rem; color: var(--ink); }
+.kf__feld input:focus { border-color: var(--moss); outline: none; box-shadow: 0 0 0 3px rgba(47,93,76,0.15); }
+.kf__angaben { border: 1px solid var(--line); border-radius: 14px; background: #fff; padding: 0.2rem 0.85rem; margin: 0 0 1rem; }
+.kf__angaben-titel { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-soft); padding: 0.6rem 0 0.3rem; margin: 0; }
+.kf__angabe { display: flex; align-items: center; gap: 0.6rem; min-height: 2.9rem; border-top: 1px solid #EDE7DA; font-size: 0.95rem; }
+.kf__angabe span { flex: 1; }
+.kf__angabe button { border: 0; background: none; padding: 0 0.2rem; min-height: 2.75rem; font: inherit; font-size: 0.9rem; font-weight: 600; color: var(--moss); cursor: pointer; }
+.kf__haekchen { display: flex; gap: 0.7rem; align-items: flex-start; margin: 0 0 0.75rem; font-size: 0.85rem; line-height: 1.5; color: var(--ink); cursor: pointer; }
+.kf__haekchen input { flex: none; width: 1.3rem; height: 1.3rem; margin: 0.12rem 0 0; accent-color: var(--moss); }
+.kf__klein { font-size: 0.82rem; line-height: 1.5; color: var(--ink-soft); margin: 0 0 0.9rem; }
+.kf__falle { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* Knöpfe */
+.kf__fuss { display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; margin-top: 1.2rem; }
+.kf__fuss--allein { grid-template-columns: 1fr; }
+.kf__knopf { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 3.3rem; padding: 0 1rem;
+  border: 0; border-radius: 12px; background: var(--moss); color: #fff; font: inherit; font-size: 1.05rem; font-weight: 600; cursor: pointer; }
+.kf__knopf:hover { background: var(--moss-deep); }
+.kf__knopf[disabled] { background: #A9BDB4; cursor: not-allowed; }
+.kf__knopf--zurueck { padding-left: 1.1rem; padding-right: 1.1rem; background: #fff; color: var(--ink); border: 2px solid var(--line-strong); }
+.kf__knopf--zurueck:hover { background: var(--paper-deep); }
+.kf__unter { font-size: 0.85rem; line-height: 1.4; color: var(--ink-soft); text-align: center; margin: 0.6rem 0 0; }
+
+/* Senden und Fehler */
+.kf__senden { margin-top: 1rem; }
+.kf__senden[hidden] { display: none; }
+.kf__fortschritt { height: 8px; border-radius: 999px; background: var(--line); overflow: hidden; }
+.kf__fortschritt span { display: block; height: 100%; width: 0; background: var(--moss); transition: width 0.25s; }
+.kf__status { font-size: 0.95rem; margin: 0.6rem 0 0; color: var(--ink); }
+.kf__fehler { margin: 0.9rem 0 0; padding: 0.75rem 0.9rem; border-radius: 12px; background: #F6E9D6; border: 1px solid #E5C9A0;
+  font-size: 0.93rem; line-height: 1.5; color: #5C3A12; }
+.kf__fehler[hidden] { display: none; }
