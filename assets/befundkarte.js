@@ -99,7 +99,9 @@
                 Hinweise ohne Betrag zählen nicht.
        Stufe B: Punkt 'frist' (Abrechnung erst nach Ablauf der Abrechnungsfrist) -> die Nachforderung.
        Stufe C: kein Betrag (alles andere, auch abgelaufene Einwendungsfrist). */
-  var PREIS_CENT = 7990; /* Festpreis der anwaltlichen Prüfung, 79,90 € inklusive Umsatzsteuer */
+  var PREIS_CENT = 7990; /* Festpreis der anwaltlichen Prüfung mit Schreiben, 79,90 € inklusive Umsatzsteuer
+                            (Vergleichswert für „über dem Preis“; seit 15.11.2026 auch ein Paket ohne Schreiben) */
+  var PREIS_AB_CENT = 5990; /* 15.11.2026: Paket ohne Schreiben an den Vermieter, 59,90 € */
   var ARTEN_MIT_BETRAG = { nicht_umlagefaehig: 1, nicht_vereinbart: 1, kabel_nach_2024: 1, rauchmelder_miete: 1 };
   function moeglicherBetrag(markiert, andere, nachforderung, guthaben, stimmig, fristAbgelaufen) {
     var kein = { stufe: 'C', cent: 0, posten: 0, summe: 0, gedeckelt: false, ueberPreis: false, guthaben: false };
@@ -244,7 +246,7 @@
       para.textContent = text; el.appendChild(para);
     }
     var AUTOMATISCH = 'Die Vorprüfung ist automatisch erstellt, ohne anwaltliche Prüfung.';
-    var PREIS = euro(PREIS_CENT);
+    var PREIS = 'ab ' + euro(PREIS_AB_CENT); /* 15.11.2026: zwei Pakete, 59,90 € und 79,90 € */
     if (m.stufe === 'B') {
       zeile('vp-betrag__zeile--haupt', 'Es geht um Ihre Nachzahlung', euro(m.cent));
       zeile('vp-betrag__zeile--preis', 'Anwaltliche Prüfung', PREIS + ' Festpreis');
@@ -280,13 +282,13 @@
       var knopf = document.createElement('a');
       knopf.className = 'vp-betrag__knopf' + (m.ueberPreis ? '' : ' vp-betrag__knopf--ruhig');
       knopf.href = '#bestellen';
-      knopf.textContent = 'Jetzt kostenpflichtig prüfen lassen, ' + euroText(PREIS_CENT).replace(' ', '\u00a0');
+      knopf.textContent = 'Anwaltliche Prüfung wählen, ab ' + euroText(PREIS_AB_CENT).replace(' ', '\u00a0');
       if (typeof opt.beiBestellen === 'function') knopf.addEventListener('click', function (e) { opt.beiBestellen(e); });
       el.appendChild(knopf);
     }
     /* 11.11.2026 (Weisung Zahid): nur noch auf der Ergebnisseite am Bestellknopf, nicht im Beispiel der Startseite;
        dazu steht es in den FAQ (Was kostet die Prüfung). */
-    if (!opt.beispiel) absatz('Die ' + PREIS + ' tragen Sie selbst. Ihr Vermieter erstattet sie in der Regel nicht.', 'vp-betrag__klein');
+    if (!opt.beispiel) absatz('Die Kosten der anwaltlichen Prüfung tragen Sie selbst. Ihr Vermieter erstattet sie in der Regel nicht.', 'vp-betrag__klein');
     el.hidden = false;
     return true;
   }
@@ -530,6 +532,6 @@
     euro: euro, datumDe: datumDe, heuteIso: heuteIso, auswerten: auswerten, kopfzeile: kopfzeile,
     zusammenfassung: zusammenfassung, baueBefund: baueBefund, zeigeBeispiel: zeigeBeispiel,
     beispielErgebnis: beispielErgebnis,
-    PREIS_CENT: PREIS_CENT, moeglicherBetrag: moeglicherBetrag, baueBetrag: baueBetrag
+    PREIS_CENT: PREIS_CENT, PREIS_AB_CENT: PREIS_AB_CENT, moeglicherBetrag: moeglicherBetrag, baueBetrag: baueBetrag
   };
 })();

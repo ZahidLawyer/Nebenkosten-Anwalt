@@ -115,3 +115,29 @@ html.karten #form-card { display: none; }
 .kf__fehler { margin: 0.9rem 0 0; padding: 0.75rem 0.9rem; border-radius: 12px; background: #F6E9D6; border: 1px solid #E5C9A0;
   font-size: 0.93rem; line-height: 1.5; color: #5C3A12; }
 .kf__fehler[hidden] { display: none; }
+
+/* ---------- Bestellformular mit Preiswahl (Ergebnisseite, 15.11.2026) ---------- */
+.kf--bestellung { margin-top: 0.9rem; padding: 1.1rem 1.05rem 1.2rem; background: var(--paper, #F7F4EE);
+  border: 1px solid var(--line-strong); border-radius: 16px; }
+.kf--bestellung .kf__frage { font-size: 1.3rem; margin-bottom: 0.9rem; }
+.kf__pakete { display: grid; gap: 0.8rem; margin: 0 0 0.6rem; padding: 0; border: 0; min-width: 0; }
+.kf__unsichtbar { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.kf__paket { position: relative; display: block; padding: 1rem 1rem 0.9rem; background: #fff; border: 2px solid var(--line);
+  border-radius: 14px; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+.kf__paket input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.kf__paket.is-gewaehlt { border-color: var(--moss); background: #F1F6F3; box-shadow: 0 6px 18px rgba(36,49,43,0.10); }
+.kf__paket:focus-within { box-shadow: 0 0 0 3px rgba(47,93,76,0.25); }
+.kf__paket-marke { position: absolute; top: -0.7rem; right: 0.9rem; padding: 0.18rem 0.6rem; border-radius: 999px;
+  background: var(--moss-deep, #24493C); color: #fff; font-size: 0.75rem; font-weight: 600; }
+.kf__paket-kopf { display: flex; align-items: baseline; gap: 0.8rem; }
+.kf__paket-titel { flex: 1; min-width: 0; font-size: 1.02rem; line-height: 1.3; font-weight: 600; color: var(--ink); }
+.kf__paket-preis { flex: none; font-family: var(--serif); font-size: 1.35rem; font-weight: 600; color: var(--moss-deep, #24493C);
+  font-variant-numeric: tabular-nums; }
+.kf__paket-liste { list-style: none; margin: 0.6rem 0 0; padding: 0; display: grid; gap: 0.35rem; }
+.kf__paket-liste li { position: relative; padding-left: 1.45rem; font-size: 0.9rem; line-height: 1.45; color: var(--ink-soft); }
+.kf__paket-liste li::before { content: ""; position: absolute; left: 0.1rem; top: 0.38rem; width: 0.7rem; height: 0.38rem;
+  border-left: 2px solid var(--moss); border-bottom: 2px solid var(--moss); transform: rotate(-45deg); }
+.kf__paket-ring { position: absolute; top: 1rem; left: -0.01rem; }
+.kf--bestellung .kf__feld { margin-top: 1rem; }
+.kf--bestellung .kf__haekchen a { color: var(--moss); }
+.kf--bestellung .kf__knopf { width: 100%; margin-top: 0.4rem; }

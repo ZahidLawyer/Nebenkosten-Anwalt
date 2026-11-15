@@ -388,9 +388,10 @@
       }
     })();
   </script>
-  <link rel="stylesheet" href="assets/kartenformular.css?v=1115b">
+  <link rel="stylesheet" href="assets/kartenformular.css?v=1115c">
   <style>
-    html.karten #form-card, html.karten #tally-fallback, html.karten #mv-card, html.karten #mv-fallback { display: none !important; }
+    html.karten #form-card, html.karten #tally-fallback, html.karten #mv-card, html.karten #mv-fallback,
+    html.karten #bestell-card, html.karten #bestell-fallback { display: none !important; }
     .kf-erneut { max-width: 40rem; margin: 0 auto; padding: 1.2rem 1.25rem; text-align: center; background: var(--paper-deep);
       border: 1px solid var(--line-strong); border-radius: 14px; }
     .kf-erneut .kf__hilfe { margin: 0 0 0.8rem; }
@@ -584,9 +585,9 @@
               <li>ob einzelne Kosten auffällig hoch sind</li>
             </ul>
           </div>
-          <a class="vp-button" href="#bestellen" id="vp-bestellen">Jetzt kostenpflichtig prüfen lassen — 79,90 Euro</a>
-          <span>Endpreis einschließlich Umsatzsteuer. Bezahlt wird erst auf der sicheren Bezahlseite von Stripe, mit
-          Karte, PayPal, Apple Pay oder Google Pay — nicht durch diesen Klick.</span>
+          <a class="vp-button" href="#bestellen" id="vp-bestellen">Anwaltliche Prüfung wählen — ab 59,90 Euro</a>
+          <span>Festpreise inklusive Umsatzsteuer: 59,90 Euro, mit Schreiben an Ihren Vermieter 79,90 Euro. Bezahlt wird erst
+          auf der sicheren Bezahlseite von Stripe, mit Karte, PayPal, Apple Pay oder Google Pay — nicht durch diesen Klick.</span>
         </div>
       </section>
 
@@ -647,16 +648,73 @@
         <div class="prep-box auftrag-box">
           <h2 id="bestellen-title">Ihre Bestellung</h2>
           <ul>
-            <li><span><strong>Leistung:</strong> anwaltliche Prüfung Ihrer Nebenkostenabrechnung durch
+            <li><span><strong>Leistung:</strong> <span id="bestell-leistung">anwaltliche Prüfung Ihrer Nebenkostenabrechnung durch
             Rechtsanwalt Zahid Akcay — Prüfergebnis und, wenn sich ein Widerspruch lohnt, ein Schreiben an
-            Ihren Vermieter, das Sie selbst absenden.</span></li>
-            <li><span><strong>Preis:</strong> 79,90 Euro einmalig, Endpreis einschließlich Umsatzsteuer, kein Abo.</span></li>
+            Ihren Vermieter, das Sie selbst absenden.</span></span></li>
+            <li><span><strong>Preis:</strong> <span id="bestell-preis">79,90 Euro einmalig, Endpreis einschließlich Umsatzsteuer, kein Abo.</span></span></li>
           </ul>
           <div class="vp-ohne-mv" id="bestell-mv-ok" hidden><p><strong>Ihr Mietvertrag ist angekommen.</strong> Sie können jetzt bestellen.</p></div>
           <p><a href="mandatsbedingungen.html">Mandatsbedingungen und Vergütung</a>,
           <a href="mandatsbedingungen.html#widerruf">Widerrufsbelehrung</a>,
           <a href="datenschutz.html">Datenschutzerklärung</a></p>
         </div>
+        <!-- Bestellformular mit Preiswahl (15.11.2026, statt Tally-Formular 2; assets/kartenformular-bestellung.js,
+             agent-service POST /vorpruefung/bestellen). Die Erklärungen stehen wortgleich in app/bestellformular.py
+             (Fassung website-bestellung-2026-11-15); wer sie ändert, ändert beide Stellen. Paket mit Schreiben ist
+             vorausgewählt (Entscheidung Zahid 15.11.2026). -->
+        <form class="kf kf--bestellung" id="kf-bestellung" novalidate
+              data-endpoint="https://api.nebenkosten-anwalt.de/vorpruefung/bestellen"
+              data-link-mit_schreiben="https://buy.stripe.com/4gM4gA1fK9O60L38Yy38400"
+              data-link-ohne_schreiben="STRIPE_LINK_59_90">
+          <h3 class="kf__frage">Wählen Sie Ihre anwaltliche Prüfung</h3>
+          <fieldset class="kf__pakete">
+            <legend class="kf__unsichtbar">Paket</legend>
+            <label class="kf__paket is-gewaehlt"><input type="radio" name="paket" value="mit_schreiben" checked>
+              <span class="kf__paket-marke">Empfohlen</span>
+              <span class="kf__paket-kopf"><span class="kf__paket-titel">Prüfung mit Schreiben an Ihren Vermieter</span>
+                <span class="kf__paket-preis">79,90&nbsp;€</span></span>
+              <ul class="kf__paket-liste">
+                <li>Ich prüfe jeden markierten Punkt am Original</li>
+                <li>Schriftliche Einschätzung, ob und in welcher Höhe Sie weniger zahlen müssen</li>
+                <li>Fertiges Schreiben, das Sie in Ihrem Namen an den Vermieter schicken</li>
+                <li>Rückfragen per E-Mail 14 Tage inklusive</li>
+              </ul></label>
+            <label class="kf__paket"><input type="radio" name="paket" value="ohne_schreiben">
+              <span class="kf__paket-kopf"><span class="kf__paket-titel">Prüfung ohne Schreiben an Ihren Vermieter</span>
+                <span class="kf__paket-preis">59,90&nbsp;€</span></span>
+              <ul class="kf__paket-liste">
+                <li>Ich prüfe jeden markierten Punkt am Original</li>
+                <li>Schriftliche Einschätzung, ob und in welcher Höhe Sie weniger zahlen müssen</li>
+                <li>Rückfragen per E-Mail 14 Tage inklusive</li>
+              </ul></label>
+          </fieldset>
+          <p class="kf__klein">Festpreise inklusive Umsatzsteuer, einmalig, kein Abo.</p>
+          <div class="kf__feld"><label for="kf-b-email">Ihre E-Mail-Adresse</label>
+            <input type="email" id="kf-b-email" autocomplete="email" inputmode="email" required></div>
+          <div class="kf__feld"><label for="kf-b-zugang">Wann kam die Abrechnung bei Ihnen an? (falls bekannt)</label>
+            <input type="date" id="kf-b-zugang">
+            <span class="kf__klein">Der Tag, an dem der Brief bei Ihnen ankam, nicht das Datum auf dem Schreiben. Wenn Sie es nicht mehr wissen, einfach leer lassen.</span></div>
+          <label class="kf__haekchen"><input type="checkbox" id="kf-b-bestellung" required>
+            <span>Ich beauftrage Rechtsanwalt Zahid Akcay (Kanzlei Akcay) mit der anwaltlichen Prüfung meiner
+            Nebenkostenabrechnung im gewählten Paket (<span data-paket-name>Prüfung mit Schreiben an Ihren Vermieter</span>)
+            zum Festpreis von <span data-paket-preis>79,90 Euro</span> (Endpreis einschließlich Umsatzsteuer). Die
+            <a href="mandatsbedingungen.html" target="_blank" rel="noopener">Mandatsbedingungen mit Vergütungsvereinbarung</a>
+            habe ich gelesen und bin einverstanden. Mir ist bekannt, dass das Mandat mit meiner Bestellung beginnt, die
+            Prüfung und die Schreiben des gewählten Pakets umfasst und mit der Zusendung dieser Schreiben an mich endet;
+            Rückfragen zur Rechtseinschätzung beantwortet Rechtsanwalt Zahid Akcay noch 14 Tage per E-Mail. Für weitere
+            Tätigkeit — etwa gegenüber meinem Vermieter — ist ein neues Mandat mit gesonderter Vergütung nötig. Mir ist
+            bekannt, dass mein Vermieter mir diese Kosten in der Regel nicht erstattet.</span></label>
+          <label class="kf__haekchen"><input type="checkbox" id="kf-b-sofort" required>
+            <span>Ich habe die <a href="mandatsbedingungen.html#widerruf" target="_blank" rel="noopener">Widerrufsbelehrung</a>
+            erhalten. Ich verlange ausdrücklich, dass Rechtsanwalt Zahid Akcay sofort — vor Ablauf der Widerrufsfrist — mit der
+            Prüfung beginnt. Mir ist bekannt, dass mein Widerrufsrecht erlischt, sobald die Prüfung vollständig erbracht ist,
+            und dass ich bei einem früheren Widerruf Wertersatz für die bis dahin erbrachte Leistung schulde.</span></label>
+          <div class="kf__falle" aria-hidden="true"><label>Firma <input type="text" id="kf-b-firma" tabindex="-1" autocomplete="off"></label></div>
+          <button type="submit" class="kf__knopf" id="kf-b-senden">Weiter zur Bezahlung, 79,90 €</button>
+          <p class="kf__unter">Zahlungspflichtig bestellen Sie erst auf der sicheren Bezahlseite von Stripe mit „Zahlen“
+          (Karte, PayPal, Apple Pay oder Google Pay).</p>
+          <p class="kf__fehler" id="kf-b-fehler" role="alert" hidden></p>
+        </form>
         <div class="form-card" id="bestell-card">
           <div class="form-card__iframe-wrap">
             <!-- Formular 2 (Bestellung), ID q4rND8. Seit 27.10.2026 ohne Zahlungsblock: nach dem Absenden geht es
@@ -730,7 +788,7 @@
   </div>
 </footer>
 
-<script src="assets/befundkarte.js?v=1113"></script>
+<script src="assets/befundkarte.js?v=1115"></script>
 <script>
   (function () {
     /* ---------- Vorgangskennung: zufällig, nur in dieser Sitzung, kein Personenbezug ---------- */
@@ -1315,7 +1373,8 @@
       var f = document.getElementById('bestell-frame');
       var id = f.getAttribute('data-bestell-form');
       b.hidden = false;
-      if (id && /^[A-Za-z0-9]{4,}$/.test(id) && id !== 'TALLY_FORMULAR_2_ID') {
+      /* 15.11.2026: Mit dem Kartenformular bestellt man über #kf-bestellung (Preiswahl), Tally-Formular 2 lädt nicht. */
+      if (!window.NKA_KARTEN && id && /^[A-Za-z0-9]{4,}$/.test(id) && id !== 'TALLY_FORMULAR_2_ID') {
         document.getElementById('bestell-platzhalter').hidden = true;
         var emailParam = '';
         try { var em = sessionStorage.getItem('nka_email'); if (em) emailParam = '&email=' + encodeURIComponent(em); } catch (e) {}
@@ -1334,7 +1393,13 @@
 
 <!-- Offizielles Tally-Skript: löst data-tally-src ein und passt die iframe-Höhe dynamisch an den Formularinhalt an. -->
 <script src="assets/kartenformular-mv.js?v=1115"></script>
-<script async src="https://tally.so/widgets/embed.js"></script>
+<script src="assets/kartenformular-bestellung.js?v=1115"></script>
+<!-- 15.11.2026: Tally nur noch mit ?formular=alt; mit dem Kartenformular lädt diese Seite nichts von tally.so. -->
+<script>
+  if (!window.NKA_KARTEN) {
+    (function () { var s = document.createElement('script'); s.async = true; s.src = 'https://tally.so/widgets/embed.js'; document.body.appendChild(s); })();
+  }
+</script>
 
 </body>
 </html>
