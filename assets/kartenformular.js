@@ -133,30 +133,48 @@
     ziel.textContent = text; ziel.hidden = false;
   }
 
-  function nimmDateien(feld, liste) {
+  /* Upload-Messung (16.11.2026): je Auswahl ein Ereignis „datei_gewaehlt“ mit Feld, Weg (kamera/datei), Art der
+     übernommenen Dateien (foto/pdf/gemischt/keine), Anzahl in Stufen (0, 1, 2-3, 4+) und dem ersten Grund, warum
+     eine Datei nicht übernommen wurde (anzahl/typ/groesse, sonst nein). Keine Dateinamen, Größen oder Inhalte. */
+  function stufe(n) { return n === 0 ? '0' : n === 1 ? '1' : n <= 3 ? '2-3' : '4+'; }
+  function meldeAuswahl(feld, weg, uebernommen, grund) {
+    var pdfs = uebernommen.filter(function (e) { return e.pdf; }).length;
+    var fotos = uebernommen.length - pdfs;
+    zaehle('datei_gewaehlt', {
+      feld: feld, weg: weg || 'datei',
+      art: !uebernommen.length ? 'keine' : (fotos && pdfs ? 'gemischt' : (pdfs ? 'pdf' : 'foto')),
+      anzahl: stufe(uebernommen.length), abgelehnt: grund || 'nein'
+    });
+  }
+
+  function nimmDateien(feld, liste, weg) {
     beruehre();
     var dateien = zustand.dateien[feld];
     var abgelehnt = [];
+    var grund = null;
     var arbeit = [];
     Array.prototype.forEach.call(liste, function (datei) {
-      if (dateien.length + arbeit.length >= MAX_DATEIEN) { abgelehnt.push('höchstens ' + MAX_DATEIEN + ' Dateien'); return; }
-      if (!istBild(datei) && !istPdf(datei)) { abgelehnt.push((datei.name || 'Datei') + ': nur Fotos oder PDF'); return; }
+      if (dateien.length + arbeit.length >= MAX_DATEIEN) { abgelehnt.push('höchstens ' + MAX_DATEIEN + ' Dateien'); grund = grund || 'anzahl'; return; }
+      if (!istBild(datei) && !istPdf(datei)) { abgelehnt.push((datei.name || 'Datei') + ': nur Fotos oder PDF'); grund = grund || 'typ'; return; }
       var eintrag = { datei: datei, blob: null, url: null, pdf: istPdf(datei) };
       arbeit.push(eintrag);
     });
     zeigeFehler(abgelehnt.length ? 'Nicht übernommen: ' + abgelehnt.join(', ') + '.' : '');
-    if (!arbeit.length) return;
+    if (!arbeit.length) { meldeAuswahl(feld, weg, [], grund); return; }
     Promise.all(arbeit.map(function (e) {
       return (e.pdf ? Promise.resolve(null) : verkleinere(e.datei)).then(function (blob) { e.blob = blob; return e; });
     })).then(function (fertige) {
       var zuGross = [];
+      var neu = [];
       fertige.forEach(function (e) {
         var g = (e.blob || e.datei).size;
         if (g > MAX_BYTES) { zuGross.push(e.datei.name || 'Datei'); return; }
         if (!e.pdf) { try { e.url = URL.createObjectURL(e.blob || e.datei); } catch (err) { e.url = null; } }
         dateien.push(e);
+        neu.push(e);
       });
       if (zuGross.length) zeigeFehler('Zu groß (mehr als 25 MB): ' + zuGross.join(', ') + '.');
+      meldeAuswahl(feld, weg, neu, grund || (zuGross.length ? 'groesse' : null));
       zeichneListe(feld);
     });
   }
@@ -199,8 +217,11 @@
   }
 
   Array.prototype.forEach.call(form.querySelectorAll('input[type="file"][data-feld]'), function (inp) {
+    var weg = inp.hasAttribute('capture') ? 'kamera' : 'datei';
+    /* Upload-Messung: Kamera oder Dateiauswahl geöffnet, auch wenn danach nichts gewählt wird („upload_geoeffnet“). */
+    inp.addEventListener('click', function () { zaehle('upload_geoeffnet', { feld: inp.getAttribute('data-feld'), weg: weg }); });
     inp.addEventListener('change', function () {
-      if (inp.files && inp.files.length) nimmDateien(inp.getAttribute('data-feld'), inp.files);
+      if (inp.files && inp.files.length) nimmDateien(inp.getAttribute('data-feld'), inp.files, weg);
       inp.value = '';
     });
   });

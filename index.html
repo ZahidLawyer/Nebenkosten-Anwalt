@@ -2124,6 +2124,17 @@
     /* Fassung der Seite (Plan 11.11.2026): steht in jedem Ereignis, damit zwischengespeicherte alte Seiten bei der
        Vorher-Nachher-Auswertung nicht mitzählen. */
     window.NKA_FASSUNG = 'L2';
+    /* Herkunft über QR-Code (16.11.2026): Seit dem Kartenformular leitet die Prüfseite ohne Vorgang hierher weiter;
+       ihr Ereignis „quelle“ ging dabei verloren. Deshalb meldet die Startseite eine Ankunft mit ?quelle=… selbst,
+       einmal je Aufruf, nur mit dem Code (z. B. flyer-f1). */
+    if (OK.test(q.get('quelle') || '')) {
+      var meldeQuelle = function () {
+        if (window.umami && typeof window.umami.track === 'function') {
+          try { window.umami.track('quelle', { quelle: q.get('quelle'), fassung: window.NKA_FASSUNG }); } catch (e) {}
+        }
+      };
+      if (document.readyState === 'complete') meldeQuelle(); else window.addEventListener('load', meldeQuelle);
+    }
     var knoepfe = document.querySelectorAll('a[data-start]');
     Array.prototype.forEach.call(knoepfe, function (a) {
       /* Vorschau 01.11.2026: Die Knöpfe springen zum Formular im Hero; nur echte Verweise auf die Prüfseite tragen die Herkunft weiter. */
@@ -2459,7 +2470,7 @@
   })();
 </script>
 <!-- Offizielles Tally-Skript: löst data-tally-src ein und passt die iframe-Höhe dynamisch an den Formularinhalt an. -->
-<script src="assets/kartenformular.js?v=1115"></script>
+<script src="assets/kartenformular.js?v=1116m"></script>
 <script async src="https://tally.so/widgets/embed.js"></script>
 <script src="assets/spaeter.js?v=1111"></script>
 </body>
