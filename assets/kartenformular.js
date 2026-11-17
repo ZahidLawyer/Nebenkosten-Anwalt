@@ -268,6 +268,24 @@
     document.getElementById('kf-angabe-mietvertrag').textContent = m ? 'Mietvertrag: ' + m + (m === 1 ? ' Datei' : ' Dateien') : 'Mietvertrag: nicht dabei';
   }
 
+  /* Messung letzter Schritt (17.11.2026, Freigabe Zahid): Woran bleiben Besucher hängen, die den Upload geschafft haben?
+     Gezählt wird nur, ob eine gültige E-Mail-Adresse eingetragen ist (nie die Adresse selbst), welche Häkchen gesetzt
+     sind, ob die Datenschutzerklärung geöffnet wurde und was beim Tippen auf „Vorprüfung starten“ noch fehlte. */
+  var emailFeld = document.getElementById('kf-email');
+  var gemeldetEmail = null;
+  emailFeld.addEventListener('change', function () {
+    var wert = String(emailFeld.value || '').trim();
+    var stand = !wert ? 'leer' : (EMAIL.test(wert) ? 'gueltig' : 'ungueltig');
+    if (stand !== gemeldetEmail) { gemeldetEmail = stand; zaehle('email_eingetragen', { stand: stand }); }
+  });
+  ['einwilligung', 'datenschutz'].forEach(function (name) {
+    var feld = document.getElementById('kf-' + name);
+    feld.addEventListener('change', function () { zaehle('haekchen', { feld: name, gesetzt: feld.checked ? 'ja' : 'nein' }); });
+  });
+  Array.prototype.forEach.call(schritte[3].querySelectorAll('a[href*="datenschutz"]'), function (a) {
+    a.addEventListener('click', function () { zaehle('datenschutz_geoeffnet', { stelle: 'letzter_schritt' }); });
+  });
+
   /* Absenden */
   var sendenBox = document.getElementById('kf-senden-box');
   var balkenSenden = document.getElementById('kf-fortschritt');
@@ -292,6 +310,11 @@
     if (zustand.sendet) return;
     zeigeFehler('');
     var email = String(document.getElementById('kf-email').value || '').trim();
+    var fehlt = !zustand.dateien.abrechnung.length ? 'abrechnung'
+      : !EMAIL.test(email) ? (email ? 'email_ungueltig' : 'email')
+      : !document.getElementById('kf-einwilligung').checked ? 'einwilligung'
+      : !document.getElementById('kf-datenschutz').checked ? 'datenschutz' : 'nichts';
+    zaehle('senden_geklickt', { fehlt: fehlt });
     if (!zustand.dateien.abrechnung.length) { zeige(2); zeigeFehler('Bitte laden Sie zuerst Ihre Abrechnung hoch.'); return; }
     if (!EMAIL.test(email)) { zeigeFehler('Bitte geben Sie Ihre E-Mail-Adresse an.'); document.getElementById('kf-email').focus(); return; }
     if (!document.getElementById('kf-einwilligung').checked || !document.getElementById('kf-datenschutz').checked) {
