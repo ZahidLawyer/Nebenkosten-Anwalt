@@ -14,6 +14,7 @@
   var MAX_DATEIEN = 30;
   var MAX_BYTES = 25 * 1024 * 1024;
   var MAX_KANTE = 2400;
+  var VORSCHAU_KANTE = 240;   /* Vorschaubild in der Dateiliste */
   var GUELTIG = /^[a-f0-9]{32}$/;
   var EMAIL = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,24}$/;
   var q = new URLSearchParams(location.search);
@@ -54,7 +55,7 @@
   var schritte = Array.prototype.slice.call(form.querySelectorAll('.kf__schritt'));
   var stand = document.getElementById('kf-stand');
   var balken = document.getElementById('kf-balken');
-  var zustand = { schritt: 1, ende: null, dateien: { abrechnung: [], mietvertrag: [] }, sendet: false };
+  var zustand = { schritt: 1, ende: null, dateien: { abrechnung: [], mietvertrag: [] }, laufend: { abrechnung: 0, mietvertrag: 0 }, sendet: false };
   var gesehen = {};
   var beruehrt = false;
 
@@ -110,9 +111,20 @@
         ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height);
         ctx.drawImage(bild, 0, 0, c.width, c.height);
         if (bild.close) bild.close();
+        /* Speicher (17.11.2026, Belastungstest 30 Fotos): Die Vorschau in der Liste ist ein eigenes kleines Bild.
+           Vorher zeigte jede Zeile das 2400-px-Foto; Safari hielt dafür je Foto rund 40 MB, bei 30 Fotos über 1 GB. */
+        var g = Math.min(1, VORSCHAU_KANTE / Math.max(c.width, c.height));
+        var v = document.createElement('canvas');
+        v.width = Math.max(1, Math.round(c.width * g));
+        v.height = Math.max(1, Math.round(c.height * g));
+        v.getContext('2d').drawImage(c, 0, 0, v.width, v.height);
         c.toBlob(function (blob) {
-          if (!blob) { fertig(null); return; }
-          fertig(f < 1 || blob.size < datei.size ? blob : null);
+          var gross = blob && (f < 1 || blob.size < datei.size) ? blob : null;
+          c.width = 0; c.height = 0;   /* Canvas-Speicher sofort freigeben, Safari hält ihn sonst lange */
+          v.toBlob(function (klein) {
+            v.width = 0; v.height = 0;
+            fertig({ blob: gross, vorschau: klein || null });
+          }, 'image/jpeg', 0.7);
         }, 'image/jpeg', 0.85);
       }).catch(function () { fertig(null); });
     });
@@ -161,21 +173,28 @@
     });
     zeigeFehler(abgelehnt.length ? 'Nicht übernommen: ' + abgelehnt.join(', ') + '.' : '');
     if (!arbeit.length) { meldeAuswahl(feld, weg, [], grund); return; }
-    Promise.all(arbeit.map(function (e) {
-      return (e.pdf ? Promise.resolve(null) : verkleinere(e.datei)).then(function (blob) { e.blob = blob; return e; });
-    })).then(function (fertige) {
-      var zuGross = [];
-      var neu = [];
-      fertige.forEach(function (e) {
-        var g = (e.blob || e.datei).size;
-        if (g > MAX_BYTES) { zuGross.push(e.datei.name || 'Datei'); return; }
-        if (!e.pdf) { try { e.url = URL.createObjectURL(e.blob || e.datei); } catch (err) { e.url = null; } }
-        dateien.push(e);
-        neu.push(e);
+    /* Nacheinander statt alle gleichzeitig (17.11.2026): 30 Fotos auf einmal hielten 30 volle Bilder zugleich im
+       Speicher (gemessen über 1,2 GB). Jedes Foto erscheint in der Liste, sobald es fertig ist. */
+    var zuGross = [];
+    var neu = [];
+    zustand.laufend[feld] += arbeit.length;
+    zeichneListe(feld);
+    arbeit.reduce(function (kette, e) {
+      return kette.then(function () {
+        return (e.pdf ? Promise.resolve(null) : verkleinere(e.datei)).then(function (r) {
+          e.blob = r ? r.blob : null;
+          zustand.laufend[feld] -= 1;
+          var g = (e.blob || e.datei).size;
+          if (g > MAX_BYTES) { zuGross.push(e.datei.name || 'Datei'); zeichneListe(feld); return; }
+          if (!e.pdf && r && r.vorschau) { try { e.url = URL.createObjectURL(r.vorschau); } catch (err) { e.url = null; } }
+          dateien.push(e);
+          neu.push(e);
+          zeichneListe(feld);
+        });
       });
+    }, Promise.resolve()).then(function () {
       if (zuGross.length) zeigeFehler('Zu groß (mehr als 25 MB): ' + zuGross.join(', ') + '.');
       meldeAuswahl(feld, weg, neu, grund || (zuGross.length ? 'groesse' : null));
-      zeichneListe(feld);
     });
   }
 
@@ -183,12 +202,13 @@
     var ul = document.getElementById('kf-liste-' + feld);
     var dateien = zustand.dateien[feld];
     ul.innerHTML = '';
-    ul.hidden = dateien.length === 0;
-    if (dateien.length) {
+    ul.hidden = dateien.length === 0 && !zustand.laufend[feld];
+    if (dateien.length || zustand.laufend[feld]) {
       var kopf = document.createElement('li');
       kopf.className = 'kf__liste-kopf';
       kopf.innerHTML = '<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-      kopf.appendChild(document.createTextNode(dateien.length === 1 ? '1 Datei ausgewählt' : dateien.length + ' Dateien ausgewählt'));
+      kopf.appendChild(document.createTextNode((dateien.length === 1 ? '1 Datei ausgewählt' : dateien.length + ' Dateien ausgewählt')
+        + (zustand.laufend[feld] ? ', ' + zustand.laufend[feld] + ' weitere werden vorbereitet …' : '')));
       ul.appendChild(kopf);
     }
     dateien.forEach(function (e, i) {
@@ -212,8 +232,11 @@
       li.appendChild(vor); li.appendChild(text); li.appendChild(weg);
       ul.appendChild(li);
     });
-    if (feld === 'abrechnung') schritte[1].querySelector('[data-weiter]').disabled = dateien.length === 0;
-    if (feld === 'mietvertrag') document.getElementById('kf-weiter-3').textContent = dateien.length ? 'Weiter' : 'Ohne Mietvertrag weiter';
+    if (feld === 'abrechnung') schritte[1].querySelector('[data-weiter]').disabled = dateien.length === 0 || zustand.laufend[feld] > 0;
+    if (feld === 'mietvertrag') {
+      document.getElementById('kf-weiter-3').textContent = dateien.length ? 'Weiter' : 'Ohne Mietvertrag weiter';
+      document.getElementById('kf-weiter-3').disabled = zustand.laufend[feld] > 0;
+    }
   }
 
   Array.prototype.forEach.call(form.querySelectorAll('input[type="file"][data-feld]'), function (inp) {
