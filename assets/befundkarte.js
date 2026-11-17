@@ -177,7 +177,7 @@
       markiert: markiert, unauffaellig: unauffaellig, andere: andere, andereTitel: andereTitel, anzahl: n,
       nachforderung: nachforderung, guthaben: guthaben, geprueft: Array.isArray(erg.geprueft) ? erg.geprueft : null, unsicher: unsicher, fristDatum: fristDatum, fristAbgelaufen: fristAbgelaufen,
       fristAbBriefdatum: abBriefdatum, fristUnklar: fristUnklar,
-      /* 17.11.2026: Der Dienst liest höchstens 12 Seiten der Abrechnung; waren es mehr, steht es in der Kopfzeile. */
+      /* 17.11.2026: Liest der Dienst nicht alle Seiten der Abrechnung, steht es in der Kopfzeile. */
       seiten: (erg.seiten_abrechnung && erg.seiten_abrechnung.gesamt > erg.seiten_abrechnung.gelesen) ? erg.seiten_abrechnung : null,
       ersparnis: ersparnis, empfehlen: empfehlen, grundlage: grundlage
     };
