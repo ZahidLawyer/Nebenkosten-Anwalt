@@ -26,14 +26,36 @@
     status.textContent = text; status.hidden = false;
     status.classList.toggle('fehler', !!fehler);
   }
+  /* 18.11.2026: Das Feld lässt sich oben im Formular oder aus dem Upload-Schritt öffnen (Knopf #kf-spaeter).
+     „geoeffnet“ zählt je Stelle einmal; die Stelle gilt, bis das Feld wieder zugeklappt wird. */
   var klapp = document.getElementById('spaeter-klapp');
+  var gemeldet = {};
+  function stelle() { return form.dataset.stelle === 'upload' ? 'upload' : 'kopf'; }
+  function meldeOffen() { var s = stelle(); if (!gemeldet[s]) { gemeldet[s] = true; zaehle('geoeffnet'); } }
   if (klapp) {
-    var gezaehlt = false;
     klapp.addEventListener('toggle', function () {
-      if (!klapp.open) return;
-      if (!gezaehlt) { gezaehlt = true; zaehle('geoeffnet'); }
+      if (!klapp.open) { delete form.dataset.stelle; return; }
+      meldeOffen();
       try { feld.focus({ preventScroll: true }); } catch (e) { feld.focus(); }
     });
+    var ausUpload = document.getElementById('kf-spaeter');
+    if (ausUpload) {
+      ausUpload.addEventListener('click', function () {
+        form.dataset.stelle = 'upload';
+        if (klapp.open) meldeOffen(); else klapp.open = true;
+        /* Feld unter die feste Kopfleiste scrollen (deren Höhe plus etwas Luft). */
+        var kopf = document.querySelector('.topbar');
+        var y = klapp.getBoundingClientRect().top + window.pageYOffset - ((kopf ? kopf.offsetHeight : 0) + 12);
+        try { window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' }); } catch (e) { window.scrollTo(0, Math.max(0, y)); }
+      });
+    }
+  }
+  /* Herkunft für den Link in der Mail: aus dem Upload-Schritt mit Zusatz „upload-“ (n8n erlaubt höchstens 20 Zeichen). */
+  function herkunftFuerLink() {
+    var h = window.NKA_HERKUNFT || 'ohne';
+    if (stelle() !== 'upload') return h;
+    var u = 'upload-' + h;
+    return /^[a-z0-9-]{1,20}$/.test(u) ? u : 'upload';
   }
   form.addEventListener('submit', function (ev) {
     ev.preventDefault();
@@ -48,7 +70,7 @@
     if (!ENDPUNKT) { zaehle('vorschau'); fertig(); return; }
     zaehle('angefordert');
     fetch(ENDPUNKT, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: adresse, erinnerung: !!(haken && haken.checked), herkunft: window.NKA_HERKUNFT || 'ohne',
+      body: JSON.stringify({ email: adresse, erinnerung: !!(haken && haken.checked), herkunft: herkunftFuerLink(),
                              firma: falle ? falle.value : '' }) })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); zaehle('gesendet'); fertig(); })
       .catch(function () {

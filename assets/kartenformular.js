@@ -17,7 +17,7 @@
   var VORSCHAU_KANTE = 240;   /* Vorschaubild in der Dateiliste */
   /* Fassung des Formulars (18.11.2026): steht in jedem Ereignis, damit Besuche je Fassung getrennt ausgewertet werden.
      Bei jeder Änderung am Ablauf neu vergeben. */
-  var FORMULAR_VERSION = 'karten-1118a';
+  var FORMULAR_VERSION = 'karten-1118b';
   window.NKA_FORMULAR_VERSION = FORMULAR_VERSION;
   var GUELTIG = /^[a-f0-9]{32}$/;
   var EMAIL = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,24}$/;

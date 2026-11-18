@@ -1064,7 +1064,7 @@
       if (an) document.documentElement.classList.add('karten');
     })();
   </script>
-  <link rel="stylesheet" href="assets/kartenformular.css?v=1118a">
+  <link rel="stylesheet" href="assets/kartenformular.css?v=1118b">
 </head>
 <body>
 
@@ -1224,6 +1224,9 @@
               <label class="kf__kachel kf__kachel--haupt kf__kachel--breit"><span class="kf__symbol"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></span>
                 Fotos oder PDF auswählen<input type="file" multiple accept="image/*,application/pdf,.pdf,.heic,.heif" data-feld="abrechnung"></label>
             </div>
+            <!-- 18.11.2026: zweiter Weg für alle, die die Abrechnung gerade nicht zur Hand haben. Öffnet das vorhandene Feld
+                 „Link per E-Mail“ oben im Formular (assets/spaeter-mail.js); der Link in der Mail trägt die Herkunft „upload-…“. -->
+            <button type="button" class="kf__mailweg" id="kf-spaeter" aria-controls="spaeter-klapp"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M4 7l8 6 8-6"/></svg>Link für später per E-Mail</button>
             <p class="kf__tipp kf__tipp--oben">Am einfachsten: Fotografieren Sie zuerst alle Seiten mit Ihrer Kamera, jede Seite einzeln, gerade von oben und gut lesbar, und wählen Sie die Fotos dann hier gemeinsam aus. Bei langen Abrechnungen genügen die Seiten mit der Kostenaufstellung und der Heizkostenabrechnung.</p>
             <label class="kf__textlink kf__kameralink">oder jetzt fotografieren<input type="file" accept="image/*" capture="environment" data-feld="abrechnung"></label>
             <ul class="kf__liste" id="kf-liste-abrechnung" hidden aria-live="polite"></ul>
@@ -2121,7 +2124,7 @@
 </script>
 
 <script src="assets/befundkarte.js?v=1117f"></script>
-<script src="assets/spaeter-mail.js?v=1118a"></script>
+<script src="assets/spaeter-mail.js?v=1118b"></script>
 <script>
   if (window.NkaBefund) window.NkaBefund.zeigeBeispiel(document.getElementById('beispiel-start'));
 </script>
@@ -2486,7 +2489,7 @@
   })();
 </script>
 <!-- Offizielles Tally-Skript: löst data-tally-src ein und passt die iframe-Höhe dynamisch an den Formularinhalt an. -->
-<script src="assets/kartenformular.js?v=1118a"></script>
+<script src="assets/kartenformular.js?v=1118b"></script>
 <script async src="https://tally.so/widgets/embed.js"></script>
 <script src="assets/spaeter.js?v=1111"></script>
 </body>

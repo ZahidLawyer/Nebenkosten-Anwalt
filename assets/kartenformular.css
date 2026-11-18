@@ -149,3 +149,10 @@ html.karten #form-card { display: none; }
 .kf--bestellung .kf__feld { margin-top: 1rem; }
 .kf--bestellung .kf__haekchen a { color: var(--moss); }
 .kf--bestellung .kf__knopf { width: 100%; margin-top: 0.4rem; }
+/* 18.11.2026: zweiter Weg im Upload-Schritt („Link für später per E-Mail“), umrandet direkt unter dem Hauptknopf */
+.kf__mailweg { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; min-height: 48px;
+  margin: 0.6rem 0 0; padding: 0.6rem 1rem; border: 1.5px solid var(--moss); border-radius: 12px; background: transparent;
+  color: var(--moss); font: inherit; font-size: 0.98rem; font-weight: 600; cursor: pointer; }
+.kf__mailweg:hover { background: #F1F6F3; }
+.kf__mailweg:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+.kf__mailweg:disabled { opacity: 0.6; cursor: default; }
