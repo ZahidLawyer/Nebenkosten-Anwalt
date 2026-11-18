@@ -2,7 +2,7 @@
    Wer die Abrechnung gerade nicht zur Hand hat, trägt seine E-Mail-Adresse ein und bekommt den Link zur Vorprüfung.
    Versand über einen n8n-Webhook (data-endpoint am Formular). Ohne Endpunkt (Vorschau) wird nichts verschickt,
    die Seite zeigt nur, wie es aussähe. Optional: eine einzige Erinnerung nach zwei Tagen (Häkchen, Einwilligung).
-   Umami: „link_per_mail“ {erinnerung: ja/nein, ergebnis: geoeffnet/gesendet/fehler/vorschau}. Die Adresse geht nie an Umami. */
+   Umami: „link_per_mail“ {erinnerung: ja/nein, ergebnis: geoeffnet/angefordert/gesendet/fehler/vorschau, stelle: kopf/upload}. Die Adresse geht nie an Umami. */
 (function () {
   'use strict';
   var form = document.getElementById('spaeter-mail');
@@ -17,7 +17,9 @@
 
   function zaehle(ergebnis) {
     var d = { erinnerung: haken && haken.checked ? 'ja' : 'nein', ergebnis: ergebnis,
-              herkunft: window.NKA_HERKUNFT || 'ohne', fassung: window.NKA_FASSUNG || 'L2' };
+              herkunft: window.NKA_HERKUNFT || 'ohne', fassung: window.NKA_FASSUNG || 'L2',
+              stelle: form.dataset.stelle === 'upload' ? 'upload' : 'kopf',
+              formular_version: window.NKA_FORMULAR_VERSION || 'ohne' };
     try { if (window.umami && typeof window.umami.track === 'function') window.umami.track('link_per_mail', d); } catch (e) {}
   }
   function zeige(text, fehler) {
@@ -44,6 +46,7 @@
             (haken && haken.checked ? ' Haben Sie in zwei Tagen noch nicht hochgeladen, erinnere ich Sie einmal.' : ''));
     };
     if (!ENDPUNKT) { zaehle('vorschau'); fertig(); return; }
+    zaehle('angefordert');
     fetch(ENDPUNKT, { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: adresse, erinnerung: !!(haken && haken.checked), herkunft: window.NKA_HERKUNFT || 'ohne',
                              firma: falle ? falle.value : '' }) })

@@ -349,6 +349,15 @@
     .hero__aktion { margin-bottom: 1.2rem; }
     .hero__punkte { gap: 0.5rem; }
   }
+  /* Handy, 18.11.2026: zwei Zeilen „Kostenlos“ und „Nur wenn Sie es beauftragen“ statt der drei Schlagworte */
+  .hero__leistung-mobil { display: none; }
+  @media (max-width: 45.99rem) {
+    .hero__punkte { display: none; }
+    .hero__leistung-mobil { display: block; font-size: 0.95rem; line-height: 1.5; color: rgba(255,255,255,0.92); }
+    .hero__leistung-mobil p { margin: 0 0 0.55rem; }
+    .hero__leistung-mobil p:last-child { margin-bottom: 0; }
+    .hero__leistung-mobil strong { color: #fff; font-weight: 600; }
+  }
   /* Unter dem Formular: Vertrauenszeile und „Link für später“ (auch am Handy sichtbar, Plan 11.11.2026) */
   .hero__vertrauen { font-size: 0.84rem; line-height: 1.45; color: var(--ink-soft); margin: 0.6rem 0 0; }
   .hero__spaeter-karte { font-size: 0.95rem; line-height: 1.45; color: var(--ink-soft); margin: 0.6rem 0 0; text-align: center; }
@@ -1055,7 +1064,7 @@
       if (an) document.documentElement.classList.add('karten');
     })();
   </script>
-  <link rel="stylesheet" href="assets/kartenformular.css?v=1117f">
+  <link rel="stylesheet" href="assets/kartenformular.css?v=1118a">
 </head>
 <body>
 
@@ -1119,6 +1128,12 @@
         <p class="hero__sub"><span class="hero__sub-lang">Fotografieren Sie Ihre Abrechnung. Die kostenlose Vorprüfung zeigt Ihnen in wenigen Minuten, welche
           Posten auffällig sind, wo möglich mit Betrag. Danach entscheiden Sie, ob ich als Rechtsanwalt prüfe.</span><span class="hero__sub-kurz">Abrechnung fotografieren, in wenigen Minuten auffällige Posten sehen.</span></p>
         <p class="hero__aktion"><a class="btn hero__knopf" href="#vorpruefung-start" data-start="hero">Abrechnung kostenlos vorprüfen</a></p>
+        <!-- Handy (18.11.2026): Statt der drei Schlagworte zwei Zeilen, die trennen, was kostenlos und automatisch ist
+             und was nur auf Auftrag und kostenpflichtig durch den Anwalt geschieht. Desktop unverändert (Liste darunter). -->
+        <div class="hero__leistung-mobil">
+          <p><strong>Kostenlos:</strong> Die automatische Vorprüfung zeigt, welche Posten auffallen.</p>
+          <p><strong>Nur wenn Sie es beauftragen:</strong> Ich prüfe Ihre Abrechnung persönlich, auf Wunsch mit Schreiben an Ihren Vermieter (kostenpflichtig).</p>
+        </div>
         <ul class="hero__punkte">
           <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F3E3CE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>
             <span><strong>Beträge auf einen Blick.</strong> <span class="hero__punkt-mehr">Die Vorprüfung nennt auffällige Posten mit Betrag, wo sie die Abrechnung sicher lesen kann.</span></span></li>
@@ -1255,6 +1270,7 @@
             <div class="kf__senden" id="kf-senden-box" hidden>
               <div class="kf__fortschritt" aria-hidden="true"><span id="kf-fortschritt"></span></div>
               <p class="kf__status" id="kf-status" role="status" aria-live="polite"></p>
+              <p class="kf__offen-lassen">Bitte lassen Sie diese Seite geöffnet, bis Ihre Unterlagen angenommen wurden.</p>
             </div>
             <p class="kf__fehler" id="kf-fehler" role="alert" hidden></p>
           </section>
@@ -2105,7 +2121,7 @@
 </script>
 
 <script src="assets/befundkarte.js?v=1117f"></script>
-<script src="assets/spaeter-mail.js?v=1112c"></script>
+<script src="assets/spaeter-mail.js?v=1118a"></script>
 <script>
   if (window.NkaBefund) window.NkaBefund.zeigeBeispiel(document.getElementById('beispiel-start'));
 </script>
@@ -2470,7 +2486,7 @@
   })();
 </script>
 <!-- Offizielles Tally-Skript: löst data-tally-src ein und passt die iframe-Höhe dynamisch an den Formularinhalt an. -->
-<script src="assets/kartenformular.js?v=1117m"></script>
+<script src="assets/kartenformular.js?v=1118a"></script>
 <script async src="https://tally.so/widgets/embed.js"></script>
 <script src="assets/spaeter.js?v=1111"></script>
 </body>

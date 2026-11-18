@@ -15,6 +15,10 @@
   var MAX_BYTES = 25 * 1024 * 1024;
   var MAX_KANTE = 2400;
   var VORSCHAU_KANTE = 240;   /* Vorschaubild in der Dateiliste */
+  /* Fassung des Formulars (18.11.2026): steht in jedem Ereignis, damit Besuche je Fassung getrennt ausgewertet werden.
+     Bei jeder Änderung am Ablauf neu vergeben. */
+  var FORMULAR_VERSION = 'karten-1118a';
+  window.NKA_FORMULAR_VERSION = FORMULAR_VERSION;
   var GUELTIG = /^[a-f0-9]{32}$/;
   var EMAIL = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,24}$/;
   var q = new URLSearchParams(location.search);
@@ -45,6 +49,7 @@
     d.herkunft = herkunft;
     d.fassung = window.NKA_FASSUNG || 'L2';
     d.formular = 'karten';
+    d.formular_version = FORMULAR_VERSION;
     function senden() {
       if (window.umami && typeof window.umami.track === 'function') { try { window.umami.track(name, d); } catch (e) {} return true; }
       return false;
@@ -244,8 +249,14 @@
     /* Upload-Messung: Kamera oder Dateiauswahl geöffnet, auch wenn danach nichts gewählt wird („upload_geoeffnet“). */
     inp.addEventListener('click', function () { zaehle('upload_geoeffnet', { feld: inp.getAttribute('data-feld'), weg: weg }); });
     inp.addEventListener('change', function () {
+      /* Messung 18.11.2026: Rückkehr aus der Dateiauswahl, noch bevor die Fotos im Browser aufbereitet werden. */
+      zaehle('dateiauswahl_zurueck', { feld: inp.getAttribute('data-feld'), weg: weg, auswahl: inp.files && inp.files.length ? 'vorhanden' : 'leer' });
       if (inp.files && inp.files.length) nimmDateien(inp.getAttribute('data-feld'), inp.files, weg);
       inp.value = '';
+    });
+    /* Abbruch der Dateiauswahl, soweit der Browser ihn meldet (nicht alle Browser tun das). */
+    inp.addEventListener('cancel', function () {
+      zaehle('dateiauswahl_zurueck', { feld: inp.getAttribute('data-feld'), weg: weg, auswahl: 'abgebrochen' });
     });
   });
 
@@ -337,20 +348,31 @@
     sendenBox.hidden = false;
     balkenSenden.style.width = '2%';
     statusText.textContent = 'Ihre Unterlagen werden übertragen …';
+    try { sendenBox.scrollIntoView({ block: 'center' }); } catch (e) {}
     var xhr = new XMLHttpRequest();
     xhr.open('POST', form.getAttribute('data-endpoint'));
     xhr.timeout = 10 * 60 * 1000;
+    /* Messung und Rückmeldung 18.11.2026: Beginn der Übertragung zählen; ist sie fertig, sagen, dass die Bestätigung
+       des Servers noch aussteht (sonst wirkt die Seite bei 99 % wie hängengeblieben). */
+    xhr.upload.addEventListener('loadstart', function () { zaehle('upload_gestartet'); });
+    xhr.upload.addEventListener('load', function () {
+      balkenSenden.style.width = '99%';
+      statusText.textContent = 'Ihre Unterlagen wurden übertragen. Die Bestätigung steht noch aus …';
+    });
     xhr.upload.addEventListener('progress', function (e) {
       if (!e.lengthComputable) return;
       var p = Math.max(2, Math.min(99, Math.round(e.loaded / e.total * 100)));
       balkenSenden.style.width = p + '%';
       statusText.textContent = 'Ihre Unterlagen werden übertragen … ' + p + ' %';
     });
-    function scheitern(st, antwort) {
+    /* Fehlerart für die Messung (18.11.2026): nur feste Kategorien und der HTTP-Status, nie die Serverantwort. */
+    function scheitern(st, antwort, art) {
       sperre(false);
       sendenBox.hidden = true;
       zeigeFehler(fehlerNachStatus(st, antwort));
-      zaehle('kartenformular_fehler', { grund: String(st || 'netz') });
+      var grund = art || (st === 413 ? 'groesse' : st === 429 ? 'ratenlimit'
+        : st === 422 ? (antwort && antwort.status === 'dateityp' ? 'dateityp' : 'validierung') : 'dienstfehler');
+      zaehle('kartenformular_fehler', { grund: grund, status: String(st || 0) });
     }
     xhr.addEventListener('load', function () {
       var antwort = null;
@@ -371,8 +393,9 @@
       }
       scheitern(xhr.status, antwort);
     });
-    xhr.addEventListener('error', function () { scheitern(0, null); });
-    xhr.addEventListener('timeout', function () { scheitern(0, null); });
+    xhr.addEventListener('error', function () { scheitern(0, null, 'netzwerk'); });
+    xhr.addEventListener('timeout', function () { scheitern(0, null, 'zeitlimit'); });
+    xhr.addEventListener('abort', function () { scheitern(0, null, 'abbruch'); });
     xhr.send(daten);
   });
 

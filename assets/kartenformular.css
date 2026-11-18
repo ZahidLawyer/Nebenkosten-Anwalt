@@ -119,6 +119,7 @@ html.karten #form-card { display: none; }
 .kf__fortschritt { height: 8px; border-radius: 999px; background: var(--line); overflow: hidden; }
 .kf__fortschritt span { display: block; height: 100%; width: 0; background: var(--moss); transition: width 0.25s; }
 .kf__status { font-size: 0.95rem; margin: 0.6rem 0 0; color: var(--ink); }
+.kf__offen-lassen { font-size: 0.85rem; line-height: 1.5; color: var(--ink-soft); margin: 0.35rem 0 0; }
 .kf__fehler { margin: 0.9rem 0 0; padding: 0.75rem 0.9rem; border-radius: 12px; background: #F6E9D6; border: 1px solid #E5C9A0;
   font-size: 0.93rem; line-height: 1.5; color: #5C3A12; }
 .kf__fehler[hidden] { display: none; }
