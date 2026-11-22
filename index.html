@@ -905,6 +905,43 @@
     }
     .doc-mock__row .tick { stroke-dashoffset: 0 !important; transition: none !important; }
   }
+
+  /* ============ Google-Bewertungen (22.11.2026, Freigabe Zahid) ============ */
+  .hero__google { margin: 0 0 1.1rem; }
+  .hero__google a {
+    display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.4rem 0.85rem; border-radius: 999px;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.4); color: #fff;
+    text-decoration: none; font-size: 0.88rem; line-height: 1.2;
+  }
+  .hero__google a:hover, .hero__google a:focus-visible { background: rgba(255,255,255,0.2); color: #fff; }
+  .hero__google svg { flex: none; }
+  .hero__google span { color: rgba(255,255,255,0.8); }
+  .bewertungen-section { background: var(--paper-deep); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    padding-top: clamp(2rem, 5vw, 3.25rem); padding-bottom: clamp(2rem, 5vw, 3.25rem); }
+  .bewertungen__oben { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem 2rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .bewertungen__oben .section-title { margin-bottom: 0; }
+  .bewertungen__gesamt { display: flex; align-items: center; gap: 1rem; background: #fff; border: 1px solid var(--line-strong);
+    border-radius: 8px; padding: 0.85rem 1.2rem; color: var(--ink); text-decoration: none; }
+  .bewertungen__gesamt:hover, .bewertungen__gesamt:focus-visible { border-color: var(--moss); color: var(--ink); }
+  .bewertungen__note { font-family: var(--serif); font-weight: 700; font-size: 2.4rem; line-height: 1; }
+  .bewertungen__sterne { display: flex; gap: 2px; }
+  .bewertungen__anzahl { display: block; font-size: 0.85rem; color: var(--ink-soft); line-height: 1.4; }
+  .stimme.bewertung { gap: 0.85rem; margin: 0; }
+  .bewertung__kopf { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; font-size: 0.82rem; color: var(--ink-soft); }
+  .stimme.bewertung blockquote { padding-left: 0; display: -webkit-box; -webkit-line-clamp: 10; -webkit-box-orient: vertical; overflow: hidden; }
+  .stimme.bewertung blockquote::before { display: none; }
+  .bewertung__mehr { font-size: 0.85rem; font-weight: 600; color: var(--moss); }
+  .stimme.bewertung figcaption { display: flex; align-items: center; gap: 0.6rem; padding-left: 0; line-height: 1.3; font-size: 0.88rem; }
+  .stimme.bewertung figcaption strong { display: block; }
+  .bewertung__kuerzel { width: 32px; height: 32px; border-radius: 50%; background: var(--paper-deep); color: var(--moss-deep);
+    font-weight: 700; font-size: 0.78rem; display: flex; align-items: center; justify-content: center; flex: none; }
+  .bewertungen__aktion { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem 1.5rem; margin: 1.25rem 0 0; }
+  .bewertungen__quelle { font-size: 0.8rem; color: var(--ink-soft); }
+  @media (min-width: 62rem) { .stimmen--drei { --spalten: 3; } }
+  @media (max-width: 45.99rem) {
+    .bewertungen__oben { flex-direction: column; align-items: stretch; }
+    .bewertungen__aktion .btn { display: block; width: 100%; text-align: center; padding-left: 1rem; padding-right: 1rem; }
+  }
 </style>
 <link rel="preconnect" href="https://tally.so">
 <link rel="stylesheet" href="assets/befundkarte.css?v=1111">
@@ -1118,10 +1155,9 @@
   <section class="hero">
     <div class="wrap hero__inner">
       <div>
-        <p class="hero__anwalt">
-          <img src="assets/portrait-zahid.jpg" alt="" width="44" height="44">
-          <span><strong>Rechtsanwalt Zahid Akcay</strong><span class="hero__anwalt-ort">Kanzlei Akcay, Frankfurt am Main</span></span>
-        </p>
+        <!-- Google-Bewertungen (22.11.2026, Freigabe Zahid): ersetzt die Zeile mit Porträt und Namen.
+             Gesamtnote und Anzahl von Hand pflegen, gleichlautend mit dem Abschnitt #bewertungen. -->
+        <p class="hero__google"><a href="https://maps.google.com/?cid=4743507490217106174" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 20 20" aria-hidden="true"><path fill="#F2C46D" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><strong>5,0</strong> bei Google <span>(6 Rezensionen)</span></a></p>
         <!-- Startseite neu (Plan 11.11.2026, Freigabe Zahid): Die Dachzeile behält den Suchbegriff in der H1. -->
         <h1 class="hero__title"><span class="hero__dach">Nebenkosten&shy;abrechnung prüfen lassen</span>Zahlen Sie nur, was Sie wirklich schulden.</h1>
         <p class="hero__fakt"><span class="hero__fakt-lang">Der Deutsche Mieterbund geht davon aus, dass <strong>jede zweite Abrechnung fehlerhaft</strong> ist.</span><span class="hero__fakt-kurz">Der Mieterbund geht davon aus: <strong>Jede zweite Abrechnung ist fehlerhaft.</strong></span> <a href="#quelle" data-quelle>Quelle</a></p>
@@ -1400,6 +1436,76 @@
         </div>
       </div>
       <p class="stimmen__aktion"><a class="btn" href="#vorpruefung-start" data-start="belege">Meine Abrechnung vorprüfen</a></p>
+    </div>
+  </section>
+
+  <!-- ============ Google-Bewertungen (22.11.2026, Freigabe Zahid) ============
+       Feste Wiedergabe aus dem Google-Profil „Rechtsanwalt Zahid Akcay“, Stand 22.11.2026. Kein Google-Skript,
+       nichts wird an Google übertragen, solange niemand auf einen Link klickt. Neue Rezensionen von Hand nachtragen
+       und Gesamtnote, Anzahl und Stand hier und im Hero (.hero__google) mitziehen. Hinweistext: Wortlaut Zahid. -->
+  <section id="bewertungen" class="bewertungen-section" aria-labelledby="bewertungen-title">
+    <div class="wrap">
+      <div class="bewertungen__oben reveal">
+        <div>
+          <p class="kicker">Bewertungen bei Google</p>
+          <h2 id="bewertungen-title" class="section-title">Was andere über meine Arbeit schreiben</h2>
+        </div>
+        <a class="bewertungen__gesamt" href="https://maps.google.com/?cid=4743507490217106174" target="_blank" rel="noopener">
+          <span class="bewertungen__note">5,0</span>
+          <span><span class="bewertungen__sterne" role="img" aria-label="5 von 5 Sternen"><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg></span><span class="bewertungen__anzahl">6 Rezensionen bei Google</span></span>
+        </a>
+      </div>
+      <p class="ergebnis__caveat reveal">Die Rezensionen stammen aus dem Google-Profil meiner Kanzlei und betreffen alle meine Rechtsgebiete.</p>
+      <ul class="stimmen stimmen--drei reveal" id="bewertungen-liste" tabindex="0" aria-label="Rezensionen, waagerecht wischen">
+        <li>
+          <figure class="stimme bewertung">
+            <div class="bewertung__kopf"><span class="bewertungen__sterne" role="img" aria-label="5 von 5 Sternen"><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg></span><span>Google</span></div>
+            <blockquote>Sehr schnelle Antworten und kompetente Beratung sowie Schreiben. Herr Akcay hat uns sehr geholfen und 833&nbsp;€ der Betriebskosten eingespart. Wir werden uns auch weiterhin bei Problemen hinsichtlich der Betriebs-kostenabrechnung an Herr Akcay wenden. Vielen Dank, sind so happy :-)</blockquote>
+            <figcaption><span class="bewertung__kuerzel" aria-hidden="true">AB</span><span><strong>A B</strong>Rezension auf Google</span></figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="stimme bewertung">
+            <div class="bewertung__kopf"><span class="bewertungen__sterne" role="img" aria-label="5 von 5 Sternen"><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg></span><span>Google</span></div>
+            <blockquote>Schnell, kompetent und menschlich. Ich habe mich bestens beraten gefühlt und kann Herrn Akcay nur empfehlen!</blockquote>
+            <figcaption><span class="bewertung__kuerzel" aria-hidden="true">IE</span><span><strong>Ismail Esen</strong>Rezension auf Google</span></figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="stimme bewertung">
+            <div class="bewertung__kopf"><span class="bewertungen__sterne" role="img" aria-label="5 von 5 Sternen"><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg></span><span>Google</span></div>
+            <blockquote>Top Anwalt, schnelle Bearbeitung des Anliegen und auch professionelle Beratung. Auch sehr verständliche Darlegung des Falles!</blockquote>
+            <figcaption><span class="bewertung__kuerzel" aria-hidden="true">NS</span><span><strong>Niklas Sauer</strong>Rezension auf Google</span></figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="stimme bewertung">
+            <div class="bewertung__kopf"><span class="bewertungen__sterne" role="img" aria-label="5 von 5 Sternen"><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg></span><span>Google</span></div>
+            <blockquote>Ich kann Rechtsanwalt Akcay aus voller Überzeugung weiterempfehlen. Er hat mich in zwei ganz unterschiedlichen Angelegenheiten vertreten, und in beiden habe ich mich von Anfang an gut aufgehoben gefühlt. Besonders wichtig war für mich, dass er immer schnell erreichbar war, auch kurzfristig und sogar, als ich gerade im Urlaub war. Er hat sich Zeit genommen und mir alles in einfachen, verständlichen Worten erklärt. Für jemanden, dessen Muttersprache nicht Deutsch ist, war das sehr viel wert.</blockquote>
+            <a class="bewertung__mehr" href="https://maps.google.com/?cid=4743507490217106174" target="_blank" rel="noopener">Weiterlesen auf Google</a>
+            <figcaption><span class="bewertung__kuerzel" aria-hidden="true">FS</span><span><strong>Faris S.</strong>Rezension auf Google</span></figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="stimme bewertung">
+            <div class="bewertung__kopf"><span class="bewertungen__sterne" role="img" aria-label="5 von 5 Sternen"><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="#B97C3B" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg></span><span>Google</span></div>
+            <blockquote>Sehr kompetent, freundlich und zuverlässig. Professionelle Beratung und hervorragende Betreuung. Absolut empfehlenswert!</blockquote>
+            <figcaption><span class="bewertung__kuerzel" aria-hidden="true">FI</span><span><strong>Fitim Islami</strong>Rezension auf Google</span></figcaption>
+          </figure>
+        </li>
+      </ul>
+      <div class="stimmen__steuerung">
+        <div class="stimmen__punkte" role="group" aria-label="Rezension wählen"></div>
+        <div class="stimmen__pfeile">
+          <button type="button" class="stimmen__pfeil" data-richtung="-1" aria-label="Vorherige Rezension">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" class="stimmen__pfeil" data-richtung="1" aria-label="Nächste Rezension">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <p class="bewertungen__aktion"><a class="btn btn--ghost" href="https://maps.google.com/?cid=4743507490217106174" target="_blank" rel="noopener">Alle Rezensionen bei Google lesen</a><span class="bewertungen__quelle">Quelle: Google, Stand 22.11.2026</span></p>
     </div>
   </section>
 
@@ -2027,7 +2133,7 @@
   /* Mandantenstimmen: Pfeile und Punkte zur Wischleiste. Ohne JS bleibt der
      waagerechte Scroll mit Einrasten; die Steuerung ist dann ausgeblendet. */
   /* Dieselbe Steuerung für die Vertrauenskarten (Wischleiste nur auf dem Handy). */
-  ['stimmen-liste', 'trust-liste'].forEach(function (id) {
+  ['stimmen-liste', 'trust-liste', 'bewertungen-liste'].forEach(function (id) {
     var liste = document.getElementById(id);
     if (!liste) return;
     var karten = Array.prototype.slice.call(liste.children);
@@ -2194,6 +2300,7 @@
        ersten Bildschirm, neu ist der Abschnitt 'preis'. */
     var ABSCHNITTE = [
       ['belege', '#stimmen'],
+      ['bewertungen', '#bewertungen'],
       ['beispiel', '.beispiel-start'],
       ['ablauf', '#ablauf'],
       ['preis', '#preis'],
